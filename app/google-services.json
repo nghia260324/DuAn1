@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "870560496481",
+    "project_id": "chiasecongthucnauan-1b57b",
+    "storage_bucket": "chiasecongthucnauan-1b57b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870560496481:android:05cc034a13df0d1c9c2320",
+        "android_client_info": {
+          "package_name": "com.example.ungdungchiasecongthucnauan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxUt4rN0m18JuY425hBQnaMjN3onL-ZFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

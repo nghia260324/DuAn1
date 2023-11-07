@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="316dp"
+    android:layout_height="56dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/cus_bgr_edt">
+    <TextView
+        android:id="@+id/tv_idecentralization"
+        android:textSize="18sp"
+        android:layout_gravity="center_vertical"
+        android:text="Người dùng"
+        android:paddingHorizontal="12dp"
+        android:layout_width="match_parent"
+        android:drawableEnd="@drawable/ic_down_while"
+        android:drawableTint="@color/black_333"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/baloo_bhaijaan"
+        android:textColorHint="@color/gray_d9d"/>
+
+</LinearLayout>
+

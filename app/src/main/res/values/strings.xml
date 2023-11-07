@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">UngDungChiaSeCongThucNauAn</string>
+    <string name="text_register"><u>Đăng Ký</u></string>
+    <string name="text_login"><u>Đăng Nhập</u></string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="is_empty">Không được để trống trường này !</string>
+</resources>
