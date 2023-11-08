@@ -1,27 +1,37 @@
 package com.example.ungdungchiasecongthucnauan.Model;
 
 public class BuocLam {
-    private int congThuc;
+    private int id;
+    private String idCongThuc;
     private String noiDung;
-    private String anh;
+    private String idAnh;
     private int thuTu;
 
     public BuocLam() {
     }
 
-    public BuocLam(int congThuc, String noiDung, String anh, int thuTu) {
-        this.congThuc = congThuc;
+    public BuocLam(int id, String idCongThuc, String noiDung, String idAnh, int thuTu) {
+        this.id = id;
+        this.idCongThuc = idCongThuc;
         this.noiDung = noiDung;
-        this.anh = anh;
+        this.idAnh = idAnh;
         this.thuTu = thuTu;
     }
 
-    public int getCongThuc() {
-        return congThuc;
+    public int getId() {
+        return id;
     }
 
-    public void setCongThuc(int congThuc) {
-        this.congThuc = congThuc;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getIdCongThuc() {
+        return idCongThuc;
+    }
+
+    public void setIdCongThuc(String idCongThuc) {
+        this.idCongThuc = idCongThuc;
     }
 
     public String getNoiDung() {
@@ -32,12 +42,12 @@ public class BuocLam {
         this.noiDung = noiDung;
     }
 
-    public String getAnh() {
-        return anh;
+    public String getIdAnh() {
+        return idAnh;
     }
 
-    public void setAnh(String anh) {
-        this.anh = anh;
+    public void setIdAnh(String idAnh) {
+        this.idAnh = idAnh;
     }
 
     public int getThuTu() {

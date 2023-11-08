@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CongThuc {
-    private int id;
+    private String id;
     private String ten;
-    private String anhDaiDien;
-    private String nguoiDung;
+    private String idAnh;
+    private int idNguoiDung;
     private int khauPhan;
     private int thoiGianNau;
     private Date ngayTao;
-    private int loai;
-    private int chiaSe;
+    private int idLoai;
+    private int trangThai;
     private ArrayList<BuocLam> lstBuocLam;
     private ArrayList<NguyenLieu> lstNguyenLieu;
     private ArrayList<BinhLuan> lstBinhLuan;
@@ -20,26 +20,26 @@ public class CongThuc {
     public CongThuc() {
     }
 
-    public CongThuc(int id, String ten, String anhDaiDien, String nguoiDung, int khauPhan, int thoiGianNau, Date ngayTao, int loai, int chiaSe, ArrayList<BuocLam> lstBuocLam, ArrayList<NguyenLieu> lstNguyenLieu, ArrayList<BinhLuan> lstBinhLuan) {
+    public CongThuc(String id, String ten, String idAnh, int idNguoiDung, int khauPhan, int thoiGianNau, Date ngayTao, int idLoai, int trangThai, ArrayList<BuocLam> lstBuocLam, ArrayList<NguyenLieu> lstNguyenLieu, ArrayList<BinhLuan> lstBinhLuan) {
         this.id = id;
         this.ten = ten;
-        this.anhDaiDien = anhDaiDien;
-        this.nguoiDung = nguoiDung;
+        this.idAnh = idAnh;
+        this.idNguoiDung = idNguoiDung;
         this.khauPhan = khauPhan;
         this.thoiGianNau = thoiGianNau;
         this.ngayTao = ngayTao;
-        this.loai = loai;
-        this.chiaSe = chiaSe;
+        this.idLoai = idLoai;
+        this.trangThai = trangThai;
         this.lstBuocLam = lstBuocLam;
         this.lstNguyenLieu = lstNguyenLieu;
         this.lstBinhLuan = lstBinhLuan;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,20 +51,20 @@ public class CongThuc {
         this.ten = ten;
     }
 
-    public String getAnhDaiDien() {
-        return anhDaiDien;
+    public String getIdAnh() {
+        return idAnh;
     }
 
-    public void setAnhDaiDien(String anhDaiDien) {
-        this.anhDaiDien = anhDaiDien;
+    public void setIdAnh(String idAnh) {
+        this.idAnh = idAnh;
     }
 
-    public String getNguoiDung() {
-        return nguoiDung;
+    public int getIdNguoiDung() {
+        return idNguoiDung;
     }
 
-    public void setNguoiDung(String nguoiDung) {
-        this.nguoiDung = nguoiDung;
+    public void setIdNguoiDung(int idNguoiDung) {
+        this.idNguoiDung = idNguoiDung;
     }
 
     public int getKhauPhan() {
@@ -91,20 +91,20 @@ public class CongThuc {
         this.ngayTao = ngayTao;
     }
 
-    public int getLoai() {
-        return loai;
+    public int getIdLoai() {
+        return idLoai;
     }
 
-    public void setLoai(int loai) {
-        this.loai = loai;
+    public void setIdLoai(int idLoai) {
+        this.idLoai = idLoai;
     }
 
-    public int getChiaSe() {
-        return chiaSe;
+    public int getTrangThai() {
+        return trangThai;
     }
 
-    public void setChiaSe(int chiaSe) {
-        this.chiaSe = chiaSe;
+    public void setTrangThai(int trangThai) {
+        this.trangThai = trangThai;
     }
 
     public ArrayList<BuocLam> getLstBuocLam() {
@@ -129,5 +129,20 @@ public class CongThuc {
 
     public void setLstBinhLuan(ArrayList<BinhLuan> lstBinhLuan) {
         this.lstBinhLuan = lstBinhLuan;
+    }
+
+    @Override
+    public String toString() {
+        return "CongThuc{" +
+                "id='" + id + '\'' +
+                ", ten='" + ten + '\'' +
+                ", idAnh='" + idAnh + '\'' +
+                ", idNguoiDung=" + idNguoiDung +
+                ", khauPhan=" + khauPhan +
+                ", thoiGianNau=" + thoiGianNau +
+                ", ngayTao=" + ngayTao +
+                ", idLoai=" + idLoai +
+                ", trangThai=" + trangThai +
+                '}';
     }
 }

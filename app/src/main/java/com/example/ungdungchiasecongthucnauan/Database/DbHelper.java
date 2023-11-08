@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
     static final String dbName = "CONG_THUC_NAU_AN";
-    static final int dbVersion = 1;
+    static final int dbVersion = 2;
     public DbHelper(Context context) {
         super(context, dbName, null, dbVersion);
     }
@@ -16,7 +16,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 "Create table KieuNguyenLieu (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                         "tenKieu TEXT NOT NULL)";
-
         String createTableNguoiDung=
                 "Create table NguoiDung (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
@@ -26,15 +25,56 @@ public class DbHelper extends SQLiteOpenHelper {
                         "trangThai INTEGER NOT NULL," +
                         "phanQuyen INTEGER NOT NULL," +
                         "avatar INTEGER NOT NULL)";
-
+        String createTableAnh =
+                "Create table Anh (" +
+                        "id TEXT PRIMARY KEY NOT NULL," +
+                        "url TEXT NOT NULL)";
+        String createTableBuocLam =
+                "Create table BuocLam (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "idCongThuc TEXT NOT NULL," +
+                        "noiDung TEXT NOT NULL," +
+                        "idAnh TEXT," +
+                        "thuTu INTEGER NOT NULL)";
+        String createTableLoaiCongThuc =
+                "Create table LoaiCongThuc (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "ten TEXT NOT NULL)";
+        String createTableCongThuc =
+                "Create table CongThuc (" +
+                        "id TEXT PRIMARY KEY NOT NULL," +
+                        "ten TEXT NOT NULL," +
+                        "idAnh TEXT," +
+                        "idnguoiDung INTEGER NOT NULL," +
+                        "khauPhan INTEGER NOT NULL," +
+                        "thoiGianNau INTEGER NOT NULL," +
+                        "ngay DATE NOT NULL," +
+                        "idLoaiCongThuc INTEGER NOT NULL," +
+                        "trangThai INTEGER NOT NULL)";
+        String createTableNguyenLieu =
+                "Create table NguyenLieu (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "ten TEXT NOT NULL," +
+                        "idKieuNguyenLieu INTEGER NOT NULL," +
+                        "calo INTEGER NOT NULL," +
+                        "gia INTEGER NOT NULL)";
+        String createTableDanhSachNguyenLieu =
+                "Create table DanhSachNguyenLieu (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        "idCongThuc TEXT NOT NULL," +
+                        "idNguyenLieu INTEGER NOT NULL," +
+                        "khoiLuong INTEGER NOT NULL)";
 
 
 
         db.execSQL(createTableKieuNguyenLieu);
-
         db.execSQL(createTableNguoiDung);
-
-
+        db.execSQL(createTableAnh);
+        db.execSQL(createTableBuocLam);
+        db.execSQL(createTableLoaiCongThuc);
+        db.execSQL(createTableCongThuc);
+        db.execSQL(createTableNguyenLieu);
+        db.execSQL(createTableDanhSachNguyenLieu);
 
         InsertValues(db);
     }

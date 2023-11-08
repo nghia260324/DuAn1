@@ -32,4 +32,9 @@ public class KieuNguyenLieuDao {
         String sql = "SELECT * FROM KIEUNGUYENLIEU";
         return getData(sql);
     }
+    public KieuNguyenLieu getID(String id) {
+        String sql = "SELECT * FORM KIEUNGUYENLIEU WHERE id = ?";
+        List<KieuNguyenLieu> lstKNL = getData(sql, id);
+        return lstKNL.get(0);
+    }
 }

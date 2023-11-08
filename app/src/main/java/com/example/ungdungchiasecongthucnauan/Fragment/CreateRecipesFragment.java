@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.Adapter.KNLAdapter;
+import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
@@ -51,8 +52,11 @@ import com.google.firebase.storage.UploadTask;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,6 +122,7 @@ public class CreateRecipesFragment extends Fragment {
     private StorageReference storageReference;
     private StorageTask storageTask;
     private DatabaseReference databaseReference;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -268,27 +273,36 @@ public class CreateRecipesFragment extends Fragment {
                 String time = edtTime.getText().toString().trim();
 
                 if (ValidateMaterial(layoutMaterial) && ValidateMaking(layoutMaking)){
-                    Toast.makeText(mainActivity, "Lưu thàh công !", Toast.LENGTH_SHORT).show();
-                }
-
-                if (lstBuocLam != null && lstAnh != null ){
-                    for (int i = 0; i < lstBuocLam.size();i++){
-                        if (lstUri.get(i) != null) {
-                            SaveDataToFirebase(lstAnh.get(i),lstUri.get(i));
-                            lstBuocLam.get(i).setAnh(lstAnh.get(i).getId());
-                        } else {
-                            lstBuocLam.get(i).setAnh(null);
+                    if (lstBuocLam != null && lstAnh != null && lstUri.size() > 0){
+                        for (int i = 0; i < lstBuocLam.size();i++){
+                            if (lstUri.get(i) != null) {
+                                SaveDataToFirebase(lstAnh.get(i),lstUri.get(i));
+                                lstBuocLam.get(i).setIdAnh(lstAnh.get(i).getId());
+                            } else {
+                                lstBuocLam.get(i).setIdAnh(null);
+                            }
                         }
                     }
-                }
-                if (mImageBannerURL != null) {
                     if (mImageBannerURL != null) {
-                        Anh anh = new Anh();
-                        SaveDataToFirebase(anh,mImageBannerURL);
-                        congThuc.setAnhDaiDien(anh.getId());
-                    } else {
-                        congThuc.setAnhDaiDien(null);
+                        if (mImageBannerURL != null) {
+                            Anh anh = new Anh();
+                            SaveDataToFirebase(anh,mImageBannerURL);
+                            congThuc.setIdAnh(anh.getId());
+                            Log.e("Công thức", "CT: " + congThuc.toString());
+
+                        } else {
+                            congThuc.setIdAnh(null);
+                        }
                     }
+                    String radomID = UUID.randomUUID().toString();
+                    congThuc.setId(radomID);
+                    congThuc.setTen(foodName);
+                    congThuc.setKhauPhan(Integer.parseInt(foodRation));
+                    congThuc.setThoiGianNau(Integer.parseInt(time));
+                    congThuc.setNgayTao(new Date());
+                    CongThucDao congThucDao = new CongThucDao(getContext());
+                    congThucDao.insert(congThuc);
+                    Toast.makeText(mainActivity, "Lưu thàh công !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -382,45 +396,6 @@ public class CreateRecipesFragment extends Fragment {
         MimeTypeMap mine = MimeTypeMap.getSingleton();
         return mine.getExtensionFromMimeType(contentResolver.getType(uri));
     }
-
-
-
-//    private void SaveImage(){
-//        progressDialog = new ProgressDialog(getContext());
-//        progressDialog.show();
-//        progressDialog.setMessage("Đang lưu hình ảnh !");
-//        for (int i = 0; i < lstUri.size();i++){
-//            int index = i;
-//            Uri uri = lstUri.get(i);
-//            if (uri != null) {
-//                StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(uri));
-//                storageTask = reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                            @Override
-//                            public void onSuccess(Uri uri) {
-//                                String getID = databaseReference.push().getKey();
-//                                lstAnh.get(index).setId(getID);
-//                                lstAnh.get(index).setUrl(uri.toString());
-//
-//                                lstBuocLam.get(index).setAnh(getID);
-//
-//                                databaseReference.child(getID).setValue(lstAnh.get(index));
-//
-//                                progressDialog.dismiss();
-//                            }
-//                        });
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(mainActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        }
-//    }
     private void SaveDataToFirebase(Anh anh, Uri uri){
         StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(uri));
         storageTask = reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
