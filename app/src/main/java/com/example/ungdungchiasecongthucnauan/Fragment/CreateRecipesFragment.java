@@ -121,8 +121,12 @@ public class CreateRecipesFragment extends Fragment {
     boolean selectedImgMaking = false;
     private StorageReference storageReference;
     private StorageTask storageTask;
+    CongThuc congThuc = new CongThuc();
     private DatabaseReference databaseReference;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
+    String time,foodRation,foodName;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -134,6 +138,7 @@ public class CreateRecipesFragment extends Fragment {
         btnCreateRecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                congThuc = new CongThuc();
                 OpenDialogCreateRecipes();
             }
         });
@@ -267,42 +272,60 @@ public class CreateRecipesFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CongThuc congThuc = new CongThuc();
-                String foodName = edtFoodName.getText().toString().trim();
-                String foodRation = edtFoodRation.getText().toString().trim();
-                String time = edtTime.getText().toString().trim();
+                progressDialog = new ProgressDialog(getContext());
+                progressDialog.setMessage("Loading . . .");
+                progressDialog.show();
+                foodName = edtFoodName.getText().toString().trim();
+                foodRation = edtFoodRation.getText().toString().trim();
+                time = edtTime.getText().toString().trim();
 
                 if (ValidateMaterial(layoutMaterial) && ValidateMaking(layoutMaking)){
-                    if (lstBuocLam != null && lstAnh != null && lstUri.size() > 0){
-                        for (int i = 0; i < lstBuocLam.size();i++){
+
+                    if (lstNguyenLieu != null && lstBuocLam != null) {
+                        for (int i = 0; i < lstUri.size(); i++){
                             if (lstUri.get(i) != null) {
-                                SaveDataToFirebase(lstAnh.get(i),lstUri.get(i));
-                                lstBuocLam.get(i).setIdAnh(lstAnh.get(i).getId());
+                                SaveDataToFirebase(lstAnh.get(i),lstUri.get(i),i,false);
                             } else {
                                 lstBuocLam.get(i).setIdAnh(null);
                             }
                         }
                     }
                     if (mImageBannerURL != null) {
-                        if (mImageBannerURL != null) {
-                            Anh anh = new Anh();
-                            SaveDataToFirebase(anh,mImageBannerURL);
-                            congThuc.setIdAnh(anh.getId());
-                            Log.e("Công thức", "CT: " + congThuc.toString());
-
-                        } else {
-                            congThuc.setIdAnh(null);
-                        }
+                        Anh anh = new Anh();
+                        SaveDataToFirebase(anh,mImageBannerURL,0,true);
+                    } else {
+                        congThuc.setIdAnh(null);
                     }
-                    String radomID = UUID.randomUUID().toString();
-                    congThuc.setId(radomID);
-                    congThuc.setTen(foodName);
-                    congThuc.setKhauPhan(Integer.parseInt(foodRation));
-                    congThuc.setThoiGianNau(Integer.parseInt(time));
-                    congThuc.setNgayTao(new Date());
-                    CongThucDao congThucDao = new CongThucDao(getContext());
-                    congThucDao.insert(congThuc);
-                    Toast.makeText(mainActivity, "Lưu thàh công !", Toast.LENGTH_SHORT).show();
+
+//                    if (lstBuocLam != null && lstAnh != null){
+//                        for (int i = 0; i < lstUri.size();i++){
+//                            if (lstUri.get(i) != null) {
+//                                SaveDataToFirebase(lstAnh.get(i),lstUri.get(i),i,false);
+//                                Toast.makeText(mainActivity, "A", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                lstBuocLam.get(i).setIdAnh(null);
+//                            }
+//                        }
+//                    }
+//
+//                    if (mImageBannerURL != null) {
+//                        Anh anh = new Anh();
+//                        SaveDataToFirebase(anh,mImageBannerURL,0,true);
+//                        Toast.makeText(mainActivity, "B", Toast.LENGTH_SHORT).show();
+//
+//                    } else {
+//                        congThuc.setIdAnh(null);
+//                    }
+//                    String radomID = UUID.randomUUID().toString();
+//                    congThuc.setId(radomID);
+//                    congThuc.setTen(foodName);
+//                    congThuc.setKhauPhan(Integer.parseInt(foodRation));
+//                    congThuc.setThoiGianNau(Integer.parseInt(time));
+//                    congThuc.setNgayTao(new Date());
+//                    CongThucDao congThucDao = new CongThucDao(getContext());
+//                    congThucDao.insert(congThuc);
+//
+//                    Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -396,25 +419,45 @@ public class CreateRecipesFragment extends Fragment {
         MimeTypeMap mine = MimeTypeMap.getSingleton();
         return mine.getExtensionFromMimeType(contentResolver.getType(uri));
     }
-    private void SaveDataToFirebase(Anh anh, Uri uri){
+    private void SaveDataToFirebase(Anh anh, Uri uri,int pos,boolean type){
         StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(uri));
         storageTask = reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(mainActivity, "C", Toast.LENGTH_SHORT).show();
                 reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        Toast.makeText(mainActivity, "B", Toast.LENGTH_SHORT).show();
+
                         String getID = databaseReference.push().getKey();
                         anh.setId(getID);
                         anh.setUrl(uri.toString());
                         databaseReference.child(getID).setValue(anh);
-                        progressDialog.dismiss();
+                        if (type) {
+                            congThuc.setIdAnh(getID);
+                            String radomID = UUID.randomUUID().toString();
+                            congThuc.setId(radomID);
+                            congThuc.setTen(foodName);
+                            congThuc.setKhauPhan(Integer.parseInt(foodRation));
+                            congThuc.setThoiGianNau(Integer.parseInt(time));
+                            congThuc.setNgayTao(new Date());
+                            CongThucDao congThucDao = new CongThucDao(getContext());
+                            congThucDao.insert(congThuc);
+                            Log.e("Công thức","" + congThuc.toString());
+                            Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        } else {
+                            lstBuocLam.get(pos).setIdAnh(getID);
+                        }
+                        Toast.makeText(getContext(), "Thành công !", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Toast.makeText(mainActivity, "E", Toast.LENGTH_SHORT).show();
                 Toast.makeText(mainActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

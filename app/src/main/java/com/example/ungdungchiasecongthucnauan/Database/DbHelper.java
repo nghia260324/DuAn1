@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
     static final String dbName = "CONG_THUC_NAU_AN";
-    static final int dbVersion = 2;
+    static final int dbVersion = 3;
     public DbHelper(Context context) {
         super(context, dbName, null, dbVersion);
     }
@@ -100,9 +100,22 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String dropTableKieuNguyenLieu = "Drop table if exists KieuNguyenLieu";
         String dropTableNguoiDung = "Drop table if exists NguoiDung";
+        String dropTableAnh = "Drop table if exists Anh";
+        String dropTableBuocLam = "Drop table if exists BuocLam";
+        String dropTableLoaiCongThuc = "Drop table if exists LoaiCongThuc";
+        String dropTableCongThuc = "Drop table if exists CongThuc";
+        String dropTableNguyenLieu = "Drop table if exists NguyenLieu";
+        String dropTableDanhSachNguyenLieu = "Drop table if exists DanhSachNguyenLieu";
+
         if(oldVersion != newVersion){
             db.execSQL(dropTableKieuNguyenLieu);
             db.execSQL(dropTableNguoiDung);
+            db.execSQL(dropTableAnh);
+            db.execSQL(dropTableBuocLam);
+            db.execSQL(dropTableLoaiCongThuc);
+            db.execSQL(dropTableCongThuc);
+            db.execSQL(dropTableNguyenLieu);
+            db.execSQL(dropTableDanhSachNguyenLieu);
             onCreate(db);
         }
     }
