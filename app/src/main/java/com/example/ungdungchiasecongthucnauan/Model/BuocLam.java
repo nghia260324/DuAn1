@@ -57,4 +57,15 @@ public class BuocLam {
     public void setThuTu(int thuTu) {
         this.thuTu = thuTu;
     }
+
+    @Override
+    public String toString() {
+        return "BuocLam{" +
+                "id=" + id +
+                ", idCongThuc='" + idCongThuc + '\'' +
+                ", noiDung='" + noiDung + '\'' +
+                ", idAnh='" + idAnh + '\'' +
+                ", thuTu=" + thuTu +
+                '}';
+    }
 }

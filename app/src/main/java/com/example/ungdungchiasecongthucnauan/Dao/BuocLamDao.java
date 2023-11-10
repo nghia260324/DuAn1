@@ -35,7 +35,6 @@ public class BuocLamDao {
     }
     public long insert(BuocLam obj) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id",obj.getId());
         contentValues.put("idCongThuc",obj.getIdCongThuc());
         contentValues.put("noiDung",obj.getNoiDung());
         contentValues.put("idAnh",obj.getIdAnh());

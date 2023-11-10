@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     KieuNguyenLieuDao kieuNguyenLieuDao;
     NguoiDungDao nguoiDungDao;
-    NguoiDung nguoiDung;
+
+    public int idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +71,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        User();
     }
 
-    private void User() {
+    public NguoiDung getUser() {
         Intent intent = getIntent();
         String id = intent.getStringExtra("userID");
-
-        nguoiDung = nguoiDungDao.getID(id);
+        NguoiDung nguoiDung = nguoiDungDao.getID(id);
+        return nguoiDung;
     }
 
     private void initUI() {
         nguoiDungDao = new NguoiDungDao(this);
-        nguoiDung = new NguoiDung();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         frameLayout = findViewById(R.id.frameLayout);

@@ -9,11 +9,6 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,8 +25,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
-import com.example.ungdungchiasecongthucnauan.Adapter.KNLAdapter;
+import com.example.ungdungchiasecongthucnauan.AlphaVantageClient;
+import com.example.ungdungchiasecongthucnauan.AlphaVantageService;
+import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
+import com.example.ungdungchiasecongthucnauan.Dao.BuocLamDao;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
@@ -50,13 +51,20 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import org.checkerframework.checker.units.qual.A;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,6 +118,7 @@ public class CreateRecipesFragment extends Fragment {
     ArrayList<KieuNguyenLieu> lstKNL;
     ImageButton imgSelectedPicture,btnCloseDialog;
     ImageView imgSelectedPictureMaking;
+    LinearLayout layoutMaterial,layoutMaking;
     ArrayList<Uri> lstUri;
     ArrayList<NguyenLieu> lstNguyenLieu;
     ArrayList<BuocLam> lstBuocLam;
@@ -122,11 +131,13 @@ public class CreateRecipesFragment extends Fragment {
     private StorageReference storageReference;
     private StorageTask storageTask;
     CongThuc congThuc = new CongThuc();
+    CongThucDao congThucDao;
+    BuocLamDao buocLamDao;
+    AnhDao anhDao;
+
     private DatabaseReference databaseReference;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-
-    String time,foodRation,foodName;
+    String time,foodRation,foodName,idRecipes;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -138,14 +149,63 @@ public class CreateRecipesFragment extends Fragment {
         btnCreateRecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                congThuc = new CongThuc();
-                OpenDialogCreateRecipes();
+//                congThuc = new CongThuc();
+//                OpenDialogCreateRecipes();
+
+
+                AlphaVantageService service = AlphaVantageClient.getService();
+                Call<ResponseBody> call = service.getPrice("GLOBAL_QUOTE", "ngô", "642JNK88J836TS1W");
+
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                String jsonData = response.body().string();
+//                                String value = "";
+//                                for (int i = 0; i < jsonData.length();i++){
+//                                    value+= jsonData.charAt(i);
+//                                }
+//                                Log.e("Data trả về","" + value);
+                                JSONObject jsonObject = new JSONObject(jsonData);
+
+                                Log.e("Data trả về","" + jsonObject);
+                                Log.e("Data trả về","" + jsonObject.length());
+
+//                                if (jsonObject != null) {
+//                                    Iterator<String> keys = jsonObject.keys();
+//                                    keys.forEachRemaining(s -> {
+//                                        Log.e("Giá gạo","Giá gạo:" + s.toLowerCase());
+//                                    });
+////                                    while(keys.hasNext()) {
+////                                        String key = keys.next();
+////                                        Log.e("Giá gạo","Giá gạo:" + key.toLowerCase() + " - " + key.va);
+////                                    }
+////                                    Log.e("Giá gạo","Giá gạo: " + jsonObject.getString("global quote"));
+//                                } else {
+//                                    Log.e("Giá gạo","Giá gạo: null");
+//                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    }
+                });
             }
         });
 
         return view;
     }
     private void OpenDialogCreateRecipes() {
+        ResetData();
+        idRecipes = UUID.randomUUID().toString();
         lstAnh = new ArrayList<>();
         lstUri = new ArrayList<>();
         lstBuocLam = new ArrayList<>();
@@ -172,8 +232,8 @@ public class CreateRecipesFragment extends Fragment {
 
         btnCloseDialog = dialog.findViewById(R.id.btn_closeDialog);
 
-        LinearLayout layoutMaterial = dialog.findViewById(R.id.layout_material);
-        LinearLayout layoutMaking = dialog.findViewById(R.id.layout_making);
+        layoutMaterial = dialog.findViewById(R.id.layout_material);
+        layoutMaking = dialog.findViewById(R.id.layout_making);
         btnAddMaterial = dialog.findViewById(R.id.btn_addMaterial);
         btnAddMaking = dialog.findViewById(R.id.btn_addMaking);
         imgSelectedPicture = dialog.findViewById(R.id.img_selected_picture);
@@ -232,6 +292,8 @@ public class CreateRecipesFragment extends Fragment {
                 lstBuocLam.add(buocLam);
                 Anh anh = new Anh();
                 lstAnh.add(anh);
+                Uri uri = null;
+                lstUri.add(uri);
 
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.item_making, null);
                 layoutMaking.addView(view);
@@ -248,6 +310,7 @@ public class CreateRecipesFragment extends Fragment {
                             layoutMaking.removeView(viewMaking);
                             lstBuocLam.remove(indexRemove);
                             lstAnh.remove(indexRemove);
+                            lstUri.remove(indexRemove);
 
                             for(int i = 0; i < layoutMaking.getChildCount(); i++) {
                                 View viewMaking = layoutMaking.getChildAt(i);
@@ -272,60 +335,18 @@ public class CreateRecipesFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog = new ProgressDialog(getContext());
-                progressDialog.setMessage("Loading . . .");
-                progressDialog.show();
                 foodName = edtFoodName.getText().toString().trim();
                 foodRation = edtFoodRation.getText().toString().trim();
                 time = edtTime.getText().toString().trim();
 
                 if (ValidateMaterial(layoutMaterial) && ValidateMaking(layoutMaking)){
+                    progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setMessage("Đang lưu công thức . . .");
+                    progressDialog.show();
+                    for (int i = 0; i < lstNguyenLieu.size(); i++) {
 
-                    if (lstNguyenLieu != null && lstBuocLam != null) {
-                        for (int i = 0; i < lstUri.size(); i++){
-                            if (lstUri.get(i) != null) {
-                                SaveDataToFirebase(lstAnh.get(i),lstUri.get(i),i,false);
-                            } else {
-                                lstBuocLam.get(i).setIdAnh(null);
-                            }
-                        }
                     }
-                    if (mImageBannerURL != null) {
-                        Anh anh = new Anh();
-                        SaveDataToFirebase(anh,mImageBannerURL,0,true);
-                    } else {
-                        congThuc.setIdAnh(null);
-                    }
-
-//                    if (lstBuocLam != null && lstAnh != null){
-//                        for (int i = 0; i < lstUri.size();i++){
-//                            if (lstUri.get(i) != null) {
-//                                SaveDataToFirebase(lstAnh.get(i),lstUri.get(i),i,false);
-//                                Toast.makeText(mainActivity, "A", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                lstBuocLam.get(i).setIdAnh(null);
-//                            }
-//                        }
-//                    }
-//
-//                    if (mImageBannerURL != null) {
-//                        Anh anh = new Anh();
-//                        SaveDataToFirebase(anh,mImageBannerURL,0,true);
-//                        Toast.makeText(mainActivity, "B", Toast.LENGTH_SHORT).show();
-//
-//                    } else {
-//                        congThuc.setIdAnh(null);
-//                    }
-//                    String radomID = UUID.randomUUID().toString();
-//                    congThuc.setId(radomID);
-//                    congThuc.setTen(foodName);
-//                    congThuc.setKhauPhan(Integer.parseInt(foodRation));
-//                    congThuc.setThoiGianNau(Integer.parseInt(time));
-//                    congThuc.setNgayTao(new Date());
-//                    CongThucDao congThucDao = new CongThucDao(getContext());
-//                    congThucDao.insert(congThuc);
-//
-//                    Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                    SaveDataToFirebase(lstAnh.get(0),lstUri.get(0),0,lstBuocLam.size() - 1,dialog);
                 }
             }
         });
@@ -351,6 +372,10 @@ public class CreateRecipesFragment extends Fragment {
                 check = false;
             }
         }
+        if (lstNguyenLieu.isEmpty()){
+            Toast.makeText(getContext(), "Hãy thêm một vài nguyên liệu trước khi lưu !", Toast.LENGTH_SHORT).show();
+            check = false;
+        }
         return check;
     }
     private boolean ValidateMaking(LinearLayout layout){
@@ -366,6 +391,10 @@ public class CreateRecipesFragment extends Fragment {
                 check = false;
             }
         }
+        if (lstBuocLam.isEmpty()) {
+            Toast.makeText(mainActivity, "Hãy thêm bước làm cho công thức của bạn !", Toast.LENGTH_SHORT).show();
+            check = false;
+        }
         return check;
     }
     private void OpenFile() {
@@ -374,7 +403,6 @@ public class CreateRecipesFragment extends Fragment {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,PICK_IMAGE_REQUEST);
     }
-
     private void initUI(View view) {
         mainActivity = (MainActivity) getActivity();
         btnCreateRecipes = view.findViewById(R.id.btn_createRecipes);
@@ -390,6 +418,21 @@ public class CreateRecipesFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference("ALL_IMAGE");
 
         progressDialog = new ProgressDialog(getContext());
+        congThucDao = new CongThucDao(getContext());
+        anhDao = new AnhDao(getContext());
+        buocLamDao = new BuocLamDao(getContext());
+
+    }
+
+    private void ResetData() {
+        foodName = "";
+        foodRation = "";
+        time = "";
+        mImageBannerURL = null;
+        lstNguyenLieu.clear();
+        lstUri.clear();
+        lstBuocLam.clear();
+        lstAnh.clear();
     }
 
     @Override
@@ -402,12 +445,10 @@ public class CreateRecipesFragment extends Fragment {
                 selectedImgBanner = false;
             }
             if (selectedImgMaking){
-                if(lstUri.size() - 1 >= INDEX_SELECTED_IMG){
-                    lstUri.remove(INDEX_SELECTED_IMG);
-                }
                 Uri uri = data.getData();
                 if (uri != null) {
                     lstUri.add(INDEX_SELECTED_IMG,uri);
+                    lstUri.remove(INDEX_SELECTED_IMG + 1);
                 }
                 Glide.with(getActivity()).load(uri).error(R.drawable.ic_picture).into(imgSelectedPictureMaking);
                 selectedImgMaking = false;
@@ -417,49 +458,109 @@ public class CreateRecipesFragment extends Fragment {
     private String getFileExtention(Uri uri){
         ContentResolver contentResolver = getActivity().getContentResolver();
         MimeTypeMap mine = MimeTypeMap.getSingleton();
-        return mine.getExtensionFromMimeType(contentResolver.getType(uri));
+        return uri != null ? mine.getExtensionFromMimeType(contentResolver.getType(uri)):null;
     }
-    private void SaveDataToFirebase(Anh anh, Uri uri,int pos,boolean type){
-        StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(uri));
-        storageTask = reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(mainActivity, "C", Toast.LENGTH_SHORT).show();
-                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Toast.makeText(mainActivity, "B", Toast.LENGTH_SHORT).show();
-
-                        String getID = databaseReference.push().getKey();
-                        anh.setId(getID);
-                        anh.setUrl(uri.toString());
-                        databaseReference.child(getID).setValue(anh);
-                        if (type) {
-                            congThuc.setIdAnh(getID);
-                            String radomID = UUID.randomUUID().toString();
-                            congThuc.setId(radomID);
-                            congThuc.setTen(foodName);
-                            congThuc.setKhauPhan(Integer.parseInt(foodRation));
-                            congThuc.setThoiGianNau(Integer.parseInt(time));
-                            congThuc.setNgayTao(new Date());
-                            CongThucDao congThucDao = new CongThucDao(getContext());
+    private void SaveDataToFirebaseBanner(){
+        if (mImageBannerURL != null) {
+            StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(mImageBannerURL));
+            storageTask = reference.putFile(mImageBannerURL).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Anh anh = new Anh();
+                            String getID = databaseReference.push().getKey();
+                            anh.setId(getID);
+                            anh.setUrl(uri.toString());
+                            databaseReference.child(getID).setValue(anh);
+                            anhDao.insert(anh);
+                            setInfCongThuc(getID);
                             congThucDao.insert(congThuc);
-                            Log.e("Công thức","" + congThuc.toString());
-                            Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        } else {
-                            lstBuocLam.get(pos).setIdAnh(getID);
                         }
-                        Toast.makeText(getContext(), "Thành công !", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            setInfCongThuc(null);
+            congThucDao.insert(congThuc);
+        }
+    }
+    private void SaveDataToFirebase(Anh anh, Uri uri,int pos,int size,Dialog dialog){
+        if (uri != null) {
+            StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(uri));
+            storageTask = reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String getID = databaseReference.push().getKey();
+                            anh.setId(getID);
+                            anh.setUrl(uri.toString());
+                            databaseReference.child(getID).setValue(anh);
+                            anhDao.insert(anh);
+                            lstBuocLam.get(pos).setIdAnh(getID);
+                            setInfBuocLam(layoutMaking,pos);
+                            if (pos == size) {
+                                SaveDataToFirebaseBanner();
+                                Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                                ResetData();
+                                progressDialog.dismiss();
+                                dialog.dismiss();
+                            } else {
+                                SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,lstBuocLam.size() - 1,dialog);
+                            }
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            lstBuocLam.get(pos).setIdAnh(null);
+            setInfBuocLam(layoutMaking,pos);
+            if (pos == (lstBuocLam.size() - 1)) {
+                SaveDataToFirebaseBanner();
+                Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                ResetData();
+                progressDialog.dismiss();
+                dialog.dismiss();
+            } else {
+                SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,lstBuocLam.size() - 1,dialog);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(mainActivity, "E", Toast.LENGTH_SHORT).show();
-                Toast.makeText(mainActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        }
+    }
+    private void setInfBuocLam(LinearLayout layout,int pos){
+        View viewMaterial = layout.getChildAt(pos);
+        TextView tvLocation = viewMaterial.findViewById(R.id.tv_location);
+        EditText edtContent = viewMaterial.findViewById(R.id.edt_content);
+        lstBuocLam.get(pos).setIdCongThuc(idRecipes);
+        lstBuocLam.get(pos).setNoiDung(edtContent.getText().toString());
+        lstBuocLam.get(pos).setThuTu(Integer.parseInt(tvLocation.getText().toString()));
+        buocLamDao.insert(lstBuocLam.get(pos));
+    }
+    private void setInfCongThuc(String getID){
+        congThuc.setId(idRecipes);
+        congThuc.setTen(foodName);
+        congThuc.setIdAnh(getID);
+        congThuc.setIdNguoiDung(mainActivity.getUser().getId());
+        if (!foodRation.isEmpty()) {
+            congThuc.setKhauPhan(Integer.parseInt(foodRation));
+        } else congThuc.setKhauPhan(-1);
+        if (!time.isEmpty()){
+            congThuc.setThoiGianNau(Integer.parseInt(time));
+        } else congThuc.setThoiGianNau(-1);
+        congThuc.setNgayTao(new Date());
+        congThuc.setIdLoai(0);
+        congThuc.setTrangThai(0);
     }
 }

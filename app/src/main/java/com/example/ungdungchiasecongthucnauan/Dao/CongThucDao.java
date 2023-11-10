@@ -60,15 +60,6 @@ public class CongThucDao {
     public int delete(String id) {
         return db.delete("CongThuc","id = ?",new String[]{String.valueOf(id)});
     }
-    public List<CongThuc> getAll() {
-        String sql = "SELECT * FROM CongThuc";
-        return getData(sql);
-    }
-    public CongThuc getID(String id) {
-        String sql = "SELECT * FORM CongThuc WHERE id = ?";
-        List<CongThuc> lstCongThuc = getData(sql, id);
-        return lstCongThuc.get(0);
-    }
     public long update(CongThuc obj) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("id",obj.getId());
@@ -82,4 +73,14 @@ public class CongThucDao {
         contentValues.put("trangThai",obj.getTrangThai());
         return db.update("CongThuc",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
     }
+    public List<CongThuc> getAll() {
+        String sql = "SELECT * FROM CongThuc";
+        return getData(sql);
+    }
+    public CongThuc getID(String id) {
+        String sql = "SELECT * FORM CongThuc WHERE id = ?";
+        List<CongThuc> lstCongThuc = getData(sql, id);
+        return lstCongThuc.get(0);
+    }
+
 }
