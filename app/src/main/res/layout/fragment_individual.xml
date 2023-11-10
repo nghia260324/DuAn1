@@ -8,13 +8,14 @@
     tools:context=".Fragment.IndividualFragment">
 
     <LinearLayout
+        android:background="@drawable/shadow"
+        android:padding="6dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="66dp"
-            android:layout_height="66dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:scaleType="centerCrop"
             android:layout_marginTop="2dp"
             android:src="@drawable/img_def_avatar"
@@ -22,28 +23,27 @@
             app:shapeAppearanceOverlay="@style/rounded_corner"/>
 
         <LinearLayout
-            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="12dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
+                android:textColor="@color/black_333"
+                android:fontFamily="@font/baloo_bhaijaan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Họ tên"
-                android:textSize="18sp"
+                android:text="Nguyễn Văn A"
+                android:textSize="16sp"
                 android:id="@+id/tvHoten"/>
-
             <TextView
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
+                android:textColor="@color/gray_d9d"
+                android:fontFamily="@font/baloo_bhaijaan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email"
-                android:textSize="13sp"
+                android:text="nva@gmail.com"
+                android:textSize="14sp"
                 android:id="@+id/tvEmail"/>
-
         </LinearLayout>
 
     </LinearLayout>
@@ -51,31 +51,30 @@
    <com.google.android.material.tabs.TabLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:layout_margin="5dp"
-       >
+       app:tabIndicatorColor="@color/orange_FDA"
+       app:tabSelectedTextColor="@color/black_333"
+       app:tabTextAppearance="@style/tab_text">
        <com.google.android.material.tabs.TabItem
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Cá nhân"
-
-           android:id="@+id/tabCaNhan"
-           />
+           app:tabTextAppearance="@style/item_tab_text"
+           android:id="@+id/tabCaNhan" />
        <com.google.android.material.tabs.TabItem
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Công thức \n đã lưu"
-           android:id="@+id/tabCongThucDaLuu"
-           />
+           android:text="Công thức đã lưu"
+           app:tabTextAppearance="@style/item_tab_text"
+           android:id="@+id/tabCongThucDaLuu"/>
        <com.google.android.material.tabs.TabItem
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Công thức của tôi"
-           android:id="@+id/tabCongThucCuaToi"
-           />
-
-
+           app:tabTextAppearance="@style/item_tab_text"
+           android:id="@+id/tabCongThucCuaToi"/>
    </com.google.android.material.tabs.TabLayout>
-
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

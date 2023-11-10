@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +29,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.ungdungchiasecongthucnauan.AlphaVantageClient;
-import com.example.ungdungchiasecongthucnauan.AlphaVantageService;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.BuocLamDao;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
@@ -51,19 +48,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
@@ -149,55 +137,53 @@ public class CreateRecipesFragment extends Fragment {
         btnCreateRecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                congThuc = new CongThuc();
-//                OpenDialogCreateRecipes();
-
-
-                AlphaVantageService service = AlphaVantageClient.getService();
-                Call<ResponseBody> call = service.getPrice("GLOBAL_QUOTE", "ngô", "642JNK88J836TS1W");
-
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            try {
-                                String jsonData = response.body().string();
-//                                String value = "";
-//                                for (int i = 0; i < jsonData.length();i++){
-//                                    value+= jsonData.charAt(i);
-//                                }
-//                                Log.e("Data trả về","" + value);
-                                JSONObject jsonObject = new JSONObject(jsonData);
-
-                                Log.e("Data trả về","" + jsonObject);
-                                Log.e("Data trả về","" + jsonObject.length());
-
-//                                if (jsonObject != null) {
-//                                    Iterator<String> keys = jsonObject.keys();
-//                                    keys.forEachRemaining(s -> {
-//                                        Log.e("Giá gạo","Giá gạo:" + s.toLowerCase());
-//                                    });
-////                                    while(keys.hasNext()) {
-////                                        String key = keys.next();
-////                                        Log.e("Giá gạo","Giá gạo:" + key.toLowerCase() + " - " + key.va);
-////                                    }
-////                                    Log.e("Giá gạo","Giá gạo: " + jsonObject.getString("global quote"));
-//                                } else {
-//                                    Log.e("Giá gạo","Giá gạo: null");
-//                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    }
-                });
+                congThuc = new CongThuc();
+                OpenDialogCreateRecipes();
+//                AlphaVantageService service = AlphaVantageClient.getService();
+//                Call<ResponseBody> call = service.getPrice("GLOBAL_QUOTE", "ngô", "642JNK88J836TS1W");
+//
+//                call.enqueue(new Callback<ResponseBody>() {
+//                    @Override
+//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                        if (response.isSuccessful()) {
+//                            try {
+//                                String jsonData = response.body().string();
+////                                String value = "";
+////                                for (int i = 0; i < jsonData.length();i++){
+////                                    value+= jsonData.charAt(i);
+////                                }
+////                                Log.e("Data trả về","" + value);
+//                                JSONObject jsonObject = new JSONObject(jsonData);
+//
+//                                Log.e("Data trả về","" + jsonObject);
+//                                Log.e("Data trả về","" + jsonObject.length());
+//
+////                                if (jsonObject != null) {
+////                                    Iterator<String> keys = jsonObject.keys();
+////                                    keys.forEachRemaining(s -> {
+////                                        Log.e("Giá gạo","Giá gạo:" + s.toLowerCase());
+////                                    });
+//////                                    while(keys.hasNext()) {
+//////                                        String key = keys.next();
+//////                                        Log.e("Giá gạo","Giá gạo:" + key.toLowerCase() + " - " + key.va);
+//////                                    }
+//////                                    Log.e("Giá gạo","Giá gạo: " + jsonObject.getString("global quote"));
+////                                } else {
+////                                    Log.e("Giá gạo","Giá gạo: null");
+////                                }
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            } catch (JSONException e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                        } else {
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                    }
+//                });
             }
         });
 
