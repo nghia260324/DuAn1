@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.ungdungchiasecongthucnauan.Database.DbHelper;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
-import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class AnhDao {
         return getData(sql);
     }
     public Anh getID(String id) {
-        String sql = "SELECT * FORM ANH WHERE id = ?";
+        String sql = "SELECT * FROM ANH WHERE id = ?";
         List<Anh> lstAnh = getData(sql, id);
         return lstAnh.get(0);
     }

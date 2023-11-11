@@ -36,8 +36,13 @@ public class NguyenLieuDao {
         return getData(sql);
     }
     public NguyenLieu getID(String id) {
-        String sql = "SELECT * FORM NGUYENLIEU WHERE id = ?";
+        String sql = "SELECT * FROM NGUYENLIEU WHERE id = ?";
         List<NguyenLieu> lstNL = getData(sql, id);
+        return lstNL.get(0);
+    }
+    public NguyenLieu getTen(String ten) {
+        String sql = "SELECT * FROM NGUYENLIEU WHERE ten = ?";
+        List<NguyenLieu> lstNL = getData(sql, ten);
         return lstNL.get(0);
     }
 }

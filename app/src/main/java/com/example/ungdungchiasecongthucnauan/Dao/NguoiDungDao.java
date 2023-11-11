@@ -79,7 +79,7 @@ public class NguoiDungDao {
                     Integer.parseInt(cursor.getString(6))
             ));
         }
-        if(lstNguoiDung != null) {
+        if(!lstNguoiDung.isEmpty()) {
             return lstNguoiDung.get(0);
         }
         return null;

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -29,15 +32,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.ungdungchiasecongthucnauan.Adapter.LoaiCongThucAdapter;
+import com.example.ungdungchiasecongthucnauan.Adapter.NLAdapter;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.BuocLamDao;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
+import com.example.ungdungchiasecongthucnauan.Dao.DanhSachNguyenLieuDao;
+import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
+import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
+import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
-import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
+import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,7 +57,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -108,7 +116,7 @@ public class CreateRecipesFragment extends Fragment {
     ImageView imgSelectedPictureMaking;
     LinearLayout layoutMaterial,layoutMaking;
     ArrayList<Uri> lstUri;
-    ArrayList<NguyenLieu> lstNguyenLieu;
+    ArrayList<DanhSachNguyenLieu> lstDanhSachNguyenLieu;
     ArrayList<BuocLam> lstBuocLam;
     ArrayList<Anh> lstAnh;
     private ProgressDialog progressDialog;
@@ -121,10 +129,12 @@ public class CreateRecipesFragment extends Fragment {
     CongThuc congThuc = new CongThuc();
     CongThucDao congThucDao;
     BuocLamDao buocLamDao;
+    DanhSachNguyenLieuDao dsnlDao;
     AnhDao anhDao;
 
+    LoaiCongThuc loaiCongThuc;
+
     private DatabaseReference databaseReference;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     String time,foodRation,foodName,idRecipes;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -141,7 +151,6 @@ public class CreateRecipesFragment extends Fragment {
                 OpenDialogCreateRecipes();
             }
         });
-
         return view;
     }
     private void OpenDialogCreateRecipes() {
@@ -150,7 +159,7 @@ public class CreateRecipesFragment extends Fragment {
         lstAnh = new ArrayList<>();
         lstUri = new ArrayList<>();
         lstBuocLam = new ArrayList<>();
-        lstNguyenLieu = new ArrayList<>();
+        lstDanhSachNguyenLieu = new ArrayList<>();
 
         final View dialogView = View.inflate(getContext(),R.layout.dialog_create_recipes,null);
         final Dialog dialog = new Dialog(getContext());
@@ -183,6 +192,18 @@ public class CreateRecipesFragment extends Fragment {
         EditText edtFoodRation = dialog.findViewById(R.id.edt_ration);
         EditText edtTime = dialog.findViewById(R.id.edt_time);
 
+        AutoCompleteTextView type = dialog.findViewById(R.id.type);
+        LoaiCongThucAdapter loaiCongThucAdapter = new LoaiCongThucAdapter(getContext(), R.layout.item_spinner_decentralization_selected, mainActivity.getAllLoaiCongThuc());
+        type.setAdapter(loaiCongThucAdapter);
+
+        type.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String ten = type.getText().toString().trim();
+                LoaiCongThucDao loaiCongThucDao = new LoaiCongThucDao(getContext());
+                loaiCongThuc = loaiCongThucDao.getTen(ten);
+            }
+        });
         imgSelectedPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,8 +221,9 @@ public class CreateRecipesFragment extends Fragment {
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NguyenLieu nguyenLieu = new NguyenLieu();
-                lstNguyenLieu.add(nguyenLieu);
+                DanhSachNguyenLieu dsnl = new DanhSachNguyenLieu();
+                dsnl.setIdCongThuc(idRecipes);
+                lstDanhSachNguyenLieu.add(dsnl);
 
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.item_material, null);
                 layoutMaterial.addView(view);
@@ -211,15 +233,21 @@ public class CreateRecipesFragment extends Fragment {
                     View viewMaterial = layoutMaterial.getChildAt(i);
                     Button btnRemoveMaterial = viewMaterial.findViewById(R.id.btn_removeMaterial);
 
-//                    AutoCompleteTextView actvKNL = viewMaterial.findViewById(R.id.actv_knl);
-//
-//                    KNLAdapter knlAdapter = new KNLAdapter(getContext(),R.layout.item_selected_spinner_knl,lstKNL);
-//                    actvKNL.setAdapter(knlAdapter);
+                    AutoCompleteTextView actvNL = viewMaterial.findViewById(R.id.edt_materialName);
+                    NLAdapter knlAdapter = new NLAdapter(getContext(), R.layout.item_selected_spinner_knl, mainActivity.getAllNguyenLieu());
+                    actvNL.setAdapter(knlAdapter);
+                    actvNL.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            NguyenLieuDao nguyenLieuDao = new NguyenLieuDao(getContext());
+                            dsnl.setIdNguyenLieu(nguyenLieuDao.getTen(actvNL.getText().toString().trim()).getId());
+                        }
+                    });
                     btnRemoveMaterial.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             layoutMaterial.removeView(viewMaterial);
-                            lstNguyenLieu.remove(indexRemove);
+                            lstDanhSachNguyenLieu.remove(indexRemove);
                         }
                     });
                 }
@@ -280,13 +308,22 @@ public class CreateRecipesFragment extends Fragment {
                 foodRation = edtFoodRation.getText().toString().trim();
                 time = edtTime.getText().toString().trim();
 
+                if (!foodRation.isEmpty() && !foodRation.matches("[0-9]+")) {
+                    edtFoodRation.setError("Khẩu phần không hợp lệ !");
+                    return;
+                }
+                if (!time.isEmpty() && !time.matches("[0-9]+")) {
+                    edtTime.setError("Thời gian không hợp lệ !");
+                    return;
+                }
+                if (loaiCongThuc == null) {
+                    type.setError("Vui lòng chọn loại công thức !");
+                    return;
+                }
                 if (ValidateMaterial(layoutMaterial) && ValidateMaking(layoutMaking)){
                     progressDialog = new ProgressDialog(getContext());
                     progressDialog.setMessage("Đang lưu công thức . . .");
                     progressDialog.show();
-                    for (int i = 0; i < lstNguyenLieu.size(); i++) {
-
-                    }
                     SaveDataToFirebase(lstAnh.get(0),lstUri.get(0),0,lstBuocLam.size() - 1,dialog);
                 }
             }
@@ -295,47 +332,62 @@ public class CreateRecipesFragment extends Fragment {
     }
     private boolean ValidateMaterial(LinearLayout layout){
         boolean check = false;
-        for (int i = 0; i < layout.getChildCount();i++){
-            View viewMaterial = layout.getChildAt(i);
-            EditText edtMaterialName = viewMaterial.findViewById(R.id.edt_materialName);
-            EditText edtMass = viewMaterial.findViewById(R.id.edt_mass);
-            String name = edtMaterialName.getText().toString().trim();
-            String mass = edtMass.getText().toString().trim();
-            if (!name.isEmpty() && !mass.isEmpty()) {
-                check = true;
-            } else {
-                if (name.isEmpty()) {
-                    edtMaterialName.setError(getContext().getResources().getString(R.string.is_empty));
-                }
-                if (mass.isEmpty()){
-                    edtMass.setError(getContext().getResources().getString(R.string.is_empty));
-                }
-                check = false;
-            }
-        }
-        if (lstNguyenLieu.isEmpty()){
+        if (lstDanhSachNguyenLieu.isEmpty()){
             Toast.makeText(getContext(), "Hãy thêm một vài nguyên liệu trước khi lưu !", Toast.LENGTH_SHORT).show();
             check = false;
+        } else {
+            for (int i = 0; i < layout.getChildCount();i++){
+                View viewMaterial = layout.getChildAt(i);
+                AutoCompleteTextView edtMaterialName = viewMaterial.findViewById(R.id.edt_materialName);
+                EditText edtMass = viewMaterial.findViewById(R.id.edt_mass);
+                String name = edtMaterialName.getText().toString().trim();
+                String mass = edtMass.getText().toString().trim();
+                if (!name.isEmpty() && !mass.isEmpty()) {
+                    if (!mass.matches("[0-9]+")) {
+                        edtMass.setError("Khối lượng không hợp lệ !");
+                        check = false;
+                    } else if (lstDanhSachNguyenLieu.get(i).getIdNguyenLieu() == 0) {
+                        Toast.makeText(getContext(), "Nguyên liệu không hợp lệ !", Toast.LENGTH_SHORT).show();
+                        check = false;
+                    } else {
+                        check = true;
+                        lstDanhSachNguyenLieu.get(i).setKhoiLuong(Integer.parseInt(mass));
+                    }
+                } else {
+                    if (name.isEmpty()) {
+                        edtMaterialName.setError(getContext().getResources().getString(R.string.is_empty));
+                    }
+                    if (mass.isEmpty()){
+                        edtMass.setError(getContext().getResources().getString(R.string.is_empty));
+                    }
+                    check = false;
+                    break;
+                }
+
+            }
         }
         return check;
     }
     private boolean ValidateMaking(LinearLayout layout){
         boolean check = false;
-        for (int i = 0; i < layout.getChildCount();i++){
-            View viewMaking = layout.getChildAt(i);
-            EditText edtContent = viewMaking.findViewById(R.id.edt_content);
-            String content = edtContent.getText().toString().trim();
-            if (!content.isEmpty()) {
-                check = true;
-            } else {
-                edtContent.setError(getContext().getResources().getString(R.string.is_empty));
-                check = false;
-            }
-        }
         if (lstBuocLam.isEmpty()) {
             Toast.makeText(mainActivity, "Hãy thêm bước làm cho công thức của bạn !", Toast.LENGTH_SHORT).show();
             check = false;
+        } else {
+            for (int i = 0; i < layout.getChildCount();i++){
+                View viewMaking = layout.getChildAt(i);
+                EditText edtContent = viewMaking.findViewById(R.id.edt_content);
+                String content = edtContent.getText().toString().trim();
+                if (!content.isEmpty()) {
+                    check = true;
+                } else {
+                    edtContent.setError(getContext().getResources().getString(R.string.is_empty));
+                    check = false;
+                    break;
+                }
+            }
         }
+
         return check;
     }
     private void OpenFile() {
@@ -351,7 +403,7 @@ public class CreateRecipesFragment extends Fragment {
         lstKNL = new ArrayList<>();
         lstKNL = mainActivity.getAllKieuNguyenLieu();
         lstUri = new ArrayList<>();
-        lstNguyenLieu = new ArrayList<>();
+        lstDanhSachNguyenLieu = new ArrayList<>();
         lstBuocLam = new ArrayList<>();
         lstAnh = new ArrayList<>();
 
@@ -362,6 +414,7 @@ public class CreateRecipesFragment extends Fragment {
         congThucDao = new CongThucDao(getContext());
         anhDao = new AnhDao(getContext());
         buocLamDao = new BuocLamDao(getContext());
+        dsnlDao = new DanhSachNguyenLieuDao(getContext());
 
     }
 
@@ -370,7 +423,7 @@ public class CreateRecipesFragment extends Fragment {
         foodRation = "";
         time = "";
         mImageBannerURL = null;
-        lstNguyenLieu.clear();
+        lstDanhSachNguyenLieu.clear();
         lstUri.clear();
         lstBuocLam.clear();
         lstAnh.clear();
@@ -401,7 +454,7 @@ public class CreateRecipesFragment extends Fragment {
         MimeTypeMap mine = MimeTypeMap.getSingleton();
         return uri != null ? mine.getExtensionFromMimeType(contentResolver.getType(uri)):null;
     }
-    private void SaveDataToFirebaseBanner(){
+    private void SaveDataToFirebaseBanner(Dialog dialog){
         if (mImageBannerURL != null) {
             StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getFileExtention(mImageBannerURL));
             storageTask = reference.putFile(mImageBannerURL).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -417,7 +470,17 @@ public class CreateRecipesFragment extends Fragment {
                             databaseReference.child(getID).setValue(anh);
                             anhDao.insert(anh);
                             setInfCongThuc(getID);
-                            congThucDao.insert(congThuc);
+                            for (int i = 0; i < lstDanhSachNguyenLieu.size(); i++) {
+                                dsnlDao.insert(lstDanhSachNguyenLieu.get(i));
+                                Log.e("Nguyên liệu","" + lstDanhSachNguyenLieu.get(i).toString());
+                            }
+                            for (int i = 0; i < lstBuocLam.size(); i++) {
+                                buocLamDao.insert(lstBuocLam.get(i));
+                            }
+                            ResetData();
+                            progressDialog.dismiss();
+                            dialog.dismiss();
+                            Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -429,7 +492,17 @@ public class CreateRecipesFragment extends Fragment {
             });
         } else {
             setInfCongThuc(null);
-            congThucDao.insert(congThuc);
+            for (int i = 0; i < lstDanhSachNguyenLieu.size(); i++) {
+                dsnlDao.insert(lstDanhSachNguyenLieu.get(i));
+                Log.e("Nguyên liệu","" + lstDanhSachNguyenLieu.get(i).toString());
+            }
+            for (int i = 0; i < lstBuocLam.size(); i++) {
+                buocLamDao.insert(lstBuocLam.get(i));
+            }
+            ResetData();
+            progressDialog.dismiss();
+            dialog.dismiss();
+            Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
         }
     }
     private void SaveDataToFirebase(Anh anh, Uri uri,int pos,int size,Dialog dialog){
@@ -449,11 +522,7 @@ public class CreateRecipesFragment extends Fragment {
                             lstBuocLam.get(pos).setIdAnh(getID);
                             setInfBuocLam(layoutMaking,pos);
                             if (pos == size) {
-                                SaveDataToFirebaseBanner();
-                                Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
-                                ResetData();
-                                progressDialog.dismiss();
-                                dialog.dismiss();
+                                SaveDataToFirebaseBanner(dialog);
                             } else {
                                 SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,lstBuocLam.size() - 1,dialog);
                             }
@@ -470,11 +539,7 @@ public class CreateRecipesFragment extends Fragment {
             lstBuocLam.get(pos).setIdAnh(null);
             setInfBuocLam(layoutMaking,pos);
             if (pos == (lstBuocLam.size() - 1)) {
-                SaveDataToFirebaseBanner();
-                Toast.makeText(mainActivity, "Lưu thành công !", Toast.LENGTH_SHORT).show();
-                ResetData();
-                progressDialog.dismiss();
-                dialog.dismiss();
+                SaveDataToFirebaseBanner(dialog);
             } else {
                 SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,lstBuocLam.size() - 1,dialog);
             }
@@ -487,7 +552,6 @@ public class CreateRecipesFragment extends Fragment {
         lstBuocLam.get(pos).setIdCongThuc(idRecipes);
         lstBuocLam.get(pos).setNoiDung(edtContent.getText().toString());
         lstBuocLam.get(pos).setThuTu(Integer.parseInt(tvLocation.getText().toString()));
-        buocLamDao.insert(lstBuocLam.get(pos));
     }
     private void setInfCongThuc(String getID){
         congThuc.setId(idRecipes);
@@ -501,7 +565,8 @@ public class CreateRecipesFragment extends Fragment {
             congThuc.setThoiGianNau(Integer.parseInt(time));
         } else congThuc.setThoiGianNau(-1);
         congThuc.setNgayTao(new Date());
-        congThuc.setIdLoai(0);
+        congThuc.setIdLoai(loaiCongThuc.getId());
         congThuc.setTrangThai(0);
+        congThucDao.insert(congThuc);
     }
 }

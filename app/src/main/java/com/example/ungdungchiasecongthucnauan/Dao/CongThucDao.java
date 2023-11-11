@@ -6,20 +6,28 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.ungdungchiasecongthucnauan.Database.DbHelper;
+import com.example.ungdungchiasecongthucnauan.Model.BinhLuan;
+import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
+import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class CongThucDao {
     private SQLiteDatabase db;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    BuocLamDao buocLamDao;
+    DanhSachNguyenLieuDao danhSachNguyenLieuDao;
+    BinhLuanDao binhLuanDao;
     public CongThucDao(Context context) {
         DbHelper dbHelper = new DbHelper(context);
         db = dbHelper.getWritableDatabase();
+        buocLamDao = new BuocLamDao(context);
+        danhSachNguyenLieuDao = new DanhSachNguyenLieuDao(context);
+        buocLamDao = new BuocLamDao(context);
     }
     private List<CongThuc> getData(String sql, String ... selectionArgs) {
         List<CongThuc> lstCongThuc = new ArrayList<>();
@@ -40,6 +48,9 @@ public class CongThucDao {
             congThuc.setIdLoai(Integer.parseInt(cursor.getString(7)));
             congThuc.setTrangThai(Integer.parseInt(cursor.getString(8)));
             lstCongThuc.add(congThuc);
+            congThuc.setLstBuocLam((ArrayList<BuocLam>) buocLamDao.getAllID(cursor.getString(0)));
+            congThuc.setLstNguyenLieu((ArrayList<DanhSachNguyenLieu>) danhSachNguyenLieuDao.getAllID(cursor.getString(0)));
+            congThuc.setLstBinhLuan((ArrayList<BinhLuan>) binhLuanDao.getAllID(cursor.getString(0)));
         }
         return lstCongThuc;
     }
@@ -78,7 +89,7 @@ public class CongThucDao {
         return getData(sql);
     }
     public CongThuc getID(String id) {
-        String sql = "SELECT * FORM CongThuc WHERE id = ?";
+        String sql = "SELECT * FROM CongThuc WHERE id = ?";
         List<CongThuc> lstCongThuc = getData(sql, id);
         return lstCongThuc.get(0);
     }

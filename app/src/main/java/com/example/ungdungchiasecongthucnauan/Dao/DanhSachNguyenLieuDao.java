@@ -35,7 +35,7 @@ public class DanhSachNguyenLieuDao {
         ContentValues contentValues = new ContentValues();
         contentValues.put("idCongThuc",obj.getIdCongThuc());
         contentValues.put("idNguyenLieu",obj.getIdNguyenLieu());
-        contentValues.put("khoiLuong",obj.getKhoiLuuong());
+        contentValues.put("khoiLuong",obj.getKhoiLuong());
 
         return db.insert("DanhSachNguyenLieu",null,contentValues);
     }
@@ -46,15 +46,19 @@ public class DanhSachNguyenLieuDao {
         ContentValues contentValues = new ContentValues();
         contentValues.put("idCongThuc",obj.getIdCongThuc());
         contentValues.put("idNguyenLieu",obj.getIdNguyenLieu());
-        contentValues.put("khoiLuong",obj.getKhoiLuuong());
+        contentValues.put("khoiLuong",obj.getKhoiLuong());
         return db.update("DanhSachNguyenLieu",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
     }
     public List<DanhSachNguyenLieu> getAll() {
         String sql = "SELECT * FROM DANHSACHNGUYENLIEU";
         return getData(sql);
     }
+    public List<DanhSachNguyenLieu> getAllID(String id) {
+        String sql = "SELECT * FROM DANHSACHNGUYENLIEU WHERE idCongThuc = ?";
+        return getData(sql,id);
+    }
     public DanhSachNguyenLieu getID(String id) {
-        String sql = "SELECT * FORM DANHSACHNGUYENLIEU WHERE ID = ?";
+        String sql = "SELECT * FROM DANHSACHNGUYENLIEU WHERE ID = ?";
         List<DanhSachNguyenLieu> lstDSNL = getData(sql, id);
         return lstDSNL.get(0);
     }

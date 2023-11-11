@@ -10,18 +10,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
+import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 import com.example.ungdungchiasecongthucnauan.R;
 
 import java.util.ArrayList;
 
-public class KNLAdapter extends ArrayAdapter<KieuNguyenLieu> {
+public class NLAdapter extends ArrayAdapter<NguyenLieu> {
     private Context context;
-    private ArrayList<KieuNguyenLieu> lstKNL;
-    public KNLAdapter(@NonNull Context context, int resource, ArrayList<KieuNguyenLieu> lstKNL) {
-        super(context,resource,lstKNL);
+    private ArrayList<NguyenLieu> lstNL;
+    public NLAdapter(@NonNull Context context, int resource, ArrayList<NguyenLieu> lstNL) {
+        super(context,resource,lstNL);
         this.context = context;
-        this.lstKNL = new ArrayList<>(lstKNL);
+        this.lstNL = new ArrayList<>(lstNL);
     }
 
 
@@ -30,9 +30,9 @@ public class KNLAdapter extends ArrayAdapter<KieuNguyenLieu> {
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_selected_spinner_knl,parent,false);
         }
-        KieuNguyenLieu kieuNguyenLieu = getItem(position);
+        NguyenLieu nguyenLieu = getItem(position);
         TextView tvTypeName = convertView.findViewById(R.id.tv_typeName);
-        tvTypeName.setText(kieuNguyenLieu.getTenKieu());
+        tvTypeName.setText(nguyenLieu.getTen());
         return convertView;
     }
     @Override
@@ -40,16 +40,16 @@ public class KNLAdapter extends ArrayAdapter<KieuNguyenLieu> {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<KieuNguyenLieu> lstK = new ArrayList<>();
+                ArrayList<NguyenLieu> lstK = new ArrayList<>();
                 if (constraint != null && constraint.length() > 0){
                     String fillter = constraint.toString().toLowerCase().trim();
-                    for(KieuNguyenLieu kieuNguyenLieu : lstKNL){
-                        if(kieuNguyenLieu.getTenKieu().toLowerCase().trim().contains(fillter)){
-                            lstK.add(kieuNguyenLieu);
+                    for(NguyenLieu nguyenLieu : lstNL){
+                        if(nguyenLieu.getTen().toLowerCase().trim().contains(fillter)){
+                            lstK.add(nguyenLieu);
                         }
                     }
                 } else {
-                    lstK.addAll(lstKNL);
+                    lstK.addAll(lstNL);
                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = lstK;
@@ -60,12 +60,12 @@ public class KNLAdapter extends ArrayAdapter<KieuNguyenLieu> {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 clear();
-                addAll((ArrayList<KieuNguyenLieu>)results.values);
+                addAll((ArrayList<NguyenLieu>)results.values);
                 notifyDataSetInvalidated();
             }
             @Override
             public CharSequence convertResultToString(Object resultValue) {
-                return ((KieuNguyenLieu)resultValue).getTenKieu();
+                return ((NguyenLieu)resultValue).getTen();
             }
         };
     }

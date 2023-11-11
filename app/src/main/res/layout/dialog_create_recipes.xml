@@ -115,6 +115,33 @@
                         android:padding="12dp"
                         android:textSize="16sp"/>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.5"
+                        android:text="Loại"
+                        android:fontFamily="@font/baloo_bhai_2"
+                        android:textSize="14sp"
+                        android:textColor="@color/black_333"/>
+                    <AutoCompleteTextView
+                        android:id="@+id/type"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/baloo_bhaijaan"
+                        android:textColorHint="@color/white"
+                        android:paddingHorizontal="12dp"
+                        android:hint="Đồ uống"
+                        android:completionThreshold="1"
+                        android:background="@drawable/cus_bgr_edt_dialog_create_recipes"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1.5"/>
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="12dp"

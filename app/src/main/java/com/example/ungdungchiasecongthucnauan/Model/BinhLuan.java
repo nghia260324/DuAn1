@@ -2,14 +2,16 @@ package com.example.ungdungchiasecongthucnauan.Model;
 
 public class BinhLuan {
     private int id;
+    private String idCongThuc;
     private int nguoiDung;
     private String noiDung;
 
     public BinhLuan() {
     }
 
-    public BinhLuan(int id, int nguoiDung, String noiDung) {
+    public BinhLuan(int id, String idCongThuc, int nguoiDung, String noiDung) {
         this.id = id;
+        this.idCongThuc = idCongThuc;
         this.nguoiDung = nguoiDung;
         this.noiDung = noiDung;
     }
@@ -20,6 +22,14 @@ public class BinhLuan {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getIdCongThuc() {
+        return idCongThuc;
+    }
+
+    public void setIdCongThuc(String idCongThuc) {
+        this.idCongThuc = idCongThuc;
     }
 
     public int getNguoiDung() {

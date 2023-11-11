@@ -1,24 +1,27 @@
 package com.example.ungdungchiasecongthucnauan;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-
 import com.example.ungdungchiasecongthucnauan.Dao.KieuNguyenLieuDao;
+import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
+import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Fragment.CreateRecipesFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.HomeFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.IndividualFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.SearchFragment;
 import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
+import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
+import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     KieuNguyenLieuDao kieuNguyenLieuDao;
     NguoiDungDao nguoiDungDao;
+    NguyenLieuDao nguyenLieuDao;
+    LoaiCongThucDao loaiCongThucDao;
 
     public int idUser;
 
@@ -82,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initUI() {
         nguoiDungDao = new NguoiDungDao(this);
+        nguyenLieuDao = new NguyenLieuDao(this);
+        loaiCongThucDao = new LoaiCongThucDao(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         frameLayout = findViewById(R.id.frameLayout);
@@ -90,10 +97,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public ArrayList<KieuNguyenLieu> getAllKieuNguyenLieu(){
-        ArrayList<KieuNguyenLieu> lstKNT = new ArrayList<>();
-        lstKNT = (ArrayList<KieuNguyenLieu>) kieuNguyenLieuDao.getAll();
+        ArrayList<KieuNguyenLieu> lstKNT = (ArrayList<KieuNguyenLieu>) kieuNguyenLieuDao.getAll();
         return lstKNT;
     }
+    public ArrayList<NguyenLieu> getAllNguyenLieu(){
+        ArrayList<NguyenLieu> lstNL = (ArrayList<NguyenLieu>) nguyenLieuDao.getAll();
+        return lstNL;
+    }
+    public ArrayList<LoaiCongThuc> getAllLoaiCongThuc(){
+        ArrayList<LoaiCongThuc> lstLCT = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();
+        return lstLCT;
+    }
+
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout,fragment);

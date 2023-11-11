@@ -6,10 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.ungdungchiasecongthucnauan.Database.DbHelper;
-import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BuocLamDao {
@@ -48,8 +49,19 @@ public class BuocLamDao {
         String sql = "SELECT * FROM BuocLam";
         return getData(sql);
     }
+    public List<BuocLam> getAllID(String id) {
+        String sql = "SELECT * FROM BuocLam WHERE idCongThuc = ?";
+        List<BuocLam> lstBuocLam = getData(sql, id);
+        Collections.sort(lstBuocLam, new Comparator<BuocLam>() {
+            @Override
+            public int compare(BuocLam o1, BuocLam o2) {
+                return o1.getThuTu() < o2.getThuTu()?1:-1;
+            }
+        });
+        return lstBuocLam;
+    }
     public BuocLam getID(String id) {
-        String sql = "SELECT * FORM BuocLam WHERE id = ?";
+        String sql = "SELECT * FROM BuocLam WHERE id = ?";
         List<BuocLam> lstBuocLam = getData(sql, id);
         return lstBuocLam.get(0);
     }

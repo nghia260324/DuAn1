@@ -4,16 +4,16 @@ public class DanhSachNguyenLieu {
     private int id;
     private String idCongThuc;
     private int idNguyenLieu;
-    private int khoiLuuong;
+    private int khoiLuong;
 
     public DanhSachNguyenLieu() {
     }
 
-    public DanhSachNguyenLieu(int id, String idCongThuc, int idNguyenLieu, int khoiLuuong) {
+    public DanhSachNguyenLieu(int id, String idCongThuc, int idNguyenLieu, int khoiLuong) {
         this.id = id;
         this.idCongThuc = idCongThuc;
         this.idNguyenLieu = idNguyenLieu;
-        this.khoiLuuong = khoiLuuong;
+        this.khoiLuong = khoiLuong;
     }
 
     public int getId() {
@@ -40,11 +40,21 @@ public class DanhSachNguyenLieu {
         this.idNguyenLieu = idNguyenLieu;
     }
 
-    public int getKhoiLuuong() {
-        return khoiLuuong;
+    public int getKhoiLuong() {
+        return khoiLuong;
     }
 
-    public void setKhoiLuuong(int khoiLuuong) {
-        this.khoiLuuong = khoiLuuong;
+    public void setKhoiLuong(int khoiLuong) {
+        this.khoiLuong = khoiLuong;
+    }
+
+    @Override
+    public String toString() {
+        return "DanhSachNguyenLieu{" +
+                "id=" + id +
+                ", idCongThuc='" + idCongThuc + '\'' +
+                ", idNguyenLieu=" + idNguyenLieu +
+                ", khoiLuong=" + khoiLuong +
+                '}';
     }
 }

@@ -14,13 +14,13 @@ public class CongThuc {
     private int idLoai;
     private int trangThai;
     private ArrayList<BuocLam> lstBuocLam;
-    private ArrayList<NguyenLieu> lstNguyenLieu;
+    private ArrayList<DanhSachNguyenLieu> lstNguyenLieu;
     private ArrayList<BinhLuan> lstBinhLuan;
 
     public CongThuc() {
     }
 
-    public CongThuc(String id, String ten, String idAnh, int idNguoiDung, int khauPhan, int thoiGianNau, Date ngayTao, int idLoai, int trangThai, ArrayList<BuocLam> lstBuocLam, ArrayList<NguyenLieu> lstNguyenLieu, ArrayList<BinhLuan> lstBinhLuan) {
+    public CongThuc(String id, String ten, String idAnh, int idNguoiDung, int khauPhan, int thoiGianNau, Date ngayTao, int idLoai, int trangThai, ArrayList<BuocLam> lstBuocLam, ArrayList<DanhSachNguyenLieu> lstNguyenLieu, ArrayList<BinhLuan> lstBinhLuan) {
         this.id = id;
         this.ten = ten;
         this.idAnh = idAnh;
@@ -115,11 +115,11 @@ public class CongThuc {
         this.lstBuocLam = lstBuocLam;
     }
 
-    public ArrayList<NguyenLieu> getLstNguyenLieu() {
+    public ArrayList<DanhSachNguyenLieu> getLstNguyenLieu() {
         return lstNguyenLieu;
     }
 
-    public void setLstNguyenLieu(ArrayList<NguyenLieu> lstNguyenLieu) {
+    public void setLstNguyenLieu(ArrayList<DanhSachNguyenLieu> lstNguyenLieu) {
         this.lstNguyenLieu = lstNguyenLieu;
     }
 
@@ -129,20 +129,5 @@ public class CongThuc {
 
     public void setLstBinhLuan(ArrayList<BinhLuan> lstBinhLuan) {
         this.lstBinhLuan = lstBinhLuan;
-    }
-
-    @Override
-    public String toString() {
-        return "CongThuc{" +
-                "id='" + id + '\'' +
-                ", ten='" + ten + '\'' +
-                ", idAnh='" + idAnh + '\'' +
-                ", idNguoiDung=" + idNguoiDung +
-                ", khauPhan=" + khauPhan +
-                ", thoiGianNau=" + thoiGianNau +
-                ", ngayTao=" + ngayTao +
-                ", idLoai=" + idLoai +
-                ", trangThai=" + trangThai +
-                '}';
     }
 }
