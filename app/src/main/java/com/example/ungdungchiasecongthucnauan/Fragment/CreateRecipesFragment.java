@@ -139,51 +139,6 @@ public class CreateRecipesFragment extends Fragment {
             public void onClick(View v) {
                 congThuc = new CongThuc();
                 OpenDialogCreateRecipes();
-//                AlphaVantageService service = AlphaVantageClient.getService();
-//                Call<ResponseBody> call = service.getPrice("GLOBAL_QUOTE", "ngô", "642JNK88J836TS1W");
-//
-//                call.enqueue(new Callback<ResponseBody>() {
-//                    @Override
-//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                        if (response.isSuccessful()) {
-//                            try {
-//                                String jsonData = response.body().string();
-////                                String value = "";
-////                                for (int i = 0; i < jsonData.length();i++){
-////                                    value+= jsonData.charAt(i);
-////                                }
-////                                Log.e("Data trả về","" + value);
-//                                JSONObject jsonObject = new JSONObject(jsonData);
-//
-//                                Log.e("Data trả về","" + jsonObject);
-//                                Log.e("Data trả về","" + jsonObject.length());
-//
-////                                if (jsonObject != null) {
-////                                    Iterator<String> keys = jsonObject.keys();
-////                                    keys.forEachRemaining(s -> {
-////                                        Log.e("Giá gạo","Giá gạo:" + s.toLowerCase());
-////                                    });
-//////                                    while(keys.hasNext()) {
-//////                                        String key = keys.next();
-//////                                        Log.e("Giá gạo","Giá gạo:" + key.toLowerCase() + " - " + key.va);
-//////                                    }
-//////                                    Log.e("Giá gạo","Giá gạo: " + jsonObject.getString("global quote"));
-////                                } else {
-////                                    Log.e("Giá gạo","Giá gạo: null");
-////                                }
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            } catch (JSONException e) {
-//                                throw new RuntimeException(e);
-//                            }
-//                        } else {
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                    }
-//                });
             }
         });
 
