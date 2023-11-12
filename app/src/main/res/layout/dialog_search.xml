@@ -17,6 +17,7 @@
             android:layout_height="24dp"
             android:background="@drawable/ic_back"/>
         <EditText
+            android:drawableEnd="@drawable/baseline_close"
             android:id="@+id/edt_searchDialog"
             android:inputType="text"
             android:singleLine="true"

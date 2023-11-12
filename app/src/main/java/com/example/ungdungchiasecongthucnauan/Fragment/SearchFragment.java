@@ -5,9 +5,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -170,7 +170,21 @@ public class SearchFragment extends Fragment {
 
             }
         });
+        edtSearchDialog.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
 
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (edtSearchDialog.getRight() - edtSearchDialog.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        edtSearchDialog.setText("");
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
         btnBackDialogSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,15 +196,18 @@ public class SearchFragment extends Fragment {
     }
 
     private ArrayList<CongThuc> searchCongThuc(String value,ArrayList<CongThuc> lstCongThuc) {
+        String[] arrInputValue = value.split(" ");
+        Map<String, Integer> wordCountMap = new HashMap<>();
         ArrayList<CongThuc> lstSearch = new ArrayList<>();
         for (CongThuc congThuc:lstCongThuc){
-            if (value.toLowerCase().trim().contains(congThuc.getTen().toLowerCase().trim())) {
-                lstSearch.add(congThuc);
+            for (String s: arrInputValue){
+                if (congThuc.getTen().toLowerCase().trim().contains(s.toLowerCase().trim())) {
+                    lstSearch.add(congThuc);
+                    break;
+                }
             }
         }
-        String[] arr = value.split(" ");
-        Map<String, Integer> wordCountMap = new HashMap<>();
-        for (String s:arr){
+        for (String s:arrInputValue){
             for (CongThuc congThuc:lstSearch) {
                 int count = 0;
                 if (congThuc.getTen().toLowerCase().trim().contains(s.toLowerCase().trim())) {
@@ -205,9 +222,6 @@ public class SearchFragment extends Fragment {
                 return wordCountMap.get(o1.getId()) < wordCountMap.get(o2.getId())?1:-1;
             }
         });
-        for (CongThuc congThuc:lstSearch) {
-            Log.e("Cong thuc sap xep","" + congThuc.toString());
-        }
         return lstSearch;
     }
 }
