@@ -10,18 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.ungdungchiasecongthucnauan.Model.Decentralization;
+import com.example.ungdungchiasecongthucnauan.Model.PhanQuyen;
 import com.example.ungdungchiasecongthucnauan.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class DecentralizatioAdapter extends ArrayAdapter<Decentralization> {
+public class DecentralizatioAdapter extends ArrayAdapter<PhanQuyen> {
     Context context;
-    ArrayList<Decentralization> lstD;
+    ArrayList<PhanQuyen> lstD;
     TextView tvDecentralization;
 
-    public DecentralizatioAdapter(Context context, int resource,ArrayList<Decentralization> objects) {
+    public DecentralizatioAdapter(Context context, int resource,ArrayList<PhanQuyen> objects) {
         super(context, resource, objects);
         this.context = context;
         this.lstD = objects;
@@ -33,10 +32,10 @@ public class DecentralizatioAdapter extends ArrayAdapter<Decentralization> {
         if (convertView == null){
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_spinner_decentralization_view,parent,false);
         }
-        Decentralization decentralization = getItem(position);
-        if (decentralization != null){
+        PhanQuyen phanQuyen = getItem(position);
+        if (phanQuyen != null){
             tvDecentralization = convertView.findViewById(R.id.tv_idecentralization);
-            tvDecentralization.setText(decentralization.getContent());
+            tvDecentralization.setText(phanQuyen.getContent());
         }
         return convertView;
     }
@@ -46,10 +45,10 @@ public class DecentralizatioAdapter extends ArrayAdapter<Decentralization> {
         if (convertView == null){
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_spinner_decentralization_selected,parent,false);
         }
-        Decentralization decentralization = getItem(position);
-        if (decentralization != null){
+        PhanQuyen phanQuyen = getItem(position);
+        if (phanQuyen != null){
             tvDecentralization = convertView.findViewById(R.id.tv_idecentralization);
-            tvDecentralization.setText(decentralization.getContent());
+            tvDecentralization.setText(phanQuyen.getContent());
         }
         return convertView;
     }

@@ -1,9 +1,9 @@
 package com.example.ungdungchiasecongthucnauan.Model;
 
-public class Decentralization {
+public class PhanQuyen {
     private String content;
 
-    public Decentralization(String content) {
+    public PhanQuyen(String content) {
         this.content = content;
     }
 

@@ -8,7 +8,7 @@
     tools:context=".Fragment.IndividualFragment">
 
     <LinearLayout
-        android:background="@drawable/shadow"
+        android:background="@drawable/shadow_bgr_while"
         android:padding="6dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"

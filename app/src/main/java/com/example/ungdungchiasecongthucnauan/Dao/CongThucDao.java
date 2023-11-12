@@ -27,9 +27,9 @@ public class CongThucDao {
         db = dbHelper.getWritableDatabase();
         buocLamDao = new BuocLamDao(context);
         danhSachNguyenLieuDao = new DanhSachNguyenLieuDao(context);
-        buocLamDao = new BuocLamDao(context);
+        binhLuanDao = new BinhLuanDao(context);
     }
-    private List<CongThuc> getData(String sql, String ... selectionArgs) {
+    public List<CongThuc> getData(String sql, String ... selectionArgs) {
         List<CongThuc> lstCongThuc = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,selectionArgs);
         while (cursor.moveToNext()) {
@@ -47,10 +47,13 @@ public class CongThucDao {
             }
             congThuc.setIdLoai(Integer.parseInt(cursor.getString(7)));
             congThuc.setTrangThai(Integer.parseInt(cursor.getString(8)));
-            lstCongThuc.add(congThuc);
             congThuc.setLstBuocLam((ArrayList<BuocLam>) buocLamDao.getAllID(cursor.getString(0)));
             congThuc.setLstNguyenLieu((ArrayList<DanhSachNguyenLieu>) danhSachNguyenLieuDao.getAllID(cursor.getString(0)));
+//            if (!binhLuanDao.getAllID(cursor.getString(0)).isEmpty()) {
+//
+//            } else congThuc.setLstBinhLuan(null);
             congThuc.setLstBinhLuan((ArrayList<BinhLuan>) binhLuanDao.getAllID(cursor.getString(0)));
+            lstCongThuc.add(congThuc);
         }
         return lstCongThuc;
     }

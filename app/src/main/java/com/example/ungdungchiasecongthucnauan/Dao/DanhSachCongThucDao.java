@@ -6,57 +6,55 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.ungdungchiasecongthucnauan.Database.DbHelper;
-import com.example.ungdungchiasecongthucnauan.Model.BinhLuan;
+import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
+import com.example.ungdungchiasecongthucnauan.Model.DanhSachCongThuc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DanhSachCongThucDao {
     private SQLiteDatabase db;
+    CongThucDao congThucDao;
     public DanhSachCongThucDao (Context context) {
         DbHelper dbHelper = new DbHelper(context);
         db = dbHelper.getWritableDatabase();
+        congThucDao = new CongThucDao(context);
     }
-
-    public long insert(BinhLuan obj) {
+    public long insert(DanhSachCongThuc obj) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("idCongThuc",obj.getIdCongThuc());
-        contentValues.put("idNguoiDung",obj.getNguoiDung());
-        contentValues.put("noiDung",obj.getNoiDung());
+        contentValues.put("ten",obj.getTen());
+        contentValues.put("idNguoiDung",obj.getIdNguoiDung());
 
-        return db.insert("BinhLuan",null,contentValues);
+        return db.insert("DanhSachCongThuc",null,contentValues);
     }
     public int delete(String id) {
-        return db.delete("BinhLuan","id = ?",new String[]{String.valueOf(id)});
+        return db.delete("DanhSachCongThuc","id = ?",new String[]{String.valueOf(id)});
     }
-    public long update(BinhLuan obj) {
+    public long update(DanhSachCongThuc obj) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("idCongThuc",obj.getIdCongThuc());
-        contentValues.put("idNguoiDung",obj.getNguoiDung());
-        contentValues.put("noiDung",obj.getNoiDung());
+        contentValues.put("ten",obj.getTen());
+        contentValues.put("idNguoiDung",obj.getIdNguoiDung());
 
-        return db.update("BinhLuan",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
+        return db.update("DanhSachCongThuc",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
     }
-    private List<BinhLuan> getData(String sql, String ... selectionArgs) {
-        List<BinhLuan> lstBinhLuan = new ArrayList<>();
+    private List<DanhSachCongThuc> getData(String sql, String ... selectionArgs) {
+        List<DanhSachCongThuc> lstDSCT = new ArrayList<>();
         Cursor cursor = db.rawQuery(sql,selectionArgs);
         while (cursor.moveToNext()) {
-            lstBinhLuan.add(new BinhLuan(
-                    Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1),
-                    Integer.parseInt(cursor.getString(2)),
-                    cursor.getString(3)
+            lstDSCT.add(new DanhSachCongThuc(
+               Integer.parseInt(cursor.getString(0)),
+               cursor.getString(1),
+               Integer.parseInt(cursor.getString(2))
             ));
         }
-        return lstBinhLuan;
+        return lstDSCT;
     }
-    public BinhLuan getID (String id) {
-        String sql = "SELECT * FROM BinhLuan WHERE id = ?";
-        List<BinhLuan> lstBinhLuan = getData(sql,id);
-        return lstBinhLuan.get(0);
+    public List<DanhSachCongThuc> getAll() {
+        String sql = "SELECT * FROM DANHSACHCONGTHUC";
+        return getData(sql);
     }
-    public List<BinhLuan> getAllID(String id) {
-        String sql = "SELECT * FROM BinhLuan WHERE idCongThuc = ?";
-        return getData(sql,id);
+    public List<CongThuc> getAllID(String id) {
+        String sql = "select * from congthuc where id in (select ct.id from CongThuc_DSCT ctdsct Join congthuc ct where ct.id = ctdsct.idCongThuc and idDanhSachCongThuc = "+ id +")";
+        return congThucDao.getData(sql,id);
     }
 }

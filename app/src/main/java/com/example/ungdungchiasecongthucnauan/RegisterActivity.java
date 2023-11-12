@@ -1,7 +1,5 @@
 package com.example.ungdungchiasecongthucnauan;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +8,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.ungdungchiasecongthucnauan.Adapter.DecentralizatioAdapter;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
-import com.example.ungdungchiasecongthucnauan.Model.Decentralization;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
+import com.example.ungdungchiasecongthucnauan.Model.PhanQuyen;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -63,10 +63,10 @@ public class RegisterActivity extends AppCompatActivity {
         spinner.setAdapter(decentralizatioAdapter);
     }
 
-    private ArrayList<Decentralization> getArrDecentralizatio() {
-        ArrayList<Decentralization> arr = new ArrayList<>();
-        arr.add(new Decentralization("Người dùng"));
-        arr.add(new Decentralization("Đầu bếp"));
+    private ArrayList<PhanQuyen> getArrDecentralizatio() {
+        ArrayList<PhanQuyen> arr = new ArrayList<>();
+        arr.add(new PhanQuyen("Người dùng"));
+        arr.add(new PhanQuyen("Đầu bếp"));
         return arr;
     }
 

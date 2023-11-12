@@ -130,4 +130,22 @@ public class CongThuc {
     public void setLstBinhLuan(ArrayList<BinhLuan> lstBinhLuan) {
         this.lstBinhLuan = lstBinhLuan;
     }
+
+    @Override
+    public String toString() {
+        return "CongThuc{" +
+                "id='" + id + '\'' +
+                ", ten='" + ten + '\'' +
+                ", idAnh='" + idAnh + '\'' +
+                ", idNguoiDung=" + idNguoiDung +
+                ", khauPhan=" + khauPhan +
+                ", thoiGianNau=" + thoiGianNau +
+                ", ngayTao=" + ngayTao +
+                ", idLoai=" + idLoai +
+                ", trangThai=" + trangThai +
+                ", lstBuocLam=" + lstBuocLam +
+                ", lstNguyenLieu=" + lstNguyenLieu +
+                ", lstBinhLuan=" + lstBinhLuan +
+                '}';
+    }
 }

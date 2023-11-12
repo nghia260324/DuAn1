@@ -76,7 +76,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         "ten TEXT NOT NULL," +
                         "idNguoiDung INTEGER NOT NULL)";
         String createTableCongThuc_DSCT =
-                "Create table CongThuc_DSCL (" +
+                "Create table CongThuc_DSCT (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "idCongThuc TEXT NOT NULL," +
                         "idDanhSachCongThuc INTEGER NOT NULL)";

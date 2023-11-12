@@ -2,6 +2,7 @@ package com.example.ungdungchiasecongthucnauan;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.KieuNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
@@ -18,6 +20,7 @@ import com.example.ungdungchiasecongthucnauan.Fragment.CreateRecipesFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.HomeFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.IndividualFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.SearchFragment;
+import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
@@ -39,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
     NguoiDungDao nguoiDungDao;
     NguyenLieuDao nguyenLieuDao;
     LoaiCongThucDao loaiCongThucDao;
+    CongThucDao congThucDao;
 
-    public int idUser;
+    public ArrayList<CongThuc> lstCongThuc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        lstCongThuc = (ArrayList<CongThuc>) congThucDao.getAll();
+        for (CongThuc congThuc: lstCongThuc){
+            Log.e("Công thức","" + congThuc.toString());
+        }
     }
 
     public NguoiDung getUser() {
@@ -89,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         nguoiDungDao = new NguoiDungDao(this);
         nguyenLieuDao = new NguyenLieuDao(this);
         loaiCongThucDao = new LoaiCongThucDao(this);
+        congThucDao = new CongThucDao(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         frameLayout = findViewById(R.id.frameLayout);
@@ -108,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<LoaiCongThuc> lstLCT = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();
         return lstLCT;
     }
+
 
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

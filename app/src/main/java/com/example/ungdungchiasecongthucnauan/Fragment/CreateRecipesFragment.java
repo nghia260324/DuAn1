@@ -415,7 +415,6 @@ public class CreateRecipesFragment extends Fragment {
         anhDao = new AnhDao(getContext());
         buocLamDao = new BuocLamDao(getContext());
         dsnlDao = new DanhSachNguyenLieuDao(getContext());
-
     }
 
     private void ResetData() {
