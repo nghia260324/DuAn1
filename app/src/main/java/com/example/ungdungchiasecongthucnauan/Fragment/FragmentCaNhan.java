@@ -3,26 +3,19 @@ package com.example.ungdungchiasecongthucnauan.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerAdapter;
 import com.example.ungdungchiasecongthucnauan.R;
-import com.google.android.material.tabs.TabLayout;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link IndividualFragment#newInstance} factory method to
+ * Use the {@link FragmentCaNhan#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IndividualFragment extends Fragment {
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
+public class FragmentCaNhan extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,7 +26,7 @@ public class IndividualFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public IndividualFragment() {
+    public FragmentCaNhan() {
         // Required empty public constructor
     }
 
@@ -43,11 +36,11 @@ public class IndividualFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment IndividualFragment.
+     * @return A new instance of fragment FragmentCaNhan.
      */
     // TODO: Rename and change types and number of parameters
-    public static IndividualFragment newInstance(String param1, String param2) {
-        IndividualFragment fragment = new IndividualFragment();
+    public static FragmentCaNhan newInstance(String param1, String param2) {
+        FragmentCaNhan fragment = new FragmentCaNhan();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,20 +61,6 @@ public class IndividualFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_individual, container, false);
-        tabLayout=(TabLayout) view.findViewById(R.id.tabLayout);
-        viewPager=(ViewPager) view.findViewById(R.id.viewPager);
-
-        viewPagerAdapter=new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-
-
-        viewPagerAdapter.addPragment(new FragmentCaNhan(),"Cá nhân");
-        viewPagerAdapter.addPragment(new FragmentCongThucDaLuu(), "Công thức đã lưu");
-        viewPagerAdapter.addPragment(new FragmentCongThucCuaToi(), "Công thức của tôi");
-
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_ca_nhan, container, false);
     }
 }
