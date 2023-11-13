@@ -4,22 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.KieuNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
-import com.example.ungdungchiasecongthucnauan.Fragment.CreateRecipesFragment;
-import com.example.ungdungchiasecongthucnauan.Fragment.HomeFragment;
-import com.example.ungdungchiasecongthucnauan.Fragment.IndividualFragment;
-import com.example.ungdungchiasecongthucnauan.Fragment.SearchFragment;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
@@ -37,15 +32,14 @@ public class MainActivity extends AppCompatActivity {
     private static final int FRAGMENT_INDIVIDIAL = 3;
     private int mCurrentFragment = FRAGMENT_HOME;
     BottomNavigationView bottomNavigationView;
-    FrameLayout frameLayout;
     KieuNguyenLieuDao kieuNguyenLieuDao;
     NguoiDungDao nguoiDungDao;
     NguyenLieuDao nguyenLieuDao;
     LoaiCongThucDao loaiCongThucDao;
     CongThucDao congThucDao;
-
     public ArrayList<CongThuc> lstCongThuc;
-
+    public ArrayList<LoaiCongThuc> lstLoaiCongThuc;
+    ViewPager2 viewPager2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,27 +47,46 @@ public class MainActivity extends AppCompatActivity {
 
         initUI();
 
+        ViewPagerBottomNavigationAdapter viewPagerBottomNavigationAdapter = new ViewPagerBottomNavigationAdapter(this);
+        viewPager2.setUserInputEnabled(false);
+        viewPager2.setAdapter(viewPagerBottomNavigationAdapter);
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                switch (position) {
+                    case 0: bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
+                        break;
+                    case 1: bottomNavigationView.getMenu().findItem(R.id.search).setChecked(true);
+                        break;
+                    case 2: bottomNavigationView.getMenu().findItem(R.id.create_recipes).setChecked(true);
+                        break;
+                    case 3: bottomNavigationView.getMenu().findItem(R.id.individual).setChecked(true);
+                        break;
+                }
+            }
+        });
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId() == R.id.home) {
                     if (mCurrentFragment != FRAGMENT_HOME) {
-                        replaceFragment(new HomeFragment());
+                        viewPager2.setCurrentItem(0);
                         mCurrentFragment = FRAGMENT_HOME;
                     }
                 } else if(item.getItemId() == R.id.search) {
                     if (mCurrentFragment != FRAGMENT_SEARCH) {
-                        replaceFragment(new SearchFragment());
+                        viewPager2.setCurrentItem(1);
                         mCurrentFragment = FRAGMENT_SEARCH;
                     }
                 } else if (item.getItemId() == R.id.create_recipes) {
                     if (mCurrentFragment != FRAGMENT_CREATE_RECIPES) {
-                        replaceFragment(new CreateRecipesFragment());
+                        viewPager2.setCurrentItem(2);
                         mCurrentFragment = FRAGMENT_CREATE_RECIPES;
                     }
                 } else if (item.getItemId() == R.id.individual) {
                     if (mCurrentFragment != FRAGMENT_INDIVIDIAL) {
-                        replaceFragment(new IndividualFragment());
+                        viewPager2.setCurrentItem(3);
                         mCurrentFragment = FRAGMENT_INDIVIDIAL;
                     }
                 }
@@ -100,9 +113,11 @@ public class MainActivity extends AppCompatActivity {
         congThucDao = new CongThucDao(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        frameLayout = findViewById(R.id.frameLayout);
+        viewPager2 = findViewById(R.id.viewPager2);
 
         kieuNguyenLieuDao = new KieuNguyenLieuDao(this);
+        lstLoaiCongThuc = new ArrayList<>();
+        lstLoaiCongThuc = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();
     }
 
     public ArrayList<KieuNguyenLieu> getAllKieuNguyenLieu(){
@@ -116,12 +131,5 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<LoaiCongThuc> getAllLoaiCongThuc(){
         ArrayList<LoaiCongThuc> lstLCT = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();
         return lstLCT;
-    }
-
-
-    private void replaceFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout,fragment);
-        fragmentTransaction.commit();
     }
 }

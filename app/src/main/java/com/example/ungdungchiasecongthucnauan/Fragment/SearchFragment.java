@@ -1,31 +1,39 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ungdungchiasecongthucnauan.Adapter.RCVLoaiCongThucAdapter;
 import com.example.ungdungchiasecongthucnauan.Adapter.SearchAdapter;
 import com.example.ungdungchiasecongthucnauan.Adapter.SearchSuggestionAdapter;
 import com.example.ungdungchiasecongthucnauan.IReturnString;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.R;
+import com.example.ungdungchiasecongthucnauan.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,9 +87,14 @@ public class SearchFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    private static final String PATH_SEARCH_HISTORY = "search_history.txt";
     MainActivity mainActivity;
     EditText edtSearch,edtSearchDialog;
     ArrayList<String> lstSuggestSearch;
+    RecyclerView rcvFormulaType;
+    ProgressDialog progressDialog;
+    TextView tvNone;
+    LinearLayout layoutHistory;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,19 +102,43 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         initUI(view);
-
         edtSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
                     edtSearch.clearFocus();
                     OpenDialogSearch();
-
                 }
             }
         });
 
+        RCVLoaiCongThucAdapter rcvLoaiCongThucAdapter = new RCVLoaiCongThucAdapter(getContext(), mainActivity.lstLoaiCongThuc);
+        rcvFormulaType.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        rcvFormulaType.setLayoutManager(new GridLayoutManager(getContext(),2));
+        rcvFormulaType.setNestedScrollingEnabled(false);
+        rcvFormulaType.setAdapter(rcvLoaiCongThucAdapter);
+
+        ShowSearchHistory();
+
         return view;
+    }
+
+    private void ShowSearchHistory() {
+        ArrayList<String> lstSearchHistory = new Service().readFile(PATH_SEARCH_HISTORY);
+        Log.e("Lst Search","" + lstSearchHistory);
+        if (!lstSearchHistory.isEmpty()) {
+            tvNone.setEnabled(false);
+            layoutHistory.setEnabled(true);
+            for (String s : lstSearchHistory) {
+                View itemHistoryView = LayoutInflater.from(getContext()).inflate(R.layout.item_search_history,null);
+                TextView tvName = itemHistoryView.findViewById(R.id.tv_history);
+                tvName.setText(s);
+                layoutHistory.addView(itemHistoryView);
+            }
+        } else {
+            tvNone.setEnabled(true);
+            layoutHistory.setEnabled(false);
+        }
     }
 
     private void initUI(View view) {
@@ -109,6 +146,11 @@ public class SearchFragment extends Fragment {
         edtSearch = view.findViewById(R.id.edt_search);
 
         lstSuggestSearch = new ArrayList<>();
+        rcvFormulaType = view.findViewById(R.id.rcv_formula_type);
+        progressDialog = new ProgressDialog(getContext());
+
+        tvNone = view.findViewById(R.id.tv_none);
+        layoutHistory = view.findViewById(R.id.layout_history);
     }
 
     private void OpenDialogSearch() {
@@ -140,7 +182,6 @@ public class SearchFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 lstSuggestSearch.clear();
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String value = s.toString().toLowerCase().trim();
@@ -153,6 +194,14 @@ public class SearchFragment extends Fragment {
                 SearchSuggestionAdapter searchSuggestionAdapter = new SearchSuggestionAdapter(lstSuggestSearch, new IReturnString() {
                     @Override
                     public void ReturnString(String value) {
+                        Service service = new Service();
+                        ArrayList<String> lstSearchHistory = service.readFile(PATH_SEARCH_HISTORY);
+                        if (!lstSearchHistory.isEmpty() && lstSearchHistory.size() >= 5) {
+                            lstSearchHistory.remove(0);
+                        }
+                        lstSearchHistory.add(value);
+                        service.writeFile(PATH_SEARCH_HISTORY,lstSearchHistory);
+
                         edtSearchDialog.setText(value);
                         ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,mainActivity.lstCongThuc);
                         SearchAdapter searchAdapter = new SearchAdapter(getContext(),lstCongThucSearch);
@@ -174,11 +223,9 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 final int DRAWABLE_RIGHT = 2;
-
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (edtSearchDialog.getRight() - edtSearchDialog.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         edtSearchDialog.setText("");
-
                         return true;
                     }
                 }
@@ -191,7 +238,22 @@ public class SearchFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-
+        edtSearchDialog.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                    String value = edtSearchDialog.getText().toString().trim();
+                    ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,mainActivity.lstCongThuc);
+                    SearchAdapter searchAdapter = new SearchAdapter(getContext(),lstCongThucSearch);
+                    rcvSearchSuggestion.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+                    rcvSearchSuggestion.setLayoutManager(new GridLayoutManager(getContext(),1));
+                    rcvSearchSuggestion.setAdapter(searchAdapter);
+                    return true;
+                }
+                return false;
+            }
+        });
         dialog.show();
     }
 
@@ -222,6 +284,9 @@ public class SearchFragment extends Fragment {
                 return wordCountMap.get(o1.getId()) < wordCountMap.get(o2.getId())?1:-1;
             }
         });
+        for (CongThuc congThuc: lstSearch){
+            Log.e("Công thức search","" + congThuc.toString());
+        }
         return lstSearch;
     }
 }

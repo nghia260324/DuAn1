@@ -38,14 +38,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         nguyenLieuDao = new NguyenLieuDao(context);
         anhDao = new AnhDao(context);
     }
-
     @NonNull
     @Override
     public SearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rcv_search,null,false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull SearchAdapter.ViewHolder holder, int position) {
         CongThuc congThuc = lstCongThuc.get(position);
