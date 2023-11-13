@@ -124,10 +124,11 @@ public class SearchFragment extends Fragment {
     }
 
     private void ShowSearchHistory() {
-        ArrayList<String> lstSearchHistory = new Service().readFile(PATH_SEARCH_HISTORY);
+        ArrayList<String> lstSearchHistory = new Service().readFile(getContext(),PATH_SEARCH_HISTORY);
         if (!lstSearchHistory.isEmpty()) {
-            tvNone.setEnabled(false);
-            layoutHistory.setEnabled(true);
+            tvNone.setVisibility(View.GONE);
+            layoutHistory.setVisibility(View.VISIBLE);
+            layoutHistory.removeAllViews();
             for (String s : lstSearchHistory) {
                 View itemHistoryView = LayoutInflater.from(getContext()).inflate(R.layout.item_search_history,null);
                 TextView tvName = itemHistoryView.findViewById(R.id.tv_history);
@@ -135,8 +136,8 @@ public class SearchFragment extends Fragment {
                 layoutHistory.addView(itemHistoryView);
             }
         } else {
-            tvNone.setEnabled(true);
-            layoutHistory.setEnabled(false);
+            tvNone.setVisibility(View.VISIBLE);
+            layoutHistory.setVisibility(View.GONE);
         }
     }
 
@@ -194,12 +195,12 @@ public class SearchFragment extends Fragment {
                     @Override
                     public void ReturnString(String value) {
                         Service service = new Service();
-                        ArrayList<String> lstSearchHistory = service.readFile(PATH_SEARCH_HISTORY);
+                        ArrayList<String> lstSearchHistory = service.readFile(getContext(),PATH_SEARCH_HISTORY);
                         if (!lstSearchHistory.isEmpty() && lstSearchHistory.size() >= 5) {
                             lstSearchHistory.remove(0);
                         }
-                        lstSearchHistory.add("value");
-                        service.writeFile(PATH_SEARCH_HISTORY,lstSearchHistory);
+                        lstSearchHistory.add(value);
+                        service.writeFile(getContext(),PATH_SEARCH_HISTORY,lstSearchHistory);
                         ShowSearchHistory();
 
                         edtSearchDialog.setText(value);

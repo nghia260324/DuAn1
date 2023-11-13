@@ -4,10 +4,11 @@
     android:id="@+id/item_history"
     android:background="@drawable/shadow_bgr_while"
     android:layout_width="match_parent"
-    android:layout_height="36dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    android:paddingHorizontal="12dp">
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="6dp">
     <TextView
         android:id="@+id/tv_history"
         android:layout_width="match_parent"
