@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerAdapter;
 import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.google.android.material.tabs.TabLayout;
@@ -20,7 +22,7 @@ import com.google.android.material.tabs.TabLayout;
 public class IndividualFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerBottomNavigationAdapter viewPagerBottomNavigationAdapter;
+    private ViewPagerAdapter viewPagerBottomNavigationAdapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,14 +72,14 @@ public class IndividualFragment extends Fragment {
         tabLayout=(TabLayout) view.findViewById(R.id.tabLayout);
         viewPager=(ViewPager) view.findViewById(R.id.viewPager);
 
-//        viewPagerBottomNavigationAdapter = new ViewPagerBottomNavigationAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-//
-//
-//        viewPagerBottomNavigationAdapter.addPragment(new FragmentCaNhan(),"Cá nhân");
-//        viewPagerBottomNavigationAdapter.addPragment(new FragmentCongThucDaLuu(), "Công thức đã lưu");
-//        viewPagerBottomNavigationAdapter.addPragment(new FragmentCongThucCuaToi(), "Công thức của tôi");
-//
-//        viewPager.setAdapter(viewPagerBottomNavigationAdapter);
+        viewPagerBottomNavigationAdapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
+
+        viewPagerBottomNavigationAdapter.addFragment(new FragmentCaNhan(),"Cá nhân");
+        viewPagerBottomNavigationAdapter.addFragment(new FragmentCongThucDaLuu(), "Công thức đã lưu");
+        viewPagerBottomNavigationAdapter.addFragment(new FragmentCongThucCuaToi(), "Công thức của tôi");
+
+        viewPager.setAdapter(viewPagerBottomNavigationAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
         return view;
