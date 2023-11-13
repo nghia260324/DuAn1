@@ -21,7 +21,6 @@ import com.google.android.gms.tasks.Task;
 
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -70,10 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "Tạo tài khoản thất bại !", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-
-
-
             }
         });
 
@@ -153,22 +148,18 @@ public class RegisterActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spn_decentralization);
     }
     private void SaveUserToFireBase(String email, String password){
-        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
-                            Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
                             startActivity(intent);
                             finishAffinity();
-
                         } else {
-
                             Log.w("w", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-//
                         }
                     }
                 });
