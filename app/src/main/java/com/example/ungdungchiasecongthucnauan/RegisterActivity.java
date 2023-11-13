@@ -2,18 +2,25 @@ package com.example.ungdungchiasecongthucnauan;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.DecentralizatioAdapter;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.Model.PhanQuyen;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,6 +32,11 @@ public class RegisterActivity extends AppCompatActivity {
     NguoiDungDao nguoiDungDao;
     NguoiDung nguoiDung;
     Spinner spinner;
+
+    String email;
+    String name;
+    String password;
+    String rePassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,19 +55,24 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = edtEmail.getText().toString().trim();
-                String name = edtName.getText().toString().trim();
-                String password = edtPassword.getText().toString().trim();
-                String rePassword = edtRePassword.getText().toString().trim().trim();
+                 email = edtEmail.getText().toString().trim();
+                 name = edtName.getText().toString().trim();
+                 password = edtPassword.getText().toString().trim();
+                 rePassword = edtRePassword.getText().toString().trim().trim();
 
                 if (Validate(email,name,password,rePassword)){
                     if(nguoiDungDao.insert(nguoiDung) > 0) {
+                        SaveUserToFireBase(email,password);
                         Toast.makeText(RegisterActivity.this, "Đăng ký tài khoản thành công !", Toast.LENGTH_SHORT).show();
-                        btnGoLogin.callOnClick();
+//                        btnGoLogin.callOnClick();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Tạo tài khoản thất bại !", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+
+
+
             }
         });
 
@@ -133,5 +150,26 @@ public class RegisterActivity extends AppCompatActivity {
         edtRePassword = findViewById(R.id.edt_rePassword);
 
         spinner = findViewById(R.id.spn_decentralization);
+    }
+    private void SaveUserToFireBase(String email, String password){
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            finishAffinity();
+
+                        } else {
+
+                            Log.w("w", "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+//
+                        }
+                    }
+                });
     }
 }
