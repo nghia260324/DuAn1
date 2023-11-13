@@ -125,7 +125,6 @@ public class SearchFragment extends Fragment {
 
     private void ShowSearchHistory() {
         ArrayList<String> lstSearchHistory = new Service().readFile(PATH_SEARCH_HISTORY);
-        Log.e("Lst Search","" + lstSearchHistory);
         if (!lstSearchHistory.isEmpty()) {
             tvNone.setEnabled(false);
             layoutHistory.setEnabled(true);
@@ -199,8 +198,9 @@ public class SearchFragment extends Fragment {
                         if (!lstSearchHistory.isEmpty() && lstSearchHistory.size() >= 5) {
                             lstSearchHistory.remove(0);
                         }
-                        lstSearchHistory.add(value);
+                        lstSearchHistory.add("value");
                         service.writeFile(PATH_SEARCH_HISTORY,lstSearchHistory);
+                        ShowSearchHistory();
 
                         edtSearchDialog.setText(value);
                         ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,mainActivity.lstCongThuc);
