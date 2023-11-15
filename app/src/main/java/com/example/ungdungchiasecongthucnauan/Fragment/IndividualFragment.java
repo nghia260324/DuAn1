@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -13,6 +14,8 @@ import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerAdapter;
 import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +26,8 @@ public class IndividualFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerBottomNavigationAdapter;
+
+    TextView tvHoten,tvEmail;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,6 +77,12 @@ public class IndividualFragment extends Fragment {
         tabLayout=(TabLayout) view.findViewById(R.id.tabLayout);
         viewPager=(ViewPager) view.findViewById(R.id.viewPager);
 
+        tvHoten=(TextView) view.findViewById(R.id.tvHoten);
+        tvEmail=(TextView) view.findViewById(R.id.tvEmail);
+        getDataUser();
+
+
+
         viewPagerBottomNavigationAdapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
 
@@ -84,4 +95,11 @@ public class IndividualFragment extends Fragment {
 
         return view;
     }
+
+    private void getDataUser(){
+        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
+        tvEmail.setText(user.getEmail());
+        //thieu setText cua tvHoten
+    }
+
 }
