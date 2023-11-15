@@ -15,6 +15,7 @@ import com.example.ungdungchiasecongthucnauan.Dao.KieuNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
+import com.example.ungdungchiasecongthucnauan.Fragment.FragmentCaNhan;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
@@ -25,7 +26,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_SEARCH = 1;
     private static final int FRAGMENT_CREATE_RECIPES = 2;
@@ -132,4 +133,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<LoaiCongThuc> lstLCT = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();
         return lstLCT;
     }
+
+
+
 }

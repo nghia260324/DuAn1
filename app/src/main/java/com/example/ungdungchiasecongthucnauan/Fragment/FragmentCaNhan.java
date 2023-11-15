@@ -7,8 +7,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.example.ungdungchiasecongthucnauan.Adapter.CaNhanAdapter;
 import com.example.ungdungchiasecongthucnauan.R;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +22,9 @@ import com.example.ungdungchiasecongthucnauan.R;
  * create an instance of this fragment.
  */
 public class FragmentCaNhan extends Fragment {
+
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +36,7 @@ public class FragmentCaNhan extends Fragment {
     private String mParam2;
 
     public FragmentCaNhan() {
-        // Required empty public constructor
+
     }
 
     /**
@@ -61,6 +70,21 @@ public class FragmentCaNhan extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ca_nhan, container, false);
+        View view=inflater.inflate(R.layout.fragment_ca_nhan, container, false);
+        ListView listView=view.findViewById(R.id.lvcanhan);
+
+        List<String> items = new ArrayList<>();
+        items.add("Đổi mật khẩu");
+        items.add("Đăng xuất");
+
+        CaNhanAdapter adapter = new CaNhanAdapter(getActivity(), items);
+        listView.setAdapter(adapter);
+
+        return view;
     }
+
+
+
+
+
 }
