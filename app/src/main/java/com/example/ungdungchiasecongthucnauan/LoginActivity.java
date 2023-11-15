@@ -152,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w("TaG", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
 
                         }
                     }
