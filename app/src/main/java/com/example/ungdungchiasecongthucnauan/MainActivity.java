@@ -1,5 +1,6 @@
 package com.example.ungdungchiasecongthucnauan;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -131,5 +132,17 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<LoaiCongThuc> getAllLoaiCongThuc(){
         ArrayList<LoaiCongThuc> lstLCT = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();
         return lstLCT;
+    }
+    public ArrayList<CongThuc> lstViewedRecipe(Context context){
+        ArrayList<String> lstIDCongThuc = (ArrayList<String>) new Service().readFile(context,"recipe_viewed.txt");
+        ArrayList<CongThuc> lstCT = new ArrayList<>();
+        if (lstIDCongThuc != null){
+            for (int i = 0; i < lstIDCongThuc.size(); i++){
+                CongThuc congThuc = congThucDao.getID(lstIDCongThuc.get(i));
+                lstCT.add(congThuc);
+            }
+            return lstCT;
+        }
+        return null;
     }
 }

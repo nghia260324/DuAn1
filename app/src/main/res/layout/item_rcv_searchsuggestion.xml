@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Tên món ăn"
-        android:fontFamily="@font/baloo_bhai"
+        android:fontFamily="@font/baloo_bhaijaan"
         android:textSize="14sp"
         android:textColor="@color/black_333"/>
 </LinearLayout>

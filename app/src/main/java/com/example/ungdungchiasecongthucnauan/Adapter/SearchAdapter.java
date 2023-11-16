@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
+import com.example.ungdungchiasecongthucnauan.IReturnDone;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
@@ -30,10 +31,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     NguoiDungDao nguoiDungDao;
     NguyenLieuDao nguyenLieuDao;
     AnhDao anhDao;
+    IReturnDone returnDone;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    public SearchAdapter(Context context, ArrayList<CongThuc> lstCongThuc) {
+    public SearchAdapter(Context context, ArrayList<CongThuc> lstCongThuc,IReturnDone iReturnDone) {
         this.context = context;
         this.lstCongThuc = lstCongThuc;
+        this.returnDone = iReturnDone;
         nguoiDungDao = new NguoiDungDao(context);
         nguyenLieuDao = new NguyenLieuDao(context);
         anhDao = new AnhDao(context);
@@ -49,10 +52,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         CongThuc congThuc = lstCongThuc.get(position);
         NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
         Anh anh = new Anh();
-        if (congThuc.getIdAnh() != null) {
-            anh = anhDao.getID(congThuc.getIdAnh());
-        }
         if (congThuc != null) {
+            if (congThuc.getIdAnh() != null) {
+                anh = anhDao.getID(congThuc.getIdAnh());
+            }
             String listMaterial = "";
             holder.tvName.setText(congThuc.getTen());
             holder.tvUser.setText(nguoiDung.getHoTen());
@@ -65,6 +68,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
             holder.tvListMaterial.setText(listMaterial);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnDone.IReturnDone(context,congThuc);
+            }
+        });
     }
 
     @Override

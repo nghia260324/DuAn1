@@ -48,6 +48,7 @@ public class CongThucDao {
             congThuc.setIdLoai(Integer.parseInt(cursor.getString(7)));
             congThuc.setTrangThai(Integer.parseInt(cursor.getString(8)));
             congThuc.setLstBuocLam((ArrayList<BuocLam>) buocLamDao.getAllID(cursor.getString(0)));
+
             congThuc.setLstNguyenLieu((ArrayList<DanhSachNguyenLieu>) danhSachNguyenLieuDao.getAllID(cursor.getString(0)));
 //            if (!binhLuanDao.getAllID(cursor.getString(0)).isEmpty()) {
 //
@@ -96,5 +97,37 @@ public class CongThucDao {
         List<CongThuc> lstCongThuc = getData(sql, id);
         return lstCongThuc.get(0);
     }
+    public List<CongThuc> getCongThucByIngredientIds(List<Integer> ingredientIds) {
+        List<CongThuc> lstCongThuc = new ArrayList<>();
+        ArrayList<String> lstIDCongThuc = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < ingredientIds.size(); i++) {
+            if (i > 0) {
+                stringBuilder.append(",");
+            }
+            stringBuilder.append(ingredientIds.get(i));
+        }
 
+        String sql = "SELECT CongThuc.id, COUNT(DanhSachNguyenLieu.idCongThuc) AS numIngredients " +
+                "FROM CongThuc " +
+                "JOIN DanhSachNguyenLieu ON CongThuc.id = DanhSachNguyenLieu.idCongThuc " +
+                "WHERE DanhSachNguyenLieu.idNguyenLieu IN (" + stringBuilder.toString() + ") " +
+                "GROUP BY CongThuc.id " +
+                "ORDER BY numIngredients DESC " +
+                "LIMIT 10";
+
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            String id = cursor.getString(0);
+            lstIDCongThuc.add(id);
+        }
+        cursor.close();
+
+        if (lstIDCongThuc != null) {
+            for (String s:lstIDCongThuc) {
+                lstCongThuc.add(getID(s));
+            }
+        }
+        return lstCongThuc;
+    }
 }

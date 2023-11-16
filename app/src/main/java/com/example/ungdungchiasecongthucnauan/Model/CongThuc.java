@@ -1,9 +1,10 @@
 package com.example.ungdungchiasecongthucnauan.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CongThuc {
+public class CongThuc implements Serializable {
     private String id;
     private String ten;
     private String idAnh;
