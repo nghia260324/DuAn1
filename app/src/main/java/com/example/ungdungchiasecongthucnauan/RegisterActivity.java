@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -87,10 +88,10 @@ public class RegisterActivity extends AppCompatActivity {
         boolean check;
         if(!email.isEmpty() && !name.isEmpty() && !password.isEmpty() && !rePassword.isEmpty()) {
             if(!email.matches("^[a-zA-Z0-9_]+@[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+){1,2}$")
-                    || password.length() < 5
+                    || !password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")
                     || !password.equals(rePassword)){
-                if (password.length() < 5) {
-                    edtPassword.setError("Mật khẩu phải có 5 ký tự trở lên !");
+                if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")) {
+                    edtPassword.setError("Mật khẩu phải có 5 ký tự trở lên, Ít nhất 1 chữ in hoa và 1 chữ thường !");
                     edtPassword.requestFocus();
                 } else if (!password.equals(rePassword)) {
                     edtRePassword.setError("Nhập lại mật khẩu chưa chính xác !");
@@ -100,6 +101,10 @@ public class RegisterActivity extends AppCompatActivity {
                     edtEmail.requestFocus();
                 }
                 check = false;
+
+
+
+
             } else {
                 nguoiDung.setId(0);
                 nguoiDung.setHoTen(name);

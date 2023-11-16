@@ -1,22 +1,31 @@
 package com.example.ungdungchiasecongthucnauan;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     EditText edtEmail,edtPassword;
     Button btnGoRegister,btnLogin;
     NguoiDungDao nguoiDungDao;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,27 +47,29 @@ public class LoginActivity extends AppCompatActivity {
                 String email = edtEmail.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
                 if(Validate(email,password)){
-                    if(nguoiDungDao.checkLogin(email,password) > 0){
-                        rememberAccount();
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                        if (nguoiDungDao.getNguoiDung(email,password) != null) {
-                            NguoiDung nguoiDung = nguoiDungDao.getNguoiDung(email,password);
-                            intent.putExtra("userID",String.valueOf(nguoiDung.getId()));
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
-                            finish();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Đăng nhập thất bại !", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu chưa chính xác !", Toast.LENGTH_SHORT).show();
-                    }
+
+                    SignInWithFirebase(email,password);
+//                    if(nguoiDungDao.checkLogin(email,password) > 0){
+//                        rememberAccount();
+//                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+//                        if (nguoiDungDao.getNguoiDung(email,password) != null) {
+//                            NguoiDung nguoiDung = nguoiDungDao.getNguoiDung(email,password);
+//                            intent.putExtra("userID",String.valueOf(nguoiDung.getId()));
+//                            startActivity(intent);
+//                            overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
+//                            finish();
+//                        } else {
+//                            Toast.makeText(LoginActivity.this, "Đăng nhập thất bại !", Toast.LENGTH_SHORT).show();
+//                        }
+//                    } else {
+//                        Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu chưa chính xác !", Toast.LENGTH_SHORT).show();
+//                    }
                 }
             }
         });
 
-        checkSharedPreferences();
+//        checkSharedPreferences();
     }
     private boolean Validate(String email,String password){
         boolean check;
@@ -90,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void initUI() {
         nguoiDungDao = new NguoiDungDao(this);
-
+        progressDialog=new ProgressDialog(this);
         btnGoRegister = findViewById(R.id.btn_goRegister);
         btnLogin = findViewById(R.id.btn_login);
 
@@ -120,4 +131,32 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void SignInWithFirebase(String email,String password){
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        progressDialog.show();
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            progressDialog.dismiss();
+                            Log.d("TAG", "signInWithEmail:success");
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
+                            finishAffinity();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TaG", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
+                        }
+                    }
+                });
+    }
+
 }
