@@ -84,4 +84,23 @@ public class NguoiDungDao {
         }
         return null;
     }
+    public NguoiDung getNguoiDungFromEmail (String email) {
+        List<NguoiDung> lstNguoiDung = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM NguoiDung WHERE email = ?",new String[]{email});
+        while (cursor.moveToNext()) {
+            lstNguoiDung.add(new NguoiDung(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    Integer.parseInt(cursor.getString(4)),
+                    Integer.parseInt(cursor.getString(5)),
+                    Integer.parseInt(cursor.getString(6))
+            ));
+        }
+        if(!lstNguoiDung.isEmpty()) {
+            return lstNguoiDung.get(0);
+        }
+        return null;
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.ungdungchiasecongthucnauan;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +22,8 @@ import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -101,9 +102,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public NguoiDung getUser() {
-        Intent intent = getIntent();
-        String id = intent.getStringExtra("userID");
-        NguoiDung nguoiDung = nguoiDungDao.getID(id);
+//        Intent intent = getIntent();
+//        String id = intent.getStringExtra("userID");
+//        NguoiDung nguoiDung = nguoiDungDao.getID(id);
+        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
+        String email = user.getEmail();
+        NguoiDung nguoiDung = nguoiDungDao.getNguoiDungFromEmail(email);
         return nguoiDung;
     }
 

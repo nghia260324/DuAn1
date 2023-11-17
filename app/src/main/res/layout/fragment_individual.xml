@@ -45,22 +45,20 @@
                 android:textSize="14sp"
                 android:id="@+id/tvEmail"/>
         </LinearLayout>
-
     </LinearLayout>
 
-   <com.google.android.material.tabs.TabLayout
-       android:id="@+id/tabLayout"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:tabIndicatorColor="@color/orange_FDA"
-       app:tabSelectedTextColor="@color/black_333"
-       app:tabTextAppearance="@style/tab_text"
-       >
-   </com.google.android.material.tabs.TabLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:background="@color/white"
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/orange_FDA"
+        app:tabSelectedTextColor="@color/black_333"
+        app:tabRippleColor="@color/orange_FFD"
+        app:tabTextAppearance="@style/tab_text">
+    </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/viewPager"
-        />
-
+        android:id="@+id/viewPager" />
 </LinearLayout>

@@ -1,13 +1,17 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.ungdungchiasecongthucnauan.Adapter.MyRecipeAdapter;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.R;
 
 /**
@@ -57,10 +61,29 @@ public class FragmentCongThucCuaToi extends Fragment {
         }
     }
 
+
+    RecyclerView rcvMyRecipe;
+    MainActivity mainActivity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cong_thuc_cua_toi, container, false);
+        View view = inflater.inflate(R.layout.fragment_cong_thuc_cua_toi, container, false);
+        initUI(view);
+        SetAdapterRCV();
+        return view;
+    }
+
+    private void SetAdapterRCV() {
+        MyRecipeAdapter myRecipeAdapter = new MyRecipeAdapter(getContext(),mainActivity.lstCongThuc);
+        rcvMyRecipe.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        rcvMyRecipe.setLayoutManager(new GridLayoutManager(getContext(),2));
+        rcvMyRecipe.setAdapter(myRecipeAdapter);
+    }
+
+    private void initUI(View view) {
+        mainActivity = (MainActivity) getActivity();
+
+        rcvMyRecipe = view.findViewById(R.id.rcv_myRecipe);
     }
 }

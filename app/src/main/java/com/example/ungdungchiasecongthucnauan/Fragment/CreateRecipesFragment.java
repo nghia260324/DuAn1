@@ -228,7 +228,33 @@ public class CreateRecipesFragment extends Fragment {
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.item_material, null);
                 layoutMaterial.addView(view);
 
-                setUpMaterialView(view, dsnl);
+                for (int i = 0; i < layoutMaterial.getChildCount(); i++){
+                    int index = i;
+                    View viewMaterial = layoutMaterial.getChildAt(index);
+
+                    Button btnRemoveMaterial = viewMaterial.findViewById(R.id.btn_removeMaterial);
+                    btnRemoveMaterial.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            layoutMaterial.removeView(viewMaterial);
+                            lstDanhSachNguyenLieu.remove(index);
+                        }
+                    });
+
+                    TextView tvUnit = viewMaterial.findViewById(R.id.tv_unit);
+
+                    AutoCompleteTextView actvNL = viewMaterial.findViewById(R.id.edt_materialName);
+                    NLAdapter knlAdapter = new NLAdapter(getContext(), R.layout.item_selected_spinner_knl, mainActivity.getAllNguyenLieu());
+                    actvNL.setAdapter(knlAdapter);
+                    actvNL.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            NguyenLieuDao nguyenLieuDao = new NguyenLieuDao(getContext());
+                            dsnl.setIdNguyenLieu(nguyenLieuDao.getTen(actvNL.getText().toString().trim()).getId());
+                            new Service().SetMass(nguyenLieuDao,null,tvUnit,dsnl.getIdNguyenLieu(),-1);
+                        }
+                    });
+                }
             }
         });
         btnAddMaterial.callOnClick();
@@ -245,7 +271,40 @@ public class CreateRecipesFragment extends Fragment {
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.item_making, null);
                 layoutMaking.addView(view);
 
-                setOnClickListenersForItem(view);
+                for (int i = 0; i < layoutMaking.getChildCount(); i++){
+                    int index = i;
+                    View viewMaking = layoutMaking.getChildAt(index);
+                    TextView tvLocation = viewMaking.findViewById(R.id.tv_location);
+                    tvLocation.setText(String.valueOf(index + 1));
+
+                    Button btnRemoveMaking = viewMaking.findViewById(R.id.btn_removeMaking);
+                    btnRemoveMaking.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int indexRemove = layoutMaking.indexOfChild(view);
+                            layoutMaking.removeView(view);
+                            lstBuocLam.remove(indexRemove);
+                            lstAnh.remove(indexRemove);
+                            lstUri.remove(indexRemove);
+
+                            for(int i = 0; i < layoutMaking.getChildCount(); i++) {
+                                View viewMaking = layoutMaking.getChildAt(i);
+                                TextView tvLocation = viewMaking.findViewById(R.id.tv_location);
+                                tvLocation.setText(String.valueOf(i + 1));
+                            }
+                        }
+                    });
+
+                    ImageView imgSelectedPictureMaking = viewMaking.findViewById(R.id.img_selected_pictureMaking);
+                    imgSelectedPictureMaking.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selectedImgMaking = true;
+                            INDEX_SELECTED_IMG = index;
+                            OpenFile();
+                        }
+                    });
+                }
             }
         });
         btnAddMaking.callOnClick();
@@ -279,68 +338,6 @@ public class CreateRecipesFragment extends Fragment {
         dialog.show();
     }
 
-    private void setUpMaterialView(View view, DanhSachNguyenLieu dsnl) {
-        int index = layoutMaking.indexOfChild(view);
-        View viewMaterial = layoutMaterial.getChildAt(index);
-
-        Button btnRemoveMaterial = viewMaterial.findViewById(R.id.btn_removeMaterial);
-        btnRemoveMaterial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layoutMaterial.removeView(viewMaterial);
-                lstDanhSachNguyenLieu.remove(index);
-            }
-        });
-
-        TextView tvUnit = viewMaterial.findViewById(R.id.tv_unit);
-
-        AutoCompleteTextView actvNL = viewMaterial.findViewById(R.id.edt_materialName);
-        NLAdapter knlAdapter = new NLAdapter(getContext(), R.layout.item_selected_spinner_knl, mainActivity.getAllNguyenLieu());
-        actvNL.setAdapter(knlAdapter);
-        actvNL.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NguyenLieuDao nguyenLieuDao = new NguyenLieuDao(getContext());
-                dsnl.setIdNguyenLieu(nguyenLieuDao.getTen(actvNL.getText().toString().trim()).getId());
-                new Service().SetMass(nguyenLieuDao,null,tvUnit,dsnl.getIdNguyenLieu(),-1);
-            }
-        });
-    }
-
-    private void setOnClickListenersForItem(View view){
-        int index = layoutMaking.indexOfChild(view);
-        View viewMaking = layoutMaking.getChildAt(index);
-        TextView tvLocation = viewMaking.findViewById(R.id.tv_location);
-        tvLocation.setText(String.valueOf(index + 1));
-
-        Button btnRemoveMaterial = viewMaking.findViewById(R.id.btn_removeMaking);
-        btnRemoveMaterial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int indexRemove = layoutMaking.indexOfChild(view);
-                layoutMaking.removeView(view);
-                lstBuocLam.remove(indexRemove);
-                lstAnh.remove(indexRemove);
-                lstUri.remove(indexRemove);
-
-                for(int i = 0; i < layoutMaking.getChildCount(); i++) {
-                    View viewMaking = layoutMaking.getChildAt(i);
-                    TextView tvLocation = viewMaking.findViewById(R.id.tv_location);
-                    tvLocation.setText(String.valueOf(i + 1));
-                }
-            }
-        });
-
-        ImageView imgSelectedPictureMaking = viewMaking.findViewById(R.id.img_selected_pictureMaking);
-        imgSelectedPictureMaking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedImgMaking = true;
-                INDEX_SELECTED_IMG = index;
-                OpenFile();
-            }
-        });
-    }
     private boolean ValidateMaterial(LinearLayout layout){
         boolean check = false;
         if (lstDanhSachNguyenLieu.isEmpty()){

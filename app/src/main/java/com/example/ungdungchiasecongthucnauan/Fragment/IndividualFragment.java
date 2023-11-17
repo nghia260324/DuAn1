@@ -11,11 +11,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerAdapter;
-import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
+import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,12 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
  * create an instance of this fragment.
  */
 public class IndividualFragment extends Fragment {
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ViewPagerAdapter viewPagerBottomNavigationAdapter;
-
-    TextView tvHoten,tvEmail;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,38 +61,46 @@ public class IndividualFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
+    TextView tvHoten,tvEmail;
+    MainActivity mainActivity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_individual, container, false);
-        tabLayout=(TabLayout) view.findViewById(R.id.tabLayout);
-        viewPager=(ViewPager) view.findViewById(R.id.viewPager);
 
-        tvHoten=(TextView) view.findViewById(R.id.tvHoten);
-        tvEmail=(TextView) view.findViewById(R.id.tvEmail);
-        getDataUser();
+        initUI(view);
 
 
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        viewPagerBottomNavigationAdapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-
-
-        viewPagerBottomNavigationAdapter.addFragment(new FragmentCaNhan(),"Cá nhân");
-        viewPagerBottomNavigationAdapter.addFragment(new FragmentCongThucDaLuu(), "Công thức đã lưu");
-        viewPagerBottomNavigationAdapter.addFragment(new FragmentCongThucCuaToi(), "Công thức của tôi");
-
-        viewPager.setAdapter(viewPagerBottomNavigationAdapter);
+        viewPagerAdapter.addFragment(new FragmentCaNhan(),"Cá nhân");
+        viewPagerAdapter.addFragment(new FragmentCongThucDaLuu(), "Công thức đã lưu");
+        viewPagerAdapter.addFragment(new FragmentCongThucCuaToi(), "Công thức của tôi");
+        viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        setDataUser();
         return view;
     }
 
-    private void getDataUser(){
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-        tvEmail.setText(user.getEmail());
-        //thieu setText cua tvHoten
+    private void initUI(View view) {
+        tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.viewPager);
+
+        tvHoten = view.findViewById(R.id.tvHoten);
+        tvEmail = view.findViewById(R.id.tvEmail);
+
+        mainActivity = (MainActivity) getActivity();
+    }
+
+    private void setDataUser(){
+        NguoiDung nguoiDung = mainActivity.getUser();
+        tvEmail.setText(nguoiDung.getEmail());
+        tvHoten.setText(nguoiDung.getHoTen());
     }
 
 }

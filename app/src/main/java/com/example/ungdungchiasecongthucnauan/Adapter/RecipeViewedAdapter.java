@@ -45,14 +45,14 @@ public class RecipeViewedAdapter extends RecyclerView.Adapter<RecipeViewedAdapte
     public void onBindViewHolder(@NonNull RecipeViewedAdapter.ViewHolder holder, int position) {
         CongThuc congThuc = lstCongThuc.get(position);
         NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
-        Anh anh;
+        Anh anh = new Anh();
         if (congThuc != null){
             if (congThuc.getIdAnh() != null) {
                 anh = anhDao.getID(congThuc.getIdAnh());
-                Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.imgRecipeViewed);
-                holder.tvNameRecipe.setText(congThuc.getTen());
-                holder.tvNameUser.setText(nguoiDung.getHoTen());
             }
+            Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.imgRecipeViewed);
+            holder.tvNameRecipe.setText(congThuc.getTen());
+            holder.tvNameUser.setText(nguoiDung.getHoTen());
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

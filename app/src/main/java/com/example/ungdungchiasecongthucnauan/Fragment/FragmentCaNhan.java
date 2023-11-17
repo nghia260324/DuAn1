@@ -1,17 +1,15 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.ungdungchiasecongthucnauan.Adapter.CaNhanAdapter;
 import com.example.ungdungchiasecongthucnauan.R;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +20,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class FragmentCaNhan extends Fragment {
-
-
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
