@@ -36,8 +36,10 @@
                 android:layout_height="36dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_def_avatar"
+                android:id="@+id/img_avata"
                 app:shapeAppearanceOverlay="@style/rounded_corner"/>
             <TextView
+                android:id="@+id/tv_nameuser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nguyễn Văn A"
@@ -47,6 +49,7 @@
                 android:textSize="12sp"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_namedish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bánh Khoai Lang"
@@ -55,6 +58,7 @@
             android:fontFamily="@font/baloo_bhai"
             android:layout_marginTop="6dp"/>
         <TextView
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1 ngày trước"
@@ -63,6 +67,7 @@
             android:fontFamily="@font/baloo_bhai"/>
     </LinearLayout>
     <ImageButton
+        android:id="@+id/btn_save"
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:background="@drawable/ic_save"

@@ -4,11 +4,15 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ungdungchiasecongthucnauan.Adapter.BannerAdapter;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.R;
 
 /**
@@ -24,12 +28,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -48,7 +47,8 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    private String mParam1;
+    private String mParam2;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +56,24 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
+    MainActivity mainActivity;
     Toolbar toolbar;
+
+    private RecyclerView rcv_banner;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        initUI(view);
+
+        BannerAdapter bannerAdapter = new BannerAdapter(getContext(),mainActivity.lstCongThuc);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rcv_banner.setLayoutManager(linearLayoutManager);
+        rcv_banner.setAdapter(bannerAdapter);
 
 
 
@@ -72,7 +83,13 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    private void initUI(View view) {
+        rcv_banner = view.findViewById(R.id.rcv_banner);
+
+    }
+
     private void initUI() {
 
     }
+
 }
