@@ -21,6 +21,7 @@ import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 import com.example.ungdungchiasecongthucnauan.R;
+import com.example.ungdungchiasecongthucnauan.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             holder.tvName.setText(congThuc.getTen());
             holder.tvUser.setText(nguoiDung.getHoTen());
             holder.tvTime.setText(sdf.format(congThuc.getNgayTao()));
-            setAvatar(holder.imgAvatar,nguoiDung.getAvatar());
+            new Service().setAvatar(holder.imgAvatar,nguoiDung.getAvatar());
             Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.imgRecipe);
             for (DanhSachNguyenLieu dsnl: congThuc.getLstNguyenLieu()) {
                 NguyenLieu nguyenLieu = nguyenLieuDao.getID(String.valueOf(dsnl.getIdNguyenLieu()));
@@ -94,21 +95,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
             imgAvatar = itemView.findViewById(R.id.img_avatar);
             imgRecipe = itemView.findViewById(R.id.img_recipe);
-        }
-    }
-    private void setAvatar(ImageView imageView,int index){
-        switch (index){
-            case 1: imageView.setImageResource(R.drawable.avatar1);break;
-            case 2: imageView.setImageResource(R.drawable.avatar2);break;
-            case 3: imageView.setImageResource(R.drawable.avatar3);break;
-            case 4: imageView.setImageResource(R.drawable.avatar4);break;
-            case 5: imageView.setImageResource(R.drawable.avatar5);break;
-            case 6: imageView.setImageResource(R.drawable.avatar6);break;
-            case 7: imageView.setImageResource(R.drawable.avatar7);break;
-            case 8: imageView.setImageResource(R.drawable.avatar8);break;
-            case 9: imageView.setImageResource(R.drawable.avatar9);break;
-            case 10: imageView.setImageResource(R.drawable.avatar10);break;
-            default:break;
         }
     }
 }

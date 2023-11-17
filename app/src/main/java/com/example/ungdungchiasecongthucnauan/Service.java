@@ -2,6 +2,7 @@ package com.example.ungdungchiasecongthucnauan;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
@@ -78,6 +79,21 @@ public class Service {
                 }
                 break;
 //            case 11: break;
+            default:break;
+        }
+    }
+    public void setAvatar(ImageView imageView, int index){
+        switch (index){
+            case 1: imageView.setImageResource(R.drawable.avatar1);break;
+            case 2: imageView.setImageResource(R.drawable.avatar2);break;
+            case 3: imageView.setImageResource(R.drawable.avatar3);break;
+            case 4: imageView.setImageResource(R.drawable.avatar4);break;
+            case 5: imageView.setImageResource(R.drawable.avatar5);break;
+            case 6: imageView.setImageResource(R.drawable.avatar6);break;
+            case 7: imageView.setImageResource(R.drawable.avatar7);break;
+            case 8: imageView.setImageResource(R.drawable.avatar8);break;
+            case 9: imageView.setImageResource(R.drawable.avatar9);break;
+            case 10: imageView.setImageResource(R.drawable.avatar10);break;
             default:break;
         }
     }

@@ -337,7 +337,6 @@ public class CreateRecipesFragment extends Fragment {
         });
         dialog.show();
     }
-
     private boolean ValidateMaterial(LinearLayout layout){
         boolean check = false;
         if (lstDanhSachNguyenLieu.isEmpty()){
@@ -426,7 +425,6 @@ public class CreateRecipesFragment extends Fragment {
         dsnlDao = new DanhSachNguyenLieuDao(getContext());
         nguyenLieuDao = new NguyenLieuDao(getContext());
     }
-
     private void ResetData() {
         foodName = "";
         foodRation = "";
@@ -437,7 +435,6 @@ public class CreateRecipesFragment extends Fragment {
         lstBuocLam.clear();
         lstAnh.clear();
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

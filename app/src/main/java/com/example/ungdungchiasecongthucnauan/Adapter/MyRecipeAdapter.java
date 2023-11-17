@@ -68,12 +68,12 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                ChiTietCongThuc chiTietCongThuc = new ChiTietCongThuc(context,congThuc,mainActivity);
                 if (item.getItemId() == R.id.edit_option) {
-                    EditRecipes(congThuc);
+                    chiTietCongThuc.OpenDialogEdit();
                     return true;
                 } else if (item.getItemId() == R.id.delete_option) {
-                    DeleteRecipes();
-
+//                    chiTietCongThuc.OpenDialogCreateRecipes();
                     return true;
                 } else {
                     return false;
@@ -81,13 +81,6 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
             }
         });
         popupMenu.show();
-    }
-    private void EditRecipes(CongThuc congThuc) {
-        ChiTietCongThuc chiTietCongThuc = new ChiTietCongThuc(context,congThuc,mainActivity);
-        chiTietCongThuc.OpenDialogCreateRecipes(1);
-    }
-
-    private void DeleteRecipes() {
     }
 
     @Override

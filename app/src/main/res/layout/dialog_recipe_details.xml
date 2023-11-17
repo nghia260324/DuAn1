@@ -101,6 +101,7 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:orientation="horizontal"
@@ -169,6 +170,7 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_material"
+            android:paddingHorizontal="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

@@ -61,7 +61,7 @@ public class RecipeViewedAdapter extends RecyclerView.Adapter<RecipeViewedAdapte
             @Override
             public void onClick(View v) {
                 ChiTietCongThuc ctct = new ChiTietCongThuc(context,congThuc,mainActivity);
-                ctct.OpenDialogCreateRecipes(0);
+                ctct.OpenDialogCreateRecipes();
             }
         });
     }

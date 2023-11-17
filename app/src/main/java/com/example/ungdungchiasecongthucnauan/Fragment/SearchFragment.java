@@ -400,7 +400,7 @@ public class SearchFragment extends Fragment {
 
     private void OpenDialogRecipeDetails(Context context,CongThuc congThuc) {
         ChiTietCongThuc chiTietCongThuc = new ChiTietCongThuc(context,congThuc,mainActivity);
-        chiTietCongThuc.OpenDialogCreateRecipes(0);
+        chiTietCongThuc.OpenDialogCreateRecipes();
         ArrayList<String> lstRecipeViewed = (ArrayList<String>) new Service().readFile(context,"recipe_viewed.txt");
 
         if (!lstRecipeViewed.contains(congThuc.getId())) {

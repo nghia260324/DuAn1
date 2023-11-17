@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.BinhLuanDao;
 import com.example.ungdungchiasecongthucnauan.Dao.DanhSachNguyenLieuDao;
+import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
@@ -31,6 +33,7 @@ import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
+import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,16 +45,18 @@ public class ChiTietCongThuc {
     AnhDao anhDao;
     NguoiDungDao nguoiDungDao;
     DanhSachNguyenLieuDao danhSachNguyenLieuDao;
+    BinhLuanDao binhLuanDao;
     NguyenLieuDao nguyenLieuDao;
+    LoaiCongThucDao loaiCongThucDao;
     RecyclerView rcvMaking;
     ImageView imgBanner,imgAvatar;
     ImageButton btnBack,btnSend;
+    LinearLayout btnSave;
     TextView tvNameUser,tvFormulaName,tvTime,tvRation,tvCookingTime,tvComment,tvNoneComment;
     EditText edtContent;
     RelativeLayout layoutLine,lineComment;
     LinearLayout layoutMaterial,layoutMaking,layoutComment,layoutAddComment;
     MainActivity mainActivity;
-    BinhLuanDao binhLuanDao;
     public ChiTietCongThuc(Context context, CongThuc congThuc,MainActivity mainActivity) {
         this.context = context;
         this.congThuc = congThuc;
@@ -60,10 +65,11 @@ public class ChiTietCongThuc {
         this.danhSachNguyenLieuDao = new DanhSachNguyenLieuDao(context);
         this.nguyenLieuDao = new NguyenLieuDao(context);
         this.mainActivity = mainActivity;
+        this.loaiCongThucDao = new LoaiCongThucDao(context);
     }
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public void OpenDialogCreateRecipes(int type) {
+    public void OpenDialogCreateRecipes() {
         final View dialogView = View.inflate(context,R.layout.dialog_recipe_details,null);
         final Dialog dialog = new Dialog(context);
 
@@ -97,7 +103,7 @@ public class ChiTietCongThuc {
         }
         Glide.with(context).load(anh.getUrl()).error(R.drawable.ic_picture).into(imgBanner);
 
-        setAvatar(imgAvatar,nguoiDung.getAvatar());
+        new Service().setAvatar(imgAvatar,nguoiDung.getAvatar());
         tvNameUser.setText(nguoiDung.getHoTen());
         tvFormulaName.setText(congThuc.getTen());
         tvTime.setText(sdf.format(congThuc.getNgayTao()));
@@ -115,35 +121,70 @@ public class ChiTietCongThuc {
             tvCookingTime.setVisibility(View.GONE);
             layoutLine.setVisibility(View.GONE);
         }
+        ChiTiet(dialog);
 
-        switch (type) {
-            case 0:
-                ChiTiet(dialog);break;
-            case 1:
-                Edit();break;
-            case 2:
-                Delete();break;
-            default:break;
+        dialog.show();
+    }
+    public void OpenDialogEdit() {
+        final View dialogView = View.inflate(context,R.layout.dialog_create_recipes,null);
+        final Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(layoutParams);
+
+        ImageButton imgSelectedPicture = dialog.findViewById(R.id.img_selected_picture);
+
+        LinearLayout layoutMaterialEdit = dialog.findViewById(R.id.layout_material);
+        LinearLayout layoutMakingEdit = dialog.findViewById(R.id.layout_making);
+        EditText edtFoodName = dialog.findViewById(R.id.edt_foodName);
+        EditText edtFoodRation = dialog.findViewById(R.id.edt_ration);
+        EditText edtTime = dialog.findViewById(R.id.edt_time);
+        AutoCompleteTextView type = dialog.findViewById(R.id.type);
+
+        Anh anhCT = new Anh();
+        if (congThuc.getIdAnh() != null) {
+            anhCT = anhDao.getID(congThuc.getIdAnh());
+        }
+        Glide.with(context).load(anhCT.getUrl()).error(R.drawable.logoapp).into(imgSelectedPicture);
+
+        edtFoodName.setText(congThuc.getTen());
+        if (congThuc.getKhauPhan() != -1) {
+            edtFoodRation.setText(congThuc.getKhauPhan() + "");
+        }
+        if (congThuc.getThoiGianNau() != -1) {
+            edtTime.setText(congThuc.getThoiGianNau() + "");
+        }
+        type.setText(loaiCongThucDao.getID(String.valueOf(congThuc.getIdLoai())).getTenLoai());
+
+        ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
+        for (DanhSachNguyenLieu dsnl:lstDSNL){
+            NguyenLieu nguyenLieu = nguyenLieuDao.getID(String.valueOf(dsnl.getIdNguyenLieu()));
+            View view = LayoutInflater.from(context).inflate(R.layout.item_material,null);
+
+            AutoCompleteTextView actvNL = view.findViewById(R.id.edt_materialName);
+            EditText edtMass = view.findViewById(R.id.edt_mass);
+            TextView tvUnit = view.findViewById(R.id.tv_unit);
+            new Service().SetMass(nguyenLieuDao,null,tvUnit,dsnl.getIdNguyenLieu(),-1);
+
+            edtMass.setText(dsnl.getKhoiLuong() + "");
+
+            actvNL.setText(nguyenLieu.getTen());
+            layoutMaterialEdit.addView(view);
         }
 
         dialog.show();
     }
-    private void Delete() {
-
-    }
-    private void Edit() {
-        HideComment();
-
-    }
-
-    private void HideComment() {
-        tvNoneComment.setVisibility(View.GONE);
-        tvComment.setVisibility(View.GONE);
-        layoutComment.setVisibility(View.GONE);
-        layoutAddComment.setVisibility(View.GONE);
-        lineComment.setVisibility(View.GONE);
-    }
-
     private void initUI(Dialog dialog) {
 //        rcvMaking = dialog.findViewById(R.id.rcv_making);
         imgBanner = dialog.findViewById(R.id.img_banner);
@@ -163,6 +204,7 @@ public class ChiTietCongThuc {
         layoutComment = dialog.findViewById(R.id.layout_comment);
         layoutAddComment = dialog.findViewById(R.id.layout_addComment);
         btnSend = dialog.findViewById(R.id.btn_send);
+        btnSave = dialog.findViewById(R.id.btn_save);
 
         edtContent = dialog.findViewById(R.id.edt_content);
 
@@ -227,11 +269,10 @@ public class ChiTietCongThuc {
                 View view = LayoutInflater.from(context).inflate(R.layout.item_comment,null);
                 TextView tvContentComment = view.findViewById(R.id.tv_content);
                 ImageView imgAvatarUserComment = view.findViewById(R.id.img_avatarUserComment);
-                setAvatar(imgAvatarUserComment,userComment.getAvatar());
+                new Service().setAvatar(imgAvatarUserComment,userComment.getAvatar());
                 tvContentComment.setText(binhLuan.getNoiDung());
                 layoutComment.addView(view);
             }
-
         } else {
             tvNoneComment.setVisibility(View.VISIBLE);
             tvComment.setText("Bình luận(0)");
@@ -255,21 +296,5 @@ public class ChiTietCongThuc {
                 }
             }
         });
-    }
-
-    private void setAvatar(ImageView imageView,int index){
-        switch (index){
-            case 1: imageView.setImageResource(R.drawable.avatar1);break;
-            case 2: imageView.setImageResource(R.drawable.avatar2);break;
-            case 3: imageView.setImageResource(R.drawable.avatar3);break;
-            case 4: imageView.setImageResource(R.drawable.avatar4);break;
-            case 5: imageView.setImageResource(R.drawable.avatar5);break;
-            case 6: imageView.setImageResource(R.drawable.avatar6);break;
-            case 7: imageView.setImageResource(R.drawable.avatar7);break;
-            case 8: imageView.setImageResource(R.drawable.avatar8);break;
-            case 9: imageView.setImageResource(R.drawable.avatar9);break;
-            case 10: imageView.setImageResource(R.drawable.avatar10);break;
-            default:break;
-        }
     }
 }
