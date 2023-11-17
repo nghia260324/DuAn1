@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,14 +90,14 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
         edt_mkmoi=dialog.findViewById(R.id.edt_mkmoi);
         edt_nhaplaimk= dialog.findViewById(R.id.edt_nhaplaimk);
         Button btnRegister= dialog.findViewById(R.id.btn_register);
-//        ImageView img_Close=dialog.findViewById(R.id.img_Close);
+        ImageView img_Close=dialog.findViewById(R.id.img_Close);
 
-//        img_Close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
+        img_Close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +105,6 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                   String newpassword=edt_mkmoi.getText().toString().trim();
                   String renewpass=edt_nhaplaimk.getText().toString().trim();
 
-                Log.e("Tag",""+validate(oldpassword,newpassword,renewpass));
                   if (validate(oldpassword,newpassword,renewpass)){
                       FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
                       String email=user.getEmail();
@@ -136,6 +136,7 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
 
     private boolean validate(String oldpassword,String newpassword, String repassword){
         boolean check;
+
         if (oldpassword.isEmpty()&&newpassword.isEmpty()&&repassword.isEmpty()){
             if (!newpassword.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")){
                 edt_mkmoi.setError("Mật khẩu phải có 5 ký tự trở lên, Ít nhất 1 chữ in hoa và 1 chữ thường !");
@@ -147,7 +148,8 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                 edt_nhaplaimk.requestFocus();
                 check=false;
             }
-
+            edt_mkcu.setError("Không để trống trường này !");
+            edt_mkcu.requestFocus();
             check=false;
         }else{
           //true
