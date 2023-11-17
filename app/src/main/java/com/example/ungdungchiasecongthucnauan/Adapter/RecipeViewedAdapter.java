@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.ChiTietCongThuc;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
@@ -26,12 +27,14 @@ public class RecipeViewedAdapter extends RecyclerView.Adapter<RecipeViewedAdapte
     private ArrayList<CongThuc> lstCongThuc;
     private NguoiDungDao nguoiDungDao;
     private AnhDao anhDao;
+    MainActivity mainActivity;
 
-    public RecipeViewedAdapter(Context context, ArrayList<CongThuc> lstCongThuc) {
+    public RecipeViewedAdapter(Context context, ArrayList<CongThuc> lstCongThuc,MainActivity mainActivity) {
         this.context = context;
         this.lstCongThuc = lstCongThuc;
         this.nguoiDungDao = new NguoiDungDao(context);
         this.anhDao = new AnhDao(context);
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -57,8 +60,8 @@ public class RecipeViewedAdapter extends RecyclerView.Adapter<RecipeViewedAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChiTietCongThuc ctct = new ChiTietCongThuc(context,congThuc);
-                ctct.OpenDialogCreateRecipes();
+                ChiTietCongThuc ctct = new ChiTietCongThuc(context,congThuc,mainActivity);
+                ctct.OpenDialogCreateRecipes(0);
             }
         });
     }

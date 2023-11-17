@@ -1,6 +1,5 @@
 package com.example.ungdungchiasecongthucnauan.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,14 +16,11 @@ import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
-import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
-import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 import com.example.ungdungchiasecongthucnauan.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder> {
     private Context context;
@@ -61,8 +58,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
             holder.tv_date.setText(sdf.format(congThuc.getNgayTao()));
             setAvatar(holder.img_avata,nguoiDung.getAvatar());
             Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.img_bgr);
-
-
         }
     }
 

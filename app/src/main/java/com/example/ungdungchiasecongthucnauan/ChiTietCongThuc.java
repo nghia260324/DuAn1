@@ -15,15 +15,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
+import com.example.ungdungchiasecongthucnauan.Dao.BinhLuanDao;
 import com.example.ungdungchiasecongthucnauan.Dao.DanhSachNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
+import com.example.ungdungchiasecongthucnauan.Model.BinhLuan;
 import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
@@ -40,18 +43,27 @@ public class ChiTietCongThuc {
     NguoiDungDao nguoiDungDao;
     DanhSachNguyenLieuDao danhSachNguyenLieuDao;
     NguyenLieuDao nguyenLieuDao;
-
-    public ChiTietCongThuc(Context context, CongThuc congThuc) {
+    RecyclerView rcvMaking;
+    ImageView imgBanner,imgAvatar;
+    ImageButton btnBack,btnSend;
+    TextView tvNameUser,tvFormulaName,tvTime,tvRation,tvCookingTime,tvComment,tvNoneComment;
+    EditText edtContent;
+    RelativeLayout layoutLine,lineComment;
+    LinearLayout layoutMaterial,layoutMaking,layoutComment,layoutAddComment;
+    MainActivity mainActivity;
+    BinhLuanDao binhLuanDao;
+    public ChiTietCongThuc(Context context, CongThuc congThuc,MainActivity mainActivity) {
         this.context = context;
         this.congThuc = congThuc;
         this.anhDao = new AnhDao(context);
         this.nguoiDungDao = new NguoiDungDao(context);
         this.danhSachNguyenLieuDao = new DanhSachNguyenLieuDao(context);
         this.nguyenLieuDao = new NguyenLieuDao(context);
+        this.mainActivity = mainActivity;
     }
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public void OpenDialogCreateRecipes() {
+    public void OpenDialogCreateRecipes(int type) {
         final View dialogView = View.inflate(context,R.layout.dialog_recipe_details,null);
         final Dialog dialog = new Dialog(context);
 
@@ -68,18 +80,9 @@ public class ChiTietCongThuc {
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.gravity = Gravity.CENTER;
         dialog.getWindow().setAttributes(layoutParams);
-        RecyclerView rcvMaking = dialog.findViewById(R.id.rcv_making);
-        ImageView imgBanner = dialog.findViewById(R.id.img_banner);
-        ImageView imgAvatar = dialog.findViewById(R.id.img_avatar);
-        TextView tvNameUser = dialog.findViewById(R.id.tv_nameUser);
-        TextView tvFormulaName = dialog.findViewById(R.id.tv_formulaName);
-        TextView tvTime = dialog.findViewById(R.id.tv_time);
-        TextView tvRation = dialog.findViewById(R.id.tv_ration);
-        TextView tvCookingTime = dialog.findViewById(R.id.tv_cookingTime);
-        RelativeLayout layoutLine = dialog.findViewById(R.id.layout_line);
-        LinearLayout layoutMaterial = dialog.findViewById(R.id.layout_material);
-        LinearLayout layoutMaking = dialog.findViewById(R.id.layout_making);
-        ImageButton btnBack = dialog.findViewById(R.id.btn_back);
+
+        initUI(dialog);
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,6 +115,61 @@ public class ChiTietCongThuc {
             tvCookingTime.setVisibility(View.GONE);
             layoutLine.setVisibility(View.GONE);
         }
+
+        switch (type) {
+            case 0:
+                ChiTiet(dialog);break;
+            case 1:
+                Edit();break;
+            case 2:
+                Delete();break;
+            default:break;
+        }
+
+        dialog.show();
+    }
+    private void Delete() {
+
+    }
+    private void Edit() {
+        HideComment();
+
+    }
+
+    private void HideComment() {
+        tvNoneComment.setVisibility(View.GONE);
+        tvComment.setVisibility(View.GONE);
+        layoutComment.setVisibility(View.GONE);
+        layoutAddComment.setVisibility(View.GONE);
+        lineComment.setVisibility(View.GONE);
+    }
+
+    private void initUI(Dialog dialog) {
+//        rcvMaking = dialog.findViewById(R.id.rcv_making);
+        imgBanner = dialog.findViewById(R.id.img_banner);
+        imgAvatar = dialog.findViewById(R.id.img_avatar);
+        tvNameUser = dialog.findViewById(R.id.tv_nameUser);
+        tvFormulaName = dialog.findViewById(R.id.tv_formulaName);
+        tvTime = dialog.findViewById(R.id.tv_time);
+        tvRation = dialog.findViewById(R.id.tv_ration);
+        tvCookingTime = dialog.findViewById(R.id.tv_cookingTime);
+        layoutLine = dialog.findViewById(R.id.layout_line);
+        lineComment = dialog.findViewById(R.id.line_comment);
+        layoutMaterial = dialog.findViewById(R.id.layout_material);
+        layoutMaking = dialog.findViewById(R.id.layout_making);
+        btnBack = dialog.findViewById(R.id.btn_back);
+        tvComment = dialog.findViewById(R.id.tv_comment);
+        tvNoneComment = dialog.findViewById(R.id.tv_noneComment);
+        layoutComment = dialog.findViewById(R.id.layout_comment);
+        layoutAddComment = dialog.findViewById(R.id.layout_addComment);
+        btnSend = dialog.findViewById(R.id.btn_send);
+
+        edtContent = dialog.findViewById(R.id.edt_content);
+
+        binhLuanDao = new BinhLuanDao(context);
+    }
+
+    private void ChiTiet(Dialog dialog) {
         ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
         for (DanhSachNguyenLieu dsnl:lstDSNL){
             View view = LayoutInflater.from(context).inflate(R.layout.item_search_history,null);
@@ -156,7 +214,47 @@ public class ChiTietCongThuc {
                 layoutMaking.addView(view);
             }
         }
-        dialog.show();
+
+        if (!congThuc.getLstBinhLuan().isEmpty()) {
+            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
+            tvNoneComment.setVisibility(View.GONE);
+            layoutComment.setVisibility(View.VISIBLE);
+            tvComment.setText("Bình luận(" + congThuc.getLstBinhLuan().size() + ")");
+
+            for (int i = 0; i < lstBinhLuan.size(); i++){
+                BinhLuan binhLuan = lstBinhLuan.get(i);
+                NguoiDung userComment = nguoiDungDao.getID(String.valueOf(binhLuan.getNguoiDung()));
+                View view = LayoutInflater.from(context).inflate(R.layout.item_comment,null);
+                TextView tvContentComment = view.findViewById(R.id.tv_content);
+                ImageView imgAvatarUserComment = view.findViewById(R.id.img_avatarUserComment);
+                setAvatar(imgAvatarUserComment,userComment.getAvatar());
+                tvContentComment.setText(binhLuan.getNoiDung());
+                layoutComment.addView(view);
+            }
+
+        } else {
+            tvNoneComment.setVisibility(View.VISIBLE);
+            tvComment.setText("Bình luận(0)");
+            layoutComment.setVisibility(View.GONE);
+        }
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String content = edtContent.getText().toString().trim();
+                if (!content.isEmpty()) {
+                    NguoiDung nguoiDung = mainActivity.getUser();
+                    BinhLuan binhLuan = new BinhLuan();
+                    binhLuan.setId(0);
+                    binhLuan.setIdCongThuc(congThuc.getId());
+                    binhLuan.setNguoiDung(nguoiDung.getId());
+                    binhLuan.setNoiDung(content);
+                    binhLuanDao.insert(binhLuan);
+                    Toast.makeText(context, "Đã thêm bình luận !", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Vui lòng nhập nội dung !", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void setAvatar(ImageView imageView,int index){

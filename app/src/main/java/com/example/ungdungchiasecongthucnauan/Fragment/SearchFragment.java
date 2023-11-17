@@ -151,7 +151,7 @@ public class SearchFragment extends Fragment {
         if (!lstCongThuc.isEmpty()) {
             tvNoneRecipe.setVisibility(View.GONE);
             rcvViewedRecipe.setVisibility(View.VISIBLE);
-            RecipeViewedAdapter recipeViewedAdapter = new RecipeViewedAdapter(getContext(),lstCongThuc);
+            RecipeViewedAdapter recipeViewedAdapter = new RecipeViewedAdapter(getContext(),lstCongThuc,mainActivity);
             rcvViewedRecipe.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
             rcvViewedRecipe.setAdapter(recipeViewedAdapter);
         } else {
@@ -399,8 +399,8 @@ public class SearchFragment extends Fragment {
     }
 
     private void OpenDialogRecipeDetails(Context context,CongThuc congThuc) {
-        ChiTietCongThuc chiTietCongThuc = new ChiTietCongThuc(context,congThuc);
-        chiTietCongThuc.OpenDialogCreateRecipes();
+        ChiTietCongThuc chiTietCongThuc = new ChiTietCongThuc(context,congThuc,mainActivity);
+        chiTietCongThuc.OpenDialogCreateRecipes(0);
         ArrayList<String> lstRecipeViewed = (ArrayList<String>) new Service().readFile(context,"recipe_viewed.txt");
 
         if (!lstRecipeViewed.contains(congThuc.getId())) {

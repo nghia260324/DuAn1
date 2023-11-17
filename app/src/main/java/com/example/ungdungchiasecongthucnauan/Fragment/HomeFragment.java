@@ -1,15 +1,14 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.BannerAdapter;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
@@ -71,14 +70,9 @@ public class HomeFragment extends Fragment {
         initUI(view);
 
         BannerAdapter bannerAdapter = new BannerAdapter(getContext(),mainActivity.lstCongThuc);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rcv_banner.setLayoutManager(linearLayoutManager);
         rcv_banner.setAdapter(bannerAdapter);
-
-
-
-
-        initUI();
 
         return view;
     }
@@ -86,10 +80,6 @@ public class HomeFragment extends Fragment {
     private void initUI(View view) {
         rcv_banner = view.findViewById(R.id.rcv_banner);
 
+        mainActivity = (MainActivity) getActivity();
     }
-
-    private void initUI() {
-
-    }
-
 }

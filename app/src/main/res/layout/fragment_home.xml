@@ -17,8 +17,8 @@
             android:orientation="vertical">
             <LinearLayout
                 android:background="@color/white"
-                android:paddingVertical="24dp"
-                android:paddingLeft="12dp"
+                android:paddingVertical="12dp"
+                android:paddingLeft="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">

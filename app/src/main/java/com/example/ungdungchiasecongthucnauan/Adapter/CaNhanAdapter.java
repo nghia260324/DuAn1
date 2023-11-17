@@ -14,21 +14,16 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.ungdungchiasecongthucnauan.Fragment.FragmentCaNhan;
-import com.example.ungdungchiasecongthucnauan.Fragment.IndividualFragment;
 import com.example.ungdungchiasecongthucnauan.LoginActivity;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -66,8 +61,6 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                 } else if (item.equals("Đăng xuất")) {
                        logOut();
                 }
-
-
             }
         });
 
@@ -92,18 +85,18 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(params);
 
-         edt_mkcu=dialog.findViewById(R.id.edt_mkcu);
-         edt_mkmoi=dialog.findViewById(R.id.edt_mkmoi);
-         edt_nhaplaimk= dialog.findViewById(R.id.edt_nhaplaimk);
-        Button btnRegister= dialog.findViewById(R.id.btn_registerChangPass);
-        ImageView img_Close=dialog.findViewById(R.id.img_Close);
+        edt_mkcu=dialog.findViewById(R.id.edt_mkcu);
+        edt_mkmoi=dialog.findViewById(R.id.edt_mkmoi);
+        edt_nhaplaimk= dialog.findViewById(R.id.edt_nhaplaimk);
+        Button btnRegister= dialog.findViewById(R.id.btn_register);
+//        ImageView img_Close=dialog.findViewById(R.id.img_Close);
 
-        img_Close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
+//        img_Close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

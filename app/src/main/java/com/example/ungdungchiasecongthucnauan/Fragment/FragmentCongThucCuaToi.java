@@ -75,7 +75,7 @@ public class FragmentCongThucCuaToi extends Fragment {
     }
 
     private void SetAdapterRCV() {
-        MyRecipeAdapter myRecipeAdapter = new MyRecipeAdapter(getContext(),mainActivity.lstCongThuc);
+        MyRecipeAdapter myRecipeAdapter = new MyRecipeAdapter(getContext(),mainActivity.lstCongThuc,mainActivity);
         rcvMyRecipe.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         rcvMyRecipe.setLayoutManager(new GridLayoutManager(getContext(),2));
         rcvMyRecipe.setAdapter(myRecipeAdapter);

@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ungdungchiasecongthucnauan.ChiTietCongThuc;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.R;
@@ -25,11 +27,13 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
     private Context context;
     private ArrayList<CongThuc> lstCongThuc;
     AnhDao anhDao;
+    MainActivity mainActivity;
 
-    public MyRecipeAdapter(Context context, ArrayList<CongThuc> lstCongThuc) {
+    public MyRecipeAdapter(Context context, ArrayList<CongThuc> lstCongThuc, MainActivity mainActivity) {
         this.context = context;
         this.lstCongThuc = lstCongThuc;
         this.anhDao = new AnhDao(context);
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -53,19 +57,19 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu(v);
+                PopupMenu(v,congThuc);
             }
         });
     }
 
-    private void PopupMenu(View view){
+    private void PopupMenu(View view,CongThuc congThuc){
         PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.edit_option) {
-                    EditRecipes();
+                    EditRecipes(congThuc);
                     return true;
                 } else if (item.getItemId() == R.id.delete_option) {
                     DeleteRecipes();
@@ -78,12 +82,12 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         });
         popupMenu.show();
     }
-    private void EditRecipes() {
-
+    private void EditRecipes(CongThuc congThuc) {
+        ChiTietCongThuc chiTietCongThuc = new ChiTietCongThuc(context,congThuc,mainActivity);
+        chiTietCongThuc.OpenDialogCreateRecipes(1);
     }
 
     private void DeleteRecipes() {
-
     }
 
     @Override
