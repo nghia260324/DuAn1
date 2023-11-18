@@ -79,7 +79,9 @@ public class IndividualFragment extends Fragment {
 
         viewPagerAdapter.addFragment(new FragmentCaNhan(),"Cá nhân");
         viewPagerAdapter.addFragment(new FragmentCongThucDaLuu(), "Công thức đã lưu");
-        viewPagerAdapter.addFragment(new FragmentCongThucCuaToi(), "Công thức của tôi");
+        if (mainActivity.getUser().getPhanQuyen() != 1) {
+            viewPagerAdapter.addFragment(new FragmentCongThucCuaToi(), "Công thức của tôi");
+        }
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 

@@ -35,6 +35,12 @@ public class AnhDao {
         contentValues.put("url",obj.getUrl());
         return db.insert("Anh",null,contentValues);
     }
+    public long update(Anh obj) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("url",obj.getUrl());
+
+        return db.update("Anh",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
+    }
     public int delete(String id) {
         return db.delete("ANH","id = ?",new String[]{String.valueOf(id)});
     }

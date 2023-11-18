@@ -74,4 +74,7 @@ public class BuocLamDao {
         contentValues.put("thuTu",obj.getThuTu());
         return db.update("BuocLam",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
     }
+    public int deleteAllByCongThucId(String id) {
+        return db.delete("BuocLam", "idCongThuc = ?", new String[]{id});
+    }
 }

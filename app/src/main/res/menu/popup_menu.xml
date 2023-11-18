@@ -4,6 +4,9 @@
         android:id="@+id/edit_option"
         android:title="Chỉnh sửa" />
     <item
+        android:id="@+id/share_option"
+        android:title="Chia sẻ" />
+    <item
         android:id="@+id/delete_option"
         android:title="Xóa" />
 </menu>

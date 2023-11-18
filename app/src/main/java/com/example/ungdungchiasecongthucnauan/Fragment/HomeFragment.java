@@ -1,25 +1,31 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.BannerAdapter;
+import com.example.ungdungchiasecongthucnauan.DataChangeListener;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
+import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements DataChangeListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,7 +65,7 @@ public class HomeFragment extends Fragment {
     }
     MainActivity mainActivity;
     Toolbar toolbar;
-
+    BannerAdapter bannerAdapter;
     private RecyclerView rcv_banner;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,8 +74,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         initUI(view);
-
-        BannerAdapter bannerAdapter = new BannerAdapter(getContext(),mainActivity.lstCongThuc);
+        bannerAdapter = new BannerAdapter(getContext(),mainActivity.lstCongThuc);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rcv_banner.setLayoutManager(linearLayoutManager);
         rcv_banner.setAdapter(bannerAdapter);
@@ -81,5 +86,18 @@ public class HomeFragment extends Fragment {
         rcv_banner = view.findViewById(R.id.rcv_banner);
 
         mainActivity = (MainActivity) getActivity();
+    }
+
+    @Override
+    public void onDataChange(ArrayList<CongThuc> dataList) {
+        bannerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+            ((MainActivity) context).registerDataChangeListener(this);
+        }
     }
 }

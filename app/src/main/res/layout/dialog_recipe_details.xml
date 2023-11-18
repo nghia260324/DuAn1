@@ -224,7 +224,7 @@
                 android:fontFamily="@font/baloo_bhai"
                 android:textColor="@color/black_333"
                 android:textSize="14sp"
-                android:text="Chưa có bình luận này về công thức này."/>
+                android:text="Chưa có bình luận nào về công thức này."/>
             <LinearLayout
                 android:visibility="gone"
                 android:layout_marginTop="12dp"

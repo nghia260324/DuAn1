@@ -209,6 +209,7 @@ public class CreateRecipesFragment extends Fragment {
         imgSelectedPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imgSelectedPictureMaking = v.findViewById(R.id.img_selected_pictureMaking);
                 OpenFile();selectedImgBanner = true;
             }
         });
@@ -295,10 +296,11 @@ public class CreateRecipesFragment extends Fragment {
                         }
                     });
 
-                    ImageView imgSelectedPictureMaking = viewMaking.findViewById(R.id.img_selected_pictureMaking);
+                    imgSelectedPictureMaking = viewMaking.findViewById(R.id.img_selected_pictureMaking);
                     imgSelectedPictureMaking.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            imgSelectedPictureMaking = v.findViewById(R.id.img_selected_pictureMaking);
                             selectedImgMaking = true;
                             INDEX_SELECTED_IMG = index;
                             OpenFile();
@@ -315,6 +317,10 @@ public class CreateRecipesFragment extends Fragment {
                 foodRation = edtFoodRation.getText().toString().trim();
                 time = edtTime.getText().toString().trim();
 
+                if (foodName.isEmpty()) {
+                    edtFoodName.setError("Vui lòng nhập tên !");
+                    return;
+                }
                 if (!foodRation.isEmpty() && !foodRation.matches("[0-9]+")) {
                     edtFoodRation.setError("Khẩu phần không hợp lệ !");
                     return;
@@ -478,7 +484,6 @@ public class CreateRecipesFragment extends Fragment {
                             setInfCongThuc(getID);
                             for (int i = 0; i < lstDanhSachNguyenLieu.size(); i++) {
                                 dsnlDao.insert(lstDanhSachNguyenLieu.get(i));
-                                Log.e("Nguyên liệu","" + lstDanhSachNguyenLieu.get(i).toString());
                             }
                             for (int i = 0; i < lstBuocLam.size(); i++) {
                                 buocLamDao.insert(lstBuocLam.get(i));
@@ -487,6 +492,8 @@ public class CreateRecipesFragment extends Fragment {
                             progressDialog.dismiss();
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+                            databaseReference.child(congThuc.getId()).setValue(congThuc);
                         }
                     });
                 }
@@ -509,6 +516,8 @@ public class CreateRecipesFragment extends Fragment {
             progressDialog.dismiss();
             dialog.dismiss();
             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
+            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+            databaseReference.child(congThuc.getId()).setValue(congThuc);
         }
     }
     private void SaveDataToFirebase(Anh anh, Uri uri,int pos,int size,Dialog dialog){
@@ -530,7 +539,7 @@ public class CreateRecipesFragment extends Fragment {
                             if (pos == size) {
                                 SaveDataToFirebaseBanner(dialog);
                             } else {
-                                SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,lstBuocLam.size() - 1,dialog);
+                                SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,size,dialog);
                             }
                         }
                     });
@@ -544,10 +553,10 @@ public class CreateRecipesFragment extends Fragment {
         } else {
             lstBuocLam.get(pos).setIdAnh(null);
             setInfBuocLam(layoutMaking,pos);
-            if (pos == (lstBuocLam.size() - 1)) {
+            if (pos == size) {
                 SaveDataToFirebaseBanner(dialog);
             } else {
-                SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,lstBuocLam.size() - 1,dialog);
+                SaveDataToFirebase(lstAnh.get(pos + 1),lstUri.get(pos + 1),pos + 1,size,dialog);
             }
         }
     }

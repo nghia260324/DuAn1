@@ -9,10 +9,13 @@ import com.example.ungdungchiasecongthucnauan.Fragment.CreateRecipesFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.HomeFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.IndividualFragment;
 import com.example.ungdungchiasecongthucnauan.Fragment.SearchFragment;
+import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 
 public class ViewPagerBottomNavigationAdapter extends FragmentStateAdapter {
-    public ViewPagerBottomNavigationAdapter(@NonNull FragmentActivity fragmentActivity) {
+    NguoiDung nguoiDung;
+    public ViewPagerBottomNavigationAdapter(@NonNull FragmentActivity fragmentActivity, NguoiDung nguoiDung) {
         super(fragmentActivity);
+        this.nguoiDung = nguoiDung;
     }
     @NonNull
     @Override
@@ -20,7 +23,9 @@ public class ViewPagerBottomNavigationAdapter extends FragmentStateAdapter {
         switch (position) {
             case 0: return new HomeFragment();
             case 1: return new SearchFragment();
-            case 2: return new CreateRecipesFragment();
+            case 2: if (nguoiDung.getPhanQuyen() != 1) {
+                return new CreateRecipesFragment();
+            }
             case 3: return new IndividualFragment();
             default:break;
         }
@@ -28,6 +33,6 @@ public class ViewPagerBottomNavigationAdapter extends FragmentStateAdapter {
     }
     @Override
     public int getItemCount() {
-        return 4;
+        return nguoiDung.getPhanQuyen()!=1?4:3;
     }
 }

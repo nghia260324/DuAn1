@@ -1,8 +1,10 @@
 package com.example.ungdungchiasecongthucnauan;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -24,10 +26,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String DATABASE_PATH = "CONG_THUC";
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_SEARCH = 1;
     private static final int FRAGMENT_CREATE_RECIPES = 2;
@@ -40,16 +48,26 @@ public class MainActivity extends AppCompatActivity {
     LoaiCongThucDao loaiCongThucDao;
     CongThucDao congThucDao;
     public ArrayList<CongThuc> lstCongThuc;
+    public ArrayList<CongThuc> myRecipes;
     public ArrayList<LoaiCongThuc> lstLoaiCongThuc;
+
     ViewPager2 viewPager2;
+    DatabaseReference databaseReference;
+    private DataChangeListener dataChangeListener;
+    public void registerDataChangeListener(DataChangeListener listener) {
+        this.dataChangeListener = listener;
+    }
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initUI();
-
-        ViewPagerBottomNavigationAdapter viewPagerBottomNavigationAdapter = new ViewPagerBottomNavigationAdapter(this);
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Loading . . .");
+        progressDialog.show();
+        ViewPagerBottomNavigationAdapter viewPagerBottomNavigationAdapter = new ViewPagerBottomNavigationAdapter(this,getUser());
         viewPager2.setUserInputEnabled(false);
         viewPager2.setAdapter(viewPagerBottomNavigationAdapter);
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -61,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1: bottomNavigationView.getMenu().findItem(R.id.search).setChecked(true);
                         break;
-                    case 2: bottomNavigationView.getMenu().findItem(R.id.create_recipes).setChecked(true);
+                    case 2: if (getUser().getPhanQuyen() != 1) {
+                        bottomNavigationView.getMenu().findItem(R.id.create_recipes).setChecked(true);}
                         break;
                     case 3: bottomNavigationView.getMenu().findItem(R.id.individual).setChecked(true);
                         break;
@@ -95,10 +114,52 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        lstCongThuc = (ArrayList<CongThuc>) congThucDao.getAll();
+
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem itemCreateRecipes = menu.findItem(R.id.create_recipes);
+        if (getUser().getPhanQuyen() == 1) {
+            itemCreateRecipes.setVisible(false);
+        } else {
+            itemCreateRecipes.setVisible(true);
+        }
+        GetRecipes();
+        GetAllData();
+    }
+
+    public void GetRecipes() {
+//        lstCongThuc = (ArrayList<CongThuc>) congThucDao.getAll();
+        myRecipes = (ArrayList<CongThuc>) congThucDao.getAllMyRecipes(getUser());
         for (CongThuc congThuc: lstCongThuc){
             Log.e("Công thức","" + congThuc.toString());
         }
+    }
+
+    private void GetAllData() {
+        Thread thread = new Thread(() -> {
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    lstCongThuc.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        CongThuc congThuc = snapshot.getValue(CongThuc.class);
+                        if (congThuc.getTrangThai() == 1) {
+                            lstCongThuc.add(congThuc);
+                        }
+                    }
+
+                    if (dataChangeListener != null) {
+                        dataChangeListener.onDataChange(lstCongThuc);
+                    }
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        });
+        thread.start();
     }
 
     public NguoiDung getUser() {
@@ -112,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+        databaseReference = FirebaseDatabase.getInstance().getReference(DATABASE_PATH);
         nguoiDungDao = new NguoiDungDao(this);
         nguyenLieuDao = new NguyenLieuDao(this);
         loaiCongThucDao = new LoaiCongThucDao(this);
@@ -120,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         viewPager2 = findViewById(R.id.viewPager2);
 
+        lstCongThuc = new ArrayList<>();
+        myRecipes = new ArrayList<>();
         kieuNguyenLieuDao = new KieuNguyenLieuDao(this);
         lstLoaiCongThuc = new ArrayList<>();
         lstLoaiCongThuc = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();

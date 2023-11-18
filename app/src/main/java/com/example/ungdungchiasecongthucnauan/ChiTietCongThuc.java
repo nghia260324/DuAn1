@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,7 +32,6 @@ import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
-import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,7 +86,8 @@ public class ChiTietCongThuc {
         dialog.getWindow().setAttributes(layoutParams);
 
         initUI(dialog);
-
+        ImageView img_CommmentUser = dialog.findViewById(R.id.img_CommmentUser);
+        new Service().setAvatar(img_CommmentUser,mainActivity.getUser().getAvatar());
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,66 +124,8 @@ public class ChiTietCongThuc {
 
         dialog.show();
     }
-    public void OpenDialogEdit() {
-        final View dialogView = View.inflate(context,R.layout.dialog_create_recipes,null);
-        final Dialog dialog = new Dialog(context);
 
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(dialogView);
 
-        Window window = dialog.getWindow();
-        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
-
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-        layoutParams.gravity = Gravity.CENTER;
-        dialog.getWindow().setAttributes(layoutParams);
-
-        ImageButton imgSelectedPicture = dialog.findViewById(R.id.img_selected_picture);
-
-        LinearLayout layoutMaterialEdit = dialog.findViewById(R.id.layout_material);
-        LinearLayout layoutMakingEdit = dialog.findViewById(R.id.layout_making);
-        EditText edtFoodName = dialog.findViewById(R.id.edt_foodName);
-        EditText edtFoodRation = dialog.findViewById(R.id.edt_ration);
-        EditText edtTime = dialog.findViewById(R.id.edt_time);
-        AutoCompleteTextView type = dialog.findViewById(R.id.type);
-
-        Anh anhCT = new Anh();
-        if (congThuc.getIdAnh() != null) {
-            anhCT = anhDao.getID(congThuc.getIdAnh());
-        }
-        Glide.with(context).load(anhCT.getUrl()).error(R.drawable.logoapp).into(imgSelectedPicture);
-
-        edtFoodName.setText(congThuc.getTen());
-        if (congThuc.getKhauPhan() != -1) {
-            edtFoodRation.setText(congThuc.getKhauPhan() + "");
-        }
-        if (congThuc.getThoiGianNau() != -1) {
-            edtTime.setText(congThuc.getThoiGianNau() + "");
-        }
-        type.setText(loaiCongThucDao.getID(String.valueOf(congThuc.getIdLoai())).getTenLoai());
-
-        ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
-        for (DanhSachNguyenLieu dsnl:lstDSNL){
-            NguyenLieu nguyenLieu = nguyenLieuDao.getID(String.valueOf(dsnl.getIdNguyenLieu()));
-            View view = LayoutInflater.from(context).inflate(R.layout.item_material,null);
-
-            AutoCompleteTextView actvNL = view.findViewById(R.id.edt_materialName);
-            EditText edtMass = view.findViewById(R.id.edt_mass);
-            TextView tvUnit = view.findViewById(R.id.tv_unit);
-            new Service().SetMass(nguyenLieuDao,null,tvUnit,dsnl.getIdNguyenLieu(),-1);
-
-            edtMass.setText(dsnl.getKhoiLuong() + "");
-
-            actvNL.setText(nguyenLieu.getTen());
-            layoutMaterialEdit.addView(view);
-        }
-
-        dialog.show();
-    }
     private void initUI(Dialog dialog) {
 //        rcvMaking = dialog.findViewById(R.id.rcv_making);
         imgBanner = dialog.findViewById(R.id.img_banner);
@@ -256,6 +197,7 @@ public class ChiTietCongThuc {
                 layoutMaking.addView(view);
             }
         }
+
 
         if (!congThuc.getLstBinhLuan().isEmpty()) {
             ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();

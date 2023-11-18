@@ -59,4 +59,7 @@ public class BinhLuanDao {
         String sql = "SELECT * FROM BinhLuan WHERE idCongThuc = ?";
         return getData(sql,id);
     }
+    public int deleteAllByCongThucId(String id) {
+        return db.delete("BinhLuan", "idCongThuc = ?", new String[]{id});
+    }
 }

@@ -77,9 +77,4 @@ public class FragmentCaNhan extends Fragment {
 
         return view;
     }
-
-
-
-
-
 }

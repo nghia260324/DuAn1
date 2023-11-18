@@ -10,6 +10,7 @@ import com.example.ungdungchiasecongthucnauan.Model.BinhLuan;
 import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
+import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +93,10 @@ public class CongThucDao {
         String sql = "SELECT * FROM CongThuc";
         return getData(sql);
     }
+    public List<CongThuc> getAllMyRecipes(NguoiDung nguoiDung) {
+        String sql = "SELECT * FROM CongThuc Where idnguoiDung = " + nguoiDung.getId();
+        return getData(sql);
+    }
     public CongThuc getID(String id) {
         String sql = "SELECT * FROM CongThuc WHERE id = ?";
         List<CongThuc> lstCongThuc = getData(sql, id);
@@ -123,7 +128,7 @@ public class CongThucDao {
         }
         cursor.close();
 
-        if (lstIDCongThuc != null) {
+        if (!lstIDCongThuc.isEmpty()) {
             for (String s:lstIDCongThuc) {
                 lstCongThuc.add(getID(s));
             }

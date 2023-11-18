@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="142dp"
             android:scaleType="centerCrop"
-            android:background="@drawable/banhkhoailangtest"
+            android:background="@drawable/ic_picture"
             app:shapeAppearanceOverlay="@style/rounded_corner_10"/>
         <LinearLayout
             android:paddingVertical="6dp"

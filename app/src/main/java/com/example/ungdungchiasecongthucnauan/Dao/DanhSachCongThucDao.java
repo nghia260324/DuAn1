@@ -57,4 +57,7 @@ public class DanhSachCongThucDao {
         String sql = "select * from congthuc where id in (select ct.id from CongThuc_DSCT ctdsct Join congthuc ct where ct.id = ctdsct.idCongThuc and idDanhSachCongThuc = "+ id +")";
         return congThucDao.getData(sql,id);
     }
+    public int deleteAllByCongThucId(String id) {
+        return db.delete("CongThuc", "idCongThuc = ?", new String[]{id});
+    }
 }
