@@ -1,14 +1,23 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.ungdungchiasecongthucnauan.Adapter.RecipeListAdapter;
+import com.example.ungdungchiasecongthucnauan.Dao.DanhSachCongThucDao;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
+import com.example.ungdungchiasecongthucnauan.Model.DanhSachCongThuc;
 import com.example.ungdungchiasecongthucnauan.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +66,40 @@ public class FragmentCongThucDaLuu extends Fragment {
         }
     }
 
+    RecyclerView rcvSavedRecipe;
+    DanhSachCongThucDao dsctDao;
+    MainActivity mainActivity;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SetRecipeListAdapter();
+    }
+
+    boolean checkRCV = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cong_thuc_da_luu, container, false);
+        View view = inflater.inflate(R.layout.fragment_cong_thuc_da_luu, container, false);
+
+        initUI(view,getContext());
+        SetRecipeListAdapter();
+        return view;
+    }
+    private void SetRecipeListAdapter(){
+        ArrayList<DanhSachCongThuc> lstDSCT = (ArrayList<DanhSachCongThuc>) dsctDao.getAll();
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getContext(),lstDSCT);
+        rcvSavedRecipe.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        rcvSavedRecipe.setLayoutManager(new GridLayoutManager(getContext(),2));
+        rcvSavedRecipe.setAdapter(recipeListAdapter);
+    }
+
+    private void initUI(View view, Context context) {
+        rcvSavedRecipe = view.findViewById(R.id.rcv_savedRecipe);
+
+        dsctDao = new DanhSachCongThucDao(context);
+        mainActivity = (MainActivity) getActivity();
     }
 }

@@ -488,7 +488,7 @@ public class CreateRecipesFragment extends Fragment {
                             for (int i = 0; i < lstBuocLam.size(); i++) {
                                 buocLamDao.insert(lstBuocLam.get(i));
                             }
-                            ResetData();
+//                            ResetData();
                             progressDialog.dismiss();
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
@@ -512,7 +512,7 @@ public class CreateRecipesFragment extends Fragment {
             for (int i = 0; i < lstBuocLam.size(); i++) {
                 buocLamDao.insert(lstBuocLam.get(i));
             }
-            ResetData();
+//            ResetData();
             progressDialog.dismiss();
             dialog.dismiss();
             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
@@ -560,6 +560,7 @@ public class CreateRecipesFragment extends Fragment {
             }
         }
     }
+
     private void setInfBuocLam(LinearLayout layout,int pos){
         View viewMaterial = layout.getChildAt(pos);
         TextView tvLocation = viewMaterial.findViewById(R.id.tv_location);

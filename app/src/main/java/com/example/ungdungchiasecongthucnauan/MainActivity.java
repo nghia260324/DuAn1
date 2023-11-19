@@ -13,11 +13,13 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
+import com.example.ungdungchiasecongthucnauan.Dao.DanhSachCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.KieuNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
+import com.example.ungdungchiasecongthucnauan.Model.DanhSachCongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
@@ -79,8 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1: bottomNavigationView.getMenu().findItem(R.id.search).setChecked(true);
                         break;
-                    case 2: if (getUser().getPhanQuyen() != 1) {
-                        bottomNavigationView.getMenu().findItem(R.id.create_recipes).setChecked(true);}
+                    case 2: bottomNavigationView.getMenu().findItem(R.id.create_recipes).setChecked(true);
                         break;
                     case 3: bottomNavigationView.getMenu().findItem(R.id.individual).setChecked(true);
                         break;
@@ -92,22 +93,22 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId() == R.id.home) {
                     if (mCurrentFragment != FRAGMENT_HOME) {
-                        viewPager2.setCurrentItem(0);
+                        viewPager2.setCurrentItem(0,false);
                         mCurrentFragment = FRAGMENT_HOME;
                     }
                 } else if(item.getItemId() == R.id.search) {
                     if (mCurrentFragment != FRAGMENT_SEARCH) {
-                        viewPager2.setCurrentItem(1);
+                        viewPager2.setCurrentItem(1,false);
                         mCurrentFragment = FRAGMENT_SEARCH;
                     }
                 } else if (item.getItemId() == R.id.create_recipes) {
                     if (mCurrentFragment != FRAGMENT_CREATE_RECIPES) {
-                        viewPager2.setCurrentItem(2);
+                        viewPager2.setCurrentItem(2,false);
                         mCurrentFragment = FRAGMENT_CREATE_RECIPES;
                     }
                 } else if (item.getItemId() == R.id.individual) {
                     if (mCurrentFragment != FRAGMENT_INDIVIDIAL) {
-                        viewPager2.setCurrentItem(3);
+                        viewPager2.setCurrentItem(3,false);
                         mCurrentFragment = FRAGMENT_INDIVIDIAL;
                     }
                 }
@@ -126,12 +127,13 @@ public class MainActivity extends AppCompatActivity {
         GetAllData();
     }
 
-    public void GetRecipes() {
+    public ArrayList<CongThuc> GetRecipes() {
 //        lstCongThuc = (ArrayList<CongThuc>) congThucDao.getAll();
         myRecipes = (ArrayList<CongThuc>) congThucDao.getAllMyRecipes(getUser());
         for (CongThuc congThuc: lstCongThuc){
             Log.e("Công thức","" + congThuc.toString());
         }
+        return myRecipes;
     }
 
     private void GetAllData() {
@@ -146,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                             lstCongThuc.add(congThuc);
                         }
                     }
-
                     if (dataChangeListener != null) {
                         dataChangeListener.onDataChange(lstCongThuc);
                     }
@@ -187,6 +188,17 @@ public class MainActivity extends AppCompatActivity {
         kieuNguyenLieuDao = new KieuNguyenLieuDao(this);
         lstLoaiCongThuc = new ArrayList<>();
         lstLoaiCongThuc = (ArrayList<LoaiCongThuc>) loaiCongThucDao.getAll();
+
+        DanhSachCongThucDao dsctDao = new DanhSachCongThucDao(this);
+        ArrayList<DanhSachCongThuc> lstDSCT = (ArrayList<DanhSachCongThuc>) dsctDao.getAll();
+        for (DanhSachCongThuc dsct:lstDSCT) {
+            Log.e("DSCT",dsct.toString());
+        }
+    }
+    public void DataChangeListener() {
+        if (dataChangeListener != null) {
+            dataChangeListener.onDataChange(lstCongThuc);
+        }
     }
 
     public ArrayList<KieuNguyenLieu> getAllKieuNguyenLieu(){

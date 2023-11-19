@@ -318,8 +318,9 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String value = s.toString().toLowerCase().trim();
-                for (int i = 0; i < mainActivity.lstCongThuc.size();i++){
-                    CongThuc congThuc = mainActivity.lstCongThuc.get(i);
+                ArrayList<CongThuc> lstCongThuc = mainActivity.GetRecipes();
+                for (int i = 0; i < lstCongThuc.size();i++){
+                    CongThuc congThuc = lstCongThuc.get(i);
                     if (congThuc.getTen().toLowerCase().trim().contains(value)) {
                         lstSuggestSearch.add(congThuc.getTen());
                     }
@@ -341,7 +342,7 @@ public class SearchFragment extends Fragment {
                         }
 
                         edtSearchDialog.setText(value);
-                        ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,mainActivity.lstCongThuc);
+                        ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,lstCongThuc);
                         SearchAdapter searchAdapter = new SearchAdapter(getContext(), lstCongThucSearch, new IReturnDone() {
                             @Override
                             public void IReturnDone(Context context, CongThuc congThuc) {
@@ -385,7 +386,7 @@ public class SearchFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                     String value = edtSearchDialog.getText().toString().trim();
-                    ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,mainActivity.lstCongThuc);
+                    ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,mainActivity.GetRecipes());
                     SearchAdapter searchAdapter = new SearchAdapter(getContext(), lstCongThucSearch,null);
                     rcvSearchSuggestion.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
                     rcvSearchSuggestion.setLayoutManager(new GridLayoutManager(getContext(),1));

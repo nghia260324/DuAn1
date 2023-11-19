@@ -97,10 +97,25 @@ public class CongThucDao {
         String sql = "SELECT * FROM CongThuc Where idnguoiDung = " + nguoiDung.getId();
         return getData(sql);
     }
+    public List<String> getAllListRecipes(String idDSCT) {
+        ArrayList<String> lstIDCongThuc = new ArrayList<>();
+        String sql = "SELECT idCongThuc FROM CongThuc_DSCT WHERE idDanhSachCongThuc = " + idDSCT;
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            String id = cursor.getString(0);
+            lstIDCongThuc.add(id);
+        }
+        cursor.close();
+        return lstIDCongThuc;
+    }
+
     public CongThuc getID(String id) {
         String sql = "SELECT * FROM CongThuc WHERE id = ?";
         List<CongThuc> lstCongThuc = getData(sql, id);
-        return lstCongThuc.get(0);
+        if (lstCongThuc != null && !lstCongThuc.isEmpty()) {
+            return lstCongThuc.get(0);
+        }
+        return null;
     }
     public List<CongThuc> getCongThucByIngredientIds(List<Integer> ingredientIds) {
         List<CongThuc> lstCongThuc = new ArrayList<>();

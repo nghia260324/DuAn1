@@ -23,9 +23,7 @@ public class ViewPagerBottomNavigationAdapter extends FragmentStateAdapter {
         switch (position) {
             case 0: return new HomeFragment();
             case 1: return new SearchFragment();
-            case 2: if (nguoiDung.getPhanQuyen() != 1) {
-                return new CreateRecipesFragment();
-            }
+            case 2: return new CreateRecipesFragment();
             case 3: return new IndividualFragment();
             default:break;
         }
@@ -33,6 +31,6 @@ public class ViewPagerBottomNavigationAdapter extends FragmentStateAdapter {
     }
     @Override
     public int getItemCount() {
-        return nguoiDung.getPhanQuyen()!=1?4:3;
+        return 4;
     }
 }

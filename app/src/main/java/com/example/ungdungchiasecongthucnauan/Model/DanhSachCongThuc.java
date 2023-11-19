@@ -37,4 +37,13 @@ public class DanhSachCongThuc {
     public void setIdNguoiDung(int idNguoiDung) {
         this.idNguoiDung = idNguoiDung;
     }
+
+    @Override
+    public String toString() {
+        return "DanhSachCongThuc{" +
+                "id=" + id +
+                ", ten='" + ten + '\'' +
+                ", idNguoiDung=" + idNguoiDung +
+                '}';
+    }
 }

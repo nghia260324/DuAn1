@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
+import com.example.ungdungchiasecongthucnauan.SaveRecipe;
 import com.example.ungdungchiasecongthucnauan.Service;
 
 import java.text.SimpleDateFormat;
@@ -25,16 +27,18 @@ import java.util.ArrayList;
 
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<CongThuc> datten;
+    private ArrayList<CongThuc> lstCongthuc;
     private NguoiDungDao nguoiDungDao;
     private AnhDao anhDao;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    MainActivity mainActivity;
 
-    public BannerAdapter(Context context, ArrayList<CongThuc> datten) {
+    public BannerAdapter(Context context, ArrayList<CongThuc> lstCongthuc, MainActivity mainActivity) {
         this.context = context;
-        this.datten = datten;
+        this.lstCongthuc = lstCongthuc;
         this.nguoiDungDao = new NguoiDungDao(context);
         this.anhDao = new AnhDao(context);
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -46,25 +50,30 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    CongThuc congThuc = datten.get(position);
-    NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
-    Anh anh = new Anh();
+        CongThuc congThuc = lstCongthuc.get(position);
+        NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
+        Anh anh = new Anh();
         if (congThuc.getIdAnh() != null) {
             anh = anhDao.getID(congThuc.getIdAnh());
         }
         if (congThuc != null) {
-            String listMaterial = "";
             holder.tv_nameuser.setText(congThuc.getTen());
             holder.tv_namedish.setText(nguoiDung.getHoTen());
             holder.tv_date.setText(sdf.format(congThuc.getNgayTao()));
-            new Service().setAvatar(holder.img_avata,nguoiDung.getAvatar());
             Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.img_bgr);
+            new Service().setAvatar(holder.img_avata,nguoiDung.getAvatar());
         }
+        holder.btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SaveRecipe().OpenDialogSaveRecipe(context,congThuc,mainActivity);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return datten != null? datten.size():0;
+        return lstCongthuc != null? lstCongthuc.size():0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -79,8 +88,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
             tv_namedish = itemView.findViewById(R.id.tv_namedish);
             tv_date = itemView.findViewById(R.id.tv_date);
             btn_save = itemView.findViewById(R.id.btn_save);
-
-
         }
     }
 }

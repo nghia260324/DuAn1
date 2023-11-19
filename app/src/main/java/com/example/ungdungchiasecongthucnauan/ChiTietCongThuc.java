@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.BinhLuanDao;
+import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.DanhSachNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
@@ -41,6 +42,7 @@ public class ChiTietCongThuc {
     Context context;
     CongThuc congThuc;
     AnhDao anhDao;
+    CongThucDao congThucDao;
     NguoiDungDao nguoiDungDao;
     DanhSachNguyenLieuDao danhSachNguyenLieuDao;
     BinhLuanDao binhLuanDao;
@@ -63,6 +65,7 @@ public class ChiTietCongThuc {
         this.danhSachNguyenLieuDao = new DanhSachNguyenLieuDao(context);
         this.nguyenLieuDao = new NguyenLieuDao(context);
         this.mainActivity = mainActivity;
+        this.congThucDao = new CongThucDao(context);
         this.loaiCongThucDao = new LoaiCongThucDao(context);
     }
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -197,14 +200,34 @@ public class ChiTietCongThuc {
                 layoutMaking.addView(view);
             }
         }
-
-
+        loadComment(congThuc.getLstBinhLuan());
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String content = edtContent.getText().toString().trim();
+                if (!content.isEmpty()) {
+                    NguoiDung nguoiDung = mainActivity.getUser();
+                    BinhLuan binhLuan = new BinhLuan();
+                    binhLuan.setId(0);
+                    binhLuan.setIdCongThuc(congThuc.getId());
+                    binhLuan.setNguoiDung(nguoiDung.getId());
+                    binhLuan.setNoiDung(content);
+                    binhLuanDao.insert(binhLuan);
+                    Toast.makeText(context, "Đã thêm bình luận !", Toast.LENGTH_SHORT).show();
+                    congThuc = congThucDao.getID(congThuc.getId());
+                    layoutComment.removeAllViews();
+                    loadComment(congThuc.getLstBinhLuan());
+                } else {
+                    Toast.makeText(context, "Vui lòng nhập nội dung !", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private void loadComment(ArrayList<BinhLuan> lstBinhLuan){
         if (!congThuc.getLstBinhLuan().isEmpty()) {
-            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
             tvNoneComment.setVisibility(View.GONE);
             layoutComment.setVisibility(View.VISIBLE);
             tvComment.setText("Bình luận(" + congThuc.getLstBinhLuan().size() + ")");
-
             for (int i = 0; i < lstBinhLuan.size(); i++){
                 BinhLuan binhLuan = lstBinhLuan.get(i);
                 NguoiDung userComment = nguoiDungDao.getID(String.valueOf(binhLuan.getNguoiDung()));
@@ -220,23 +243,6 @@ public class ChiTietCongThuc {
             tvComment.setText("Bình luận(0)");
             layoutComment.setVisibility(View.GONE);
         }
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String content = edtContent.getText().toString().trim();
-                if (!content.isEmpty()) {
-                    NguoiDung nguoiDung = mainActivity.getUser();
-                    BinhLuan binhLuan = new BinhLuan();
-                    binhLuan.setId(0);
-                    binhLuan.setIdCongThuc(congThuc.getId());
-                    binhLuan.setNguoiDung(nguoiDung.getId());
-                    binhLuan.setNoiDung(content);
-                    binhLuanDao.insert(binhLuan);
-                    Toast.makeText(context, "Đã thêm bình luận !", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Vui lòng nhập nội dung !", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
     }
 }

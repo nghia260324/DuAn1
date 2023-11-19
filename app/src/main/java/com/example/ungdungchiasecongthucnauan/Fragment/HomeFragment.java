@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment implements DataChangeListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         initUI(view);
-        bannerAdapter = new BannerAdapter(getContext(),mainActivity.lstCongThuc);
+        bannerAdapter = new BannerAdapter(getContext(),mainActivity.lstCongThuc,mainActivity);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rcv_banner.setLayoutManager(linearLayoutManager);
         rcv_banner.setAdapter(bannerAdapter);

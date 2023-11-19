@@ -75,7 +75,7 @@ import java.util.Collections;
  * Use the {@link FragmentCongThucCuaToi#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentCongThucCuaToi extends Fragment {
+public class FragmentCongThucCuaToi extends Fragment{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,10 +85,6 @@ public class FragmentCongThucCuaToi extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    public FragmentCongThucCuaToi() {
-        // Required empty public constructor
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -146,31 +142,32 @@ public class FragmentCongThucCuaToi extends Fragment {
     private StorageTask storageTask;
     String time,foodRation,foodName;
     MyRecipeAdapter myRecipeAdapter;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SetAdapterRCV(mainActivity.GetRecipes());
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cong_thuc_cua_toi, container, false);
         initUI(view,getContext());
 
-        SetAdapterRCV();
+        SetAdapterRCV(mainActivity.myRecipes);
+
         return view;
     }
 
-    private void SetAdapterRCV() {
-//        progressDialog = new ProgressDialog(getContext());
-//        progressDialog.setMessage("Loading . . .");
-//        progressDialog.show();
-        myRecipeAdapter = new MyRecipeAdapter(getContext(), mainActivity.myRecipes, mainActivity, new IOpenEdit() {
+    public void SetAdapterRCV(ArrayList<CongThuc> lstCT) {
+        myRecipeAdapter = new MyRecipeAdapter(getContext(), lstCT, mainActivity, new IOpenEdit() {
             @Override
             public void IOpenDialogEdit(CongThuc congThuc) {
                 OpenDialogEdit(getContext(), congThuc);
             }
-
             @Override
             public void IOpenDialogDelete(CongThuc congThuc) {
                 OpenDialogDelete(congThuc);
-                mainActivity.GetRecipes();
             }
         });
         rcvMyRecipe.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
@@ -205,8 +202,10 @@ public class FragmentCongThucCuaToi extends Fragment {
                 buocLamDao.deleteAllByCongThucId(congThuc.getId());
                 dsnlDao.delete(congThuc.getId());
                 congThucDao.delete(congThuc.getId());
+                databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+                databaseReference.child(congThuc.getId()).setValue(null);
                 Toast.makeText(getContext(), "Xóa thành công !", Toast.LENGTH_SHORT).show();
-
+                Reload();
                 dialog.dismiss();
             }
         }).setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -523,9 +522,6 @@ public class FragmentCongThucCuaToi extends Fragment {
                             progressDialog.dismiss();
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
-                            for (int i = 0; i < mainActivity.lstCongThuc.size(); i++){
-                                Log.e("CHECK CT",mainActivity.lstCongThuc.get(i).toString());
-                            }
                             Reload();
                         }
                     });
@@ -561,9 +557,9 @@ public class FragmentCongThucCuaToi extends Fragment {
             Reload();
         }
     }
+
     private void Reload() {
-        mainActivity.GetRecipes();
-        myRecipeAdapter.notifyDataSetChanged();
+        SetAdapterRCV(mainActivity.GetRecipes());
     }
     private void SaveDataToFirebase(Anh anh, Uri uri,int pos,int size,Dialog dialog,CongThuc congThuc){
         if (uri != null) {
@@ -742,4 +738,5 @@ public class FragmentCongThucCuaToi extends Fragment {
         lstAnh = new ArrayList<>();
         lstUri = new ArrayList<>();
     }
+
 }

@@ -33,8 +33,6 @@ public class DanhSachCongThucDao {
     public long update(DanhSachCongThuc obj) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("ten",obj.getTen());
-        contentValues.put("idNguoiDung",obj.getIdNguoiDung());
-
         return db.update("DanhSachCongThuc",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
     }
     private List<DanhSachCongThuc> getData(String sql, String ... selectionArgs) {
@@ -53,11 +51,35 @@ public class DanhSachCongThucDao {
         String sql = "SELECT * FROM DANHSACHCONGTHUC";
         return getData(sql);
     }
+    public List<DanhSachCongThuc> getAllIdUser(String id) {
+        String sql = "SELECT * FROM DANHSACHCONGTHUC where idNguoiDung = ?";
+        return getData(sql,id);
+    }
     public List<CongThuc> getAllID(String id) {
         String sql = "select * from congthuc where id in (select ct.id from CongThuc_DSCT ctdsct Join congthuc ct where ct.id = ctdsct.idCongThuc and idDanhSachCongThuc = "+ id +")";
         return congThucDao.getData(sql,id);
     }
     public int deleteAllByCongThucId(String id) {
         return db.delete("CongThuc", "idCongThuc = ?", new String[]{id});
+    }
+
+    public List<CongThuc> getAllCongThucUser(String idUser) {
+        List<CongThuc> lstCongThuc = new ArrayList<>();
+        ArrayList<String> lstIDCongThuc = new ArrayList<>();
+        String sql = "SELECT idCongThuc FROM CongThuc_DSCT WHERE idDanhSachCongThuc IN (SELECT id FROM DanhSachCongThuc WHERE idNguoiDung = " + idUser +  ") GROUP BY idCongThuc";
+
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            String id = cursor.getString(0);
+            lstIDCongThuc.add(id);
+        }
+        cursor.close();
+
+        if (lstIDCongThuc != null && !lstIDCongThuc.isEmpty()) {
+            for (String s:lstIDCongThuc) {
+                lstCongThuc.add(congThucDao.getID(s));
+            }
+        }
+        return lstCongThuc;
     }
 }
