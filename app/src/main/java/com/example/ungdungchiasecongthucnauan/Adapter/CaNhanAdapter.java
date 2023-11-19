@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +14,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,23 +74,28 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         getContext().startActivity(intent);
     }
-
     private void changePassword(){
-        dialog=new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_chanepassword);
+        View dialogView = View.inflate(getContext(),R.layout.dialog_chanepassword,null);
+        dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
 
         Window window = dialog.getWindow();
-        WindowManager.LayoutParams params = window.getAttributes();
-        params.gravity = Gravity.BOTTOM;
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        window.setAttributes(params);
+        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.gravity = Gravity.BOTTOM;
+        layoutParams.windowAnimations = R.style.showDialogMorePlay;
+        dialog.getWindow().setAttributes(layoutParams);
 
         edt_mkcu=dialog.findViewById(R.id.edt_mkcu);
         edt_mkmoi=dialog.findViewById(R.id.edt_mkmoi);
         edt_nhaplaimk= dialog.findViewById(R.id.edt_nhaplaimk);
         Button btnRegister= dialog.findViewById(R.id.btn_register);
-        ImageView img_Close=dialog.findViewById(R.id.img_Close);
+        ImageButton img_Close=dialog.findViewById(R.id.img_Close);
 
         img_Close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,21 +119,16 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                                   @Override
                                   public void onComplete(@NonNull Task<AuthResult> task) {
                                       if (task.isSuccessful()) {
-                                          // Mật khẩu hiện tại hợp lệ
                                           updatePass(newpassword);
                                           dialog.dismiss();
 
                                       } else {
-                                          // Mật khẩu hiện tại không hợp lệ
                                           dialog.dismiss();
                                           Toast.makeText(getContext(),"Mật khẩu hiện tại chưa chính xác",Toast.LENGTH_LONG).show();
                                       }
                                   }
                               });
-
-
                   }
-
             }
         });
         dialog.show();
@@ -141,21 +141,17 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
             if (!newpassword.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")){
                 edt_mkmoi.setError("Mật khẩu phải có 5 ký tự trở lên, Ít nhất 1 chữ in hoa và 1 chữ thường !");
                 edt_mkmoi.requestFocus();
-                check=false;
             }
             if (!newpassword.equals(repassword)) {
                 edt_nhaplaimk.setError("Nhập lại mật khẩu chưa chính xác !");
                 edt_nhaplaimk.requestFocus();
-                check=false;
             }
             edt_mkcu.setError("Không để trống trường này !");
             edt_mkcu.requestFocus();
-            check=false;
+            check = false;
         }else{
-          //true
            check=true;
         }
-
         return check;
     }
 
