@@ -86,7 +86,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 nguoiDung.setPhanQuyen(position + 1);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 

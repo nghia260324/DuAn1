@@ -42,6 +42,15 @@ public class BuocLamDao {
         contentValues.put("thuTu",obj.getThuTu());
         return db.insert("BuocLam",null,contentValues);
     }
+    public long insertID(BuocLam obj) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id",obj.getId());
+        contentValues.put("idCongThuc",obj.getIdCongThuc());
+        contentValues.put("noiDung",obj.getNoiDung());
+        contentValues.put("idAnh",obj.getIdAnh());
+        contentValues.put("thuTu",obj.getThuTu());
+        return db.insert("BuocLam",null,contentValues);
+    }
     public int delete(String id) {
         return db.delete("BuocLam","id = ?",new String[]{String.valueOf(id)});
     }

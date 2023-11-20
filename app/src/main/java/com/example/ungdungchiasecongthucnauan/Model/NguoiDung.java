@@ -77,4 +77,17 @@ public class NguoiDung {
     public void setAvatar(int avatar) {
         this.avatar = avatar;
     }
+
+    @Override
+    public String toString() {
+        return "NguoiDung{" +
+                "id='" + id + '\'' +
+                ", hoTen='" + hoTen + '\'' +
+                ", email='" + email + '\'' +
+                ", matKhau='" + matKhau + '\'' +
+                ", trangThai=" + trangThai +
+                ", phanQuyen=" + phanQuyen +
+                ", avatar=" + avatar +
+                '}';
+    }
 }

@@ -522,6 +522,8 @@ public class FragmentCongThucCuaToi extends Fragment{
                             progressDialog.dismiss();
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+                            databaseReference.child(congThuc.getId()).setValue(congThuc);
                             Reload();
                         }
                     });
@@ -554,6 +556,8 @@ public class FragmentCongThucCuaToi extends Fragment{
             progressDialog.dismiss();
             dialog.dismiss();
             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
+            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+            databaseReference.child(congThuc.getId()).setValue(congThuc);
             Reload();
         }
     }

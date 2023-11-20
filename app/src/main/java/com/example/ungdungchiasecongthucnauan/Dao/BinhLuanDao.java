@@ -26,6 +26,15 @@ public class BinhLuanDao {
 
         return db.insert("BinhLuan",null,contentValues);
     }
+    public long insertID(BinhLuan obj) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id",obj.getId());
+        contentValues.put("idCongThuc",obj.getIdCongThuc());
+        contentValues.put("idNguoiDung",obj.getNguoiDung());
+        contentValues.put("noiDung",obj.getNoiDung());
+
+        return db.insert("BinhLuan",null,contentValues);
+    }
     public int delete(String id) {
         return db.delete("BinhLuan","id = ?",new String[]{String.valueOf(id)});
     }

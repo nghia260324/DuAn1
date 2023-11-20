@@ -39,6 +39,15 @@ public class DanhSachNguyenLieuDao {
 
         return db.insert("DanhSachNguyenLieu",null,contentValues);
     }
+    public long insertID(DanhSachNguyenLieu obj) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id",obj.getId());
+        contentValues.put("idCongThuc",obj.getIdCongThuc());
+        contentValues.put("idNguyenLieu",obj.getIdNguyenLieu());
+        contentValues.put("khoiLuong",obj.getKhoiLuong());
+
+        return db.insert("DanhSachNguyenLieu",null,contentValues);
+    }
     public int delete(String id) {
         return db.delete("DanhSachNguyenLieu","id = ?",new String[]{String.valueOf(id)});
     }

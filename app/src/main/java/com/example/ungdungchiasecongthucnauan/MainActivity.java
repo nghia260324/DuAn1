@@ -5,12 +5,14 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.DanhSachCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.KieuNguyenLieuDao;
@@ -32,6 +35,7 @@ import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<CongThuc> lstCongThuc;
     public ArrayList<CongThuc> myRecipes;
     public ArrayList<LoaiCongThuc> lstLoaiCongThuc;
-
     ViewPager2 viewPager2;
     DatabaseReference databaseReference;
     private DataChangeListener dataChangeListener;
@@ -72,64 +75,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
-    private void CheckDataRecipe() {
-        databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<CongThuc> lstCTFirebase = new ArrayList<>();
-                ArrayList<CongThuc> lstCTCSDL = (ArrayList<CongThuc>) congThucDao.getAll();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    CongThuc congThuc = snapshot.getValue(CongThuc.class);
-                    lstCTFirebase.add(congThuc);
-                }
-                if (lstCTCSDL == null) {
-                    for (CongThuc ct:lstCTFirebase) {
-                        congThucDao.insert(ct);
-                    }
-                } else {
-                    for (CongThuc ct:lstCTFirebase) {
-                        if (!lstCTCSDL.contains(ct)) {
-                            congThucDao.insert(ct);
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-
-    private void CheckDataUser() {
-        databaseReference = FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<NguoiDung> lstNDFirebase = new ArrayList<>();
-                ArrayList<NguoiDung> lstNDCSDL = (ArrayList<NguoiDung>) nguoiDungDao.getAll();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    NguoiDung nguoiDung = snapshot.getValue(NguoiDung.class);
-                    lstNDFirebase.add(nguoiDung);
-                }
-                if (lstNDCSDL == null && lstNDCSDL.isEmpty()) {
-                    for (NguoiDung nd:lstNDFirebase) {
-                        nguoiDungDao.insert(nd);
-                    }
-                } else {
-                    for (NguoiDung nd:lstNDFirebase) {
-                        if (!lstNDCSDL.contains(nd)) {
-                            nguoiDungDao.insert(nd);
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
     boolean checkUser = false;
     boolean checkCT = false;
     ProgressDialog progressDialog;
@@ -139,15 +84,74 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initUI();
-//        Thread thread = new Thread(() -> {
-//            CheckDataUser();
-//            CheckDataRecipe();
-//        });
-//        thread.start();
+        ViewPagerBottomNavigationAdapter viewPagerBottomNavigationAdapter = new ViewPagerBottomNavigationAdapter(MainActivity.this,getUser());
+        viewPager2.setUserInputEnabled(false);
+        viewPager2.setAdapter(viewPagerBottomNavigationAdapter);
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                switch (position) {
+                    case 0: bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
+                        break;
+                    case 1: bottomNavigationView.getMenu().findItem(R.id.search).setChecked(true);
+                        break;
+                    case 2: bottomNavigationView.getMenu().findItem(R.id.create_recipes).setChecked(true);
+                        break;
+                    case 3: bottomNavigationView.getMenu().findItem(R.id.individual).setChecked(true);
+                        break;
+                }
+            }
+        });
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId() == R.id.home) {
+                    if (mCurrentFragment != FRAGMENT_HOME) {
+                        viewPager2.setCurrentItem(0,false);
+                        mCurrentFragment = FRAGMENT_HOME;
+                    }
+                } else if(item.getItemId() == R.id.search) {
+                    if (mCurrentFragment != FRAGMENT_SEARCH) {
+                        viewPager2.setCurrentItem(1,false);
+                        mCurrentFragment = FRAGMENT_SEARCH;
+                    }
+                } else if (item.getItemId() == R.id.create_recipes) {
+                    if (mCurrentFragment != FRAGMENT_CREATE_RECIPES) {
+                        viewPager2.setCurrentItem(2,false);
+                        mCurrentFragment = FRAGMENT_CREATE_RECIPES;
+                    }
+                } else if (item.getItemId() == R.id.individual) {
+                    if (mCurrentFragment != FRAGMENT_INDIVIDIAL) {
+                        viewPager2.setCurrentItem(3,false);
+                        mCurrentFragment = FRAGMENT_INDIVIDIAL;
+                    }
+                }
+                return true;
+            }
+        });
 
-        MyAsyncTask myAsyncTask = new MyAsyncTask();
-        myAsyncTask.execute();
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem itemCreateRecipes = menu.findItem(R.id.create_recipes);
+        if (getUser().getPhanQuyen() == 1) {
+            itemCreateRecipes.setVisible(false);
+        } else {
+            itemCreateRecipes.setVisible(true);
+        }
+        GetRecipes();
+        GetAllData();
+        IntentFilter filter = new IntentFilter("ALARM_TRIGGERED");
+        registerReceiver(alarmReceiver, filter);
+        checkCT = false;
+        checkUser = false;
 
+//        UpdateData();
+    }
+
+    private void UpdateData() {
+        Thread thread = new Thread(() -> {
+
+        });
     }
 
     @Override
@@ -270,81 +274,5 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.POST_NOTIFICATIONS},7979);
         }
     }
-    private class MyAsyncTask extends AsyncTask<String,Void,String> {
 
-        @Override
-        protected String doInBackground(String... strings) {
-            CheckDataRecipe();
-            CheckDataUser();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-//            progressDialog = new ProgressDialog(MainActivity.this);
-//            progressDialog.setMessage("Loading . . .");
-//            progressDialog.show();
-//            ViewPagerBottomNavigationAdapter viewPagerBottomNavigationAdapter = new ViewPagerBottomNavigationAdapter(MainActivity.this,getUser());
-//            viewPager2.setUserInputEnabled(false);
-//            viewPager2.setAdapter(viewPagerBottomNavigationAdapter);
-//            viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-//                @Override
-//                public void onPageSelected(int position) {
-//                    super.onPageSelected(position);
-//                    switch (position) {
-//                        case 0: bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
-//                            break;
-//                        case 1: bottomNavigationView.getMenu().findItem(R.id.search).setChecked(true);
-//                            break;
-//                        case 2: bottomNavigationView.getMenu().findItem(R.id.create_recipes).setChecked(true);
-//                            break;
-//                        case 3: bottomNavigationView.getMenu().findItem(R.id.individual).setChecked(true);
-//                            break;
-//                    }
-//                }
-//            });
-//            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//                @Override
-//                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                    if(item.getItemId() == R.id.home) {
-//                        if (mCurrentFragment != FRAGMENT_HOME) {
-//                            viewPager2.setCurrentItem(0,false);
-//                            mCurrentFragment = FRAGMENT_HOME;
-//                        }
-//                    } else if(item.getItemId() == R.id.search) {
-//                        if (mCurrentFragment != FRAGMENT_SEARCH) {
-//                            viewPager2.setCurrentItem(1,false);
-//                            mCurrentFragment = FRAGMENT_SEARCH;
-//                        }
-//                    } else if (item.getItemId() == R.id.create_recipes) {
-//                        if (mCurrentFragment != FRAGMENT_CREATE_RECIPES) {
-//                            viewPager2.setCurrentItem(2,false);
-//                            mCurrentFragment = FRAGMENT_CREATE_RECIPES;
-//                        }
-//                    } else if (item.getItemId() == R.id.individual) {
-//                        if (mCurrentFragment != FRAGMENT_INDIVIDIAL) {
-//                            viewPager2.setCurrentItem(3,false);
-//                            mCurrentFragment = FRAGMENT_INDIVIDIAL;
-//                        }
-//                    }
-//                    return true;
-//                }
-//            });
-//
-//            Menu menu = bottomNavigationView.getMenu();
-//            MenuItem itemCreateRecipes = menu.findItem(R.id.create_recipes);
-//            if (getUser().getPhanQuyen() == 1) {
-//                itemCreateRecipes.setVisible(false);
-//            } else {
-//                itemCreateRecipes.setVisible(true);
-//            }
-//            GetRecipes();
-////            GetAllData();
-//            IntentFilter filter = new IntentFilter("ALARM_TRIGGERED");
-//            registerReceiver(alarmReceiver, filter);
-//            checkCT = false;
-//            checkUser = false;
-        }
-    }
 }
