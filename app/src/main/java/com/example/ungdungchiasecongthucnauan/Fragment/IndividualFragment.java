@@ -101,8 +101,11 @@ public class IndividualFragment extends Fragment {
 
     private void setDataUser(){
         NguoiDung nguoiDung = mainActivity.getUser();
-        tvEmail.setText(nguoiDung.getEmail());
-        tvHoten.setText(nguoiDung.getHoTen());
+
+        if (!nguoiDung.getHoTen().equals("")&& !nguoiDung.getEmail().equals("")) {
+            tvEmail.setText(nguoiDung.getEmail());
+            tvHoten.setText(nguoiDung.getHoTen());
+        }
     }
 
 }
