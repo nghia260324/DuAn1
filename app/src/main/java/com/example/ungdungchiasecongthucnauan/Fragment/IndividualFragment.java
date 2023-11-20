@@ -77,7 +77,6 @@ public class IndividualFragment extends Fragment {
 
         initUI(view);
 
-
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         viewPagerAdapter.addFragment(new FragmentCaNhan(),"Cá nhân");
