@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.ungdungchiasecongthucnauan.Dao.DanhSachCongThucDao;
 import com.example.ungdungchiasecongthucnauan.LoginActivity;
+import com.example.ungdungchiasecongthucnauan.Model.DanhSachCongThuc;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,7 +35,9 @@ import java.util.List;
 public class CaNhanAdapter extends ArrayAdapter<String> {
     Dialog dialog;
     ProgressDialog progressDialog;
-    EditText edt_mkcu, edt_mkmoi,edt_nhaplaimk;
+    EditText edt_mkcu, edt_mkmoi,edt_nhaplaimk,edt_name;
+    Button btn_save;
+    DanhSachCongThucDao dsclDao = new DanhSachCongThucDao(getContext());
 
     public CaNhanAdapter(Context context, List<String> items) {
         super(context, 0, items);
@@ -61,6 +65,10 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                        changePassword();
                 } else if (item.equals("Đăng xuất")) {
                        logOut();
+                }else if(item.equals("Tạo danh sách công thức mới")){
+                      addListCT();
+                } else if (item.equals("Tạo danh sách món ăn theo ngày")) {
+                    
                 }
             }
         });
@@ -171,25 +179,47 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                 });
     }
 
-//    private void reAuthenticate(String newPassword){
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//
-//        AuthCredential credential = EmailAuthProvider
-//                .getCredential("user@example.com", "password1234");
-//
-//
-//        user.reauthenticate(credential)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()){
-//                            updatePass(newPassword);
-//                        }else {
-//
-//                        }
-//                    }
-//                });
-//    }
+    private void addListCT(){
+        View dialogView = View.inflate(getContext(),R.layout.dialog_recipe_list,null);
+        dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.gravity = Gravity.BOTTOM;
+        layoutParams.windowAnimations = R.style.showDialogMorePlay;
+        dialog.getWindow().setAttributes(layoutParams);
+        ImageButton img=dialog.findViewById(R.id.img_Close);
+        edt_name=dialog.findViewById(R.id.edt_name);
+        btn_save=dialog.findViewById(R.id.btn_save);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = edt_name.getText().toString().trim();
+                if (!name.isEmpty()) {
+                    DanhSachCongThuc dsct = new DanhSachCongThuc();
+                    dsct.setTen(name);
+                    dsclDao.insert(dsct);
+                    Toast.makeText(getContext(), "Tạo thành công !", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                } else {
+                    edt_name.setError("Vui lòng nhập tên danh sách!");
+                }
+            }
+        });
+        dialog.show();
+    }
 
 }
