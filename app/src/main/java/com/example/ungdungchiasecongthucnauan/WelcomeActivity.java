@@ -31,7 +31,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(WelcomeActivity.this,LoginActivity.class));
+
                 checkUserLogin();
                 overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
                 finish();
