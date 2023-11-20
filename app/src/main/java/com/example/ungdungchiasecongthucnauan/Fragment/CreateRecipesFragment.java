@@ -492,8 +492,8 @@ public class CreateRecipesFragment extends Fragment {
                             progressDialog.dismiss();
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
-//                            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-//                            databaseReference.child(congThuc.getId()).setValue(congThuc);
+                            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+                            databaseReference.child(congThuc.getId()).setValue(congThuc);
                         }
                     });
                 }
@@ -516,8 +516,8 @@ public class CreateRecipesFragment extends Fragment {
             progressDialog.dismiss();
             dialog.dismiss();
             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
-//            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-//            databaseReference.child(congThuc.getId()).setValue(congThuc);
+            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+            databaseReference.child(congThuc.getId()).setValue(congThuc);
         }
     }
     private void SaveDataToFirebase(Anh anh, Uri uri,int pos,int size,Dialog dialog){

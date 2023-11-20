@@ -20,6 +20,7 @@ public class NguoiDungDao {
 
     public long insert(NguoiDung obj) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put("id",obj.getId());
         contentValues.put("hoTen", obj.getHoTen());
         contentValues.put("email",obj.getEmail());
         contentValues.put("matKhau",obj.getMatKhau());
@@ -53,6 +54,10 @@ public class NguoiDungDao {
             ));
         }
         return lstNguoiDung;
+    }
+    public List<NguoiDung> getAll() {
+        String sql = "SELECT * FROM NguoiDung";
+        return getData(sql);
     }
     public NguoiDung getID (String id) {
         String sql = "SELECT * FROM NguoiDung WHERE id = ?";

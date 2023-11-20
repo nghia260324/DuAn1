@@ -52,8 +52,8 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CongThuc congThuc = lstCongthuc.get(position);
-        NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
         if (congThuc != null) {
+            NguoiDung nguoiDung = nguoiDungDao.getID(congThuc.getIdNguoiDung());
             Anh anh = new Anh();
             if (congThuc.getIdAnh() != null) {
                 anh = anhDao.getID(congThuc.getIdAnh());
