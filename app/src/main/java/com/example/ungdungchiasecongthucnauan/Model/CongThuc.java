@@ -8,7 +8,7 @@ public class CongThuc implements Serializable {
     private String id;
     private String ten;
     private String idAnh;
-    private int idNguoiDung;
+    private String idNguoiDung;
     private int khauPhan;
     private int thoiGianNau;
     private Date ngayTao;
@@ -21,7 +21,7 @@ public class CongThuc implements Serializable {
     public CongThuc() {
     }
 
-    public CongThuc(String id, String ten, String idAnh, int idNguoiDung, int khauPhan, int thoiGianNau, Date ngayTao, int idLoai, int trangThai, ArrayList<BuocLam> lstBuocLam, ArrayList<DanhSachNguyenLieu> lstNguyenLieu, ArrayList<BinhLuan> lstBinhLuan) {
+    public CongThuc(String id, String ten, String idAnh, String idNguoiDung, int khauPhan, int thoiGianNau, Date ngayTao, int idLoai, int trangThai, ArrayList<BuocLam> lstBuocLam, ArrayList<DanhSachNguyenLieu> lstNguyenLieu, ArrayList<BinhLuan> lstBinhLuan) {
         this.id = id;
         this.ten = ten;
         this.idAnh = idAnh;
@@ -60,11 +60,11 @@ public class CongThuc implements Serializable {
         this.idAnh = idAnh;
     }
 
-    public int getIdNguoiDung() {
+    public String getIdNguoiDung() {
         return idNguoiDung;
     }
 
-    public void setIdNguoiDung(int idNguoiDung) {
+    public void setIdNguoiDung(String idNguoiDung) {
         this.idNguoiDung = idNguoiDung;
     }
 
@@ -130,23 +130,5 @@ public class CongThuc implements Serializable {
 
     public void setLstBinhLuan(ArrayList<BinhLuan> lstBinhLuan) {
         this.lstBinhLuan = lstBinhLuan;
-    }
-
-    @Override
-    public String toString() {
-        return "CongThuc{" +
-                "id='" + id + '\'' +
-                ", ten='" + ten + '\'' +
-                ", idAnh='" + idAnh + '\'' +
-                ", idNguoiDung=" + idNguoiDung +
-                ", khauPhan=" + khauPhan +
-                ", thoiGianNau=" + thoiGianNau +
-                ", ngayTao=" + ngayTao +
-                ", idLoai=" + idLoai +
-                ", trangThai=" + trangThai +
-                ", lstBuocLam=" + lstBuocLam +
-                ", lstNguyenLieu=" + lstNguyenLieu +
-                ", lstBinhLuan=" + lstBinhLuan +
-                '}';
     }
 }

@@ -38,7 +38,7 @@ public class CongThucDao {
             congThuc.setId(cursor.getString(0));
             congThuc.setTen(cursor.getString(1));
             congThuc.setIdAnh(cursor.getString(2));
-            congThuc.setIdNguoiDung(Integer.parseInt(cursor.getString(3)));
+            congThuc.setIdNguoiDung(cursor.getString(3));
             congThuc.setKhauPhan(Integer.parseInt(cursor.getString(4)));
             congThuc.setThoiGianNau(Integer.parseInt(cursor.getString(5)));
             try {

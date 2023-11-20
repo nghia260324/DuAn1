@@ -3,12 +3,14 @@ package com.example.ungdungchiasecongthucnauan.Model;
 public class CT_DSCT {
     private int id;
     private String idCongThuc;
-    private int iđSCT;
-    public CT_DSCT(int id, String idCongThuc, int iđSCT) {
+    private int idSCT;
+
+    public CT_DSCT(int id, String idCongThuc, int idSCT) {
         this.id = id;
         this.idCongThuc = idCongThuc;
-        this.iđSCT = iđSCT;
+        this.idSCT = idSCT;
     }
+
     public int getId() {
         return id;
     }
@@ -25,11 +27,11 @@ public class CT_DSCT {
         this.idCongThuc = idCongThuc;
     }
 
-    public int getIđSCT() {
-        return iđSCT;
+    public int getIdSCT() {
+        return idSCT;
     }
 
-    public void setIđSCT(int iđSCT) {
-        this.iđSCT = iđSCT;
+    public void setIdSCT(int idSCT) {
+        this.idSCT = idSCT;
     }
 }

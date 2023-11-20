@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -18,13 +19,14 @@ import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.Model.PhanQuyen;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -38,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     String name;
     String password;
     String rePassword;
+    DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,9 @@ public class RegisterActivity extends AppCompatActivity {
                  rePassword = edtRePassword.getText().toString().trim().trim();
 
                 if (Validate(email,name,password,rePassword)){
+                    String id = UUID.randomUUID().toString();
+                    nguoiDung.setId(id);
+                    databaseReference.child(id).setValue(nguoiDung);
                     if(nguoiDungDao.insert(nguoiDung) > 0) {
                         SaveUserToFireBase(email,password);
                         Toast.makeText(RegisterActivity.this, "Đăng ký tài khoản thành công !", Toast.LENGTH_SHORT).show();
@@ -75,6 +81,17 @@ public class RegisterActivity extends AppCompatActivity {
 
         DecentralizatioAdapter decentralizatioAdapter = new DecentralizatioAdapter(this,R.layout.item_spinner_decentralization_selected,getArrDecentralizatio());
         spinner.setAdapter(decentralizatioAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                nguoiDung.setPhanQuyen(position + 1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private ArrayList<PhanQuyen> getArrDecentralizatio() {
@@ -101,17 +118,11 @@ public class RegisterActivity extends AppCompatActivity {
                     edtEmail.requestFocus();
                 }
                 check = false;
-
-
-
-
             } else {
-                nguoiDung.setId(0);
                 nguoiDung.setHoTen(name);
                 nguoiDung.setEmail(email);
                 nguoiDung.setMatKhau(password);
                 nguoiDung.setTrangThai(0);
-                nguoiDung.setPhanQuyen(1);
                 Random random = new Random();
                 int rdAvatar = random.nextInt(10) + 1;
                 nguoiDung.setAvatar(rdAvatar);
@@ -139,8 +150,10 @@ public class RegisterActivity extends AppCompatActivity {
         return check;
     }
     private void initUI() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
         nguoiDungDao = new NguoiDungDao(this);
         nguoiDung = new NguoiDung();
+        nguoiDung.setPhanQuyen(1);
 
         btnGoLogin = findViewById(R.id.btn_goLogin);
         btnRegister = findViewById(R.id.btn_register);

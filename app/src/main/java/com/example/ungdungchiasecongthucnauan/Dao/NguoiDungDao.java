@@ -27,6 +27,8 @@ public class NguoiDungDao {
         contentValues.put("phanQuyen",obj.getPhanQuyen());
         contentValues.put("avatar",obj.getAvatar());
 
+
+
         return db.insert("NguoiDung",null,contentValues);
     }
     public long update(NguoiDung obj) {
@@ -41,13 +43,13 @@ public class NguoiDungDao {
         Cursor cursor = db.rawQuery(sql,selectionArgs);
         while (cursor.moveToNext()) {
             lstNguoiDung.add(new NguoiDung(
-                Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1),
-                cursor.getString(2),
-                cursor.getString(3),
-                Integer.parseInt(cursor.getString(4)),
-                Integer.parseInt(cursor.getString(5)),
-                Integer.parseInt(cursor.getString(6))
+                    cursor.getString(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    Integer.parseInt(cursor.getString(4)),
+                    Integer.parseInt(cursor.getString(5)),
+                    Integer.parseInt(cursor.getString(6))
             ));
         }
         return lstNguoiDung;
@@ -70,7 +72,7 @@ public class NguoiDungDao {
         Cursor cursor = db.rawQuery("SELECT * FROM NguoiDung WHERE email = ? AND matKhau = ?",new String[]{email,password});
         while (cursor.moveToNext()) {
             lstNguoiDung.add(new NguoiDung(
-                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
@@ -89,7 +91,7 @@ public class NguoiDungDao {
         Cursor cursor = db.rawQuery("SELECT * FROM NguoiDung WHERE email = ?",new String[]{email});
         while (cursor.moveToNext()) {
             lstNguoiDung.add(new NguoiDung(
-                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),

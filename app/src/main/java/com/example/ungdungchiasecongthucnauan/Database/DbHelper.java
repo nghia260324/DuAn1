@@ -18,7 +18,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         "tenKieu TEXT NOT NULL)";
         String createTableNguoiDung=
                 "Create table NguoiDung (" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        "id TEXT PRIMARY KEY NOT NULL, " +
                         "hoTen TEXT NOT NULL," +
                         "email TEXT NOT NULL," +
                         "matKhau TEXT NOT NULL," +
@@ -46,7 +46,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         "id TEXT PRIMARY KEY NOT NULL," +
                         "ten TEXT NOT NULL," +
                         "idAnh TEXT," +
-                        "idnguoiDung INTEGER NOT NULL," +
+                        "idnguoiDung TEXT NOT NULL," +
                         "khauPhan INTEGER," +
                         "thoiGianNau INTEGER," +
                         "ngay DATE NOT NULL," +
@@ -72,7 +72,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "Create table BinhLuan (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "idCongThuc TEXT NOT NULL," +
-                        "idNguoiDung INTEGER NOT NULL," +
+                        "idNguoiDung TEXT NOT NULL," +
                         "noiDung TEXT NOT NULL)";
         //        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id)" +
         //        "FOREIGN KEY(idNguoiDung) REFERENCES NguoiDung(id)" +
@@ -80,7 +80,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "Create table DanhSachCongThuc (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "ten TEXT NOT NULL," +
-                        "idNguoiDung INTEGER NOT NULL)";
+                        "idNguoiDung TEXT NOT NULL)";
         //        "FOREIGN KEY(idNguoiDung) REFERENCES NguoiDung(id)" +
         String createTableCongThuc_DSCT =
                 "Create table CongThuc_DSCT (" +
@@ -151,9 +151,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Ngao',2,93,15000)," +
                 "('Sò điệp tươi',2,111,16000)," +
 
-                "('Trứng chim cút',4,142,900)," +
-                "('Trứng gà',4,155,3000)," +
-                "('Trứng vịt',4,170,3000)," +
+                "('Trứng chim cút',14,142,900)," +
+                "('Trứng gà',4,70,3000)," +
+                "('Trứng vịt',4,100,3000)," +
 
                 "('Sữa tươi không đường',5,55,7000)," +
 
@@ -202,8 +202,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Phô mai lát con bò cười',12,402,120000)," +//500gram
                 "('Bơ thực vật',12,716,40000)," +//500gram
                 "('Đậu phụ',12,68,15000)";//500gram
-        String add_nguoiDung = "INSERT INTO NguoiDung(hoTen,email,matKhau,trangThai,phanQuyen,avatar) VALUES" +
-                "('Admin','admin@gmail.com','admin',0,0,5)";
+//        String add_nguoiDung = "INSERT INTO NguoiDung(hoTen,email,matKhau,trangThai,phanQuyen,avatar) VALUES" +
+//                "('Admin','admin@gmail.com','admin',0,0,5)";
         String add_LoaiCongThuc = "INSERT INTO LoaiCongThuc(ten) VALUES" +
                 "('Đồ uống')," +
                 "('Nướng')," +
@@ -220,7 +220,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.execSQL(add_kieuNguyenLieu);
         db.execSQL(add_NguyenLieu);
-        db.execSQL(add_nguoiDung);
+//        db.execSQL(add_nguoiDung);
         db.execSQL(add_LoaiCongThuc);
     }
 

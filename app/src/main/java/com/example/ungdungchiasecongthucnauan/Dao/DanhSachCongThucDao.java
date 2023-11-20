@@ -42,7 +42,7 @@ public class DanhSachCongThucDao {
             lstDSCT.add(new DanhSachCongThuc(
                Integer.parseInt(cursor.getString(0)),
                cursor.getString(1),
-               Integer.parseInt(cursor.getString(2))
+                    cursor.getString(2)
             ));
         }
         return lstDSCT;

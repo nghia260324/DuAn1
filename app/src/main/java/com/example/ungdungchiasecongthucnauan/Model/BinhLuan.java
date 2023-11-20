@@ -3,13 +3,13 @@ package com.example.ungdungchiasecongthucnauan.Model;
 public class BinhLuan {
     private int id;
     private String idCongThuc;
-    private int nguoiDung;
+    private String nguoiDung;
     private String noiDung;
 
     public BinhLuan() {
     }
 
-    public BinhLuan(int id, String idCongThuc, int nguoiDung, String noiDung) {
+    public BinhLuan(int id, String idCongThuc, String nguoiDung, String noiDung) {
         this.id = id;
         this.idCongThuc = idCongThuc;
         this.nguoiDung = nguoiDung;
@@ -32,11 +32,11 @@ public class BinhLuan {
         this.idCongThuc = idCongThuc;
     }
 
-    public int getNguoiDung() {
+    public String getNguoiDung() {
         return nguoiDung;
     }
 
-    public void setNguoiDung(int nguoiDung) {
+    public void setNguoiDung(String nguoiDung) {
         this.nguoiDung = nguoiDung;
     }
 

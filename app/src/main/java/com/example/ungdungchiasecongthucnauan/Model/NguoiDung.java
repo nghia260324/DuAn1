@@ -1,7 +1,7 @@
 package com.example.ungdungchiasecongthucnauan.Model;
 
 public class NguoiDung {
-    private int id;
+    private String id;
     private String hoTen;
     private String email;
     private String matKhau;
@@ -12,7 +12,7 @@ public class NguoiDung {
     public NguoiDung() {
     }
 
-    public NguoiDung(int id, String hoTen, String email, String matKhau, int trangThai, int phanQuyen, int avatar) {
+    public NguoiDung(String id, String hoTen, String email, String matKhau, int trangThai, int phanQuyen, int avatar) {
         this.id = id;
         this.hoTen = hoTen;
         this.email = email;
@@ -22,11 +22,11 @@ public class NguoiDung {
         this.avatar = avatar;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

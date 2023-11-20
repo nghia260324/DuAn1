@@ -302,7 +302,6 @@ public class ChiTietCongThuc {
         dialog.getWindow().setAttributes(layoutParams);
 
         LinearLayout layout_timer = dialog.findViewById(R.id.layout_timer);
-        TextView tv_time = dialog.findViewById(R.id.tv_time);
         Button btn_start = dialog.findViewById(R.id.btn_start);
 
         final NumberPicker numberPicker = new NumberPicker(context);
@@ -333,6 +332,5 @@ public class ChiTietCongThuc {
         }
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, selectedTimeInMinutes * 60 * 1000, pendingIntent);
-
     }
 }

@@ -3,12 +3,12 @@ package com.example.ungdungchiasecongthucnauan.Model;
 public class DanhSachCongThuc {
     private int id;
     private String ten;
-    private int idNguoiDung;
+    private String idNguoiDung;
 
     public DanhSachCongThuc() {
     }
 
-    public DanhSachCongThuc(int id, String ten, int idNguoiDung) {
+    public DanhSachCongThuc(int id, String ten, String idNguoiDung) {
         this.id = id;
         this.ten = ten;
         this.idNguoiDung = idNguoiDung;
@@ -30,20 +30,11 @@ public class DanhSachCongThuc {
         this.ten = ten;
     }
 
-    public int getIdNguoiDung() {
+    public String getIdNguoiDung() {
         return idNguoiDung;
     }
 
-    public void setIdNguoiDung(int idNguoiDung) {
+    public void setIdNguoiDung(String idNguoiDung) {
         this.idNguoiDung = idNguoiDung;
-    }
-
-    @Override
-    public String toString() {
-        return "DanhSachCongThuc{" +
-                "id=" + id +
-                ", ten='" + ten + '\'' +
-                ", idNguoiDung=" + idNguoiDung +
-                '}';
     }
 }
