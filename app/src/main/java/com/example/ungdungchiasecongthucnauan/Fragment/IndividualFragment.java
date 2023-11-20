@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerAdapter;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
+import com.example.ungdungchiasecongthucnauan.Service;
 import com.google.android.material.tabs.TabLayout;
 
 /**
@@ -65,6 +67,7 @@ public class IndividualFragment extends Fragment {
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     TextView tvHoten,tvEmail;
+    ImageView imgUser;
     MainActivity mainActivity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,6 +98,14 @@ public class IndividualFragment extends Fragment {
 
         tvHoten = view.findViewById(R.id.tvHoten);
         tvEmail = view.findViewById(R.id.tvEmail);
+        imgUser = view.findViewById(R.id.imgUser);
+
+        imgUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         mainActivity = (MainActivity) getActivity();
     }
@@ -103,6 +114,7 @@ public class IndividualFragment extends Fragment {
         NguoiDung nguoiDung = mainActivity.getUser();
         tvEmail.setText(nguoiDung.getEmail());
         tvHoten.setText(nguoiDung.getHoTen());
+        new Service().setAvatar(imgUser,nguoiDung.getAvatar());
     }
 
 }

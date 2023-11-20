@@ -32,7 +32,7 @@ public class SaveRecipe {
         if (dsct.getAll() != null && !dsct.getAll().isEmpty()) {
             ArrayList<CongThuc> lstCT = (ArrayList<CongThuc>) dsctDao.getAllCongThucUser(String.valueOf(mainActivity.getUser().getId()));
             for (CongThuc ct:lstCT) {
-                if (ct.getId().equals(congThuc.getId())) {
+                if (ct != null && ct.getId().equals(congThuc.getId())) {
                     check = true;
                     Toast.makeText(context, "Bạn đã lưu công thức này !", Toast.LENGTH_SHORT).show();
                 }

@@ -40,20 +40,19 @@ public class CongThucDSCTDao {
         }
         return lstDSCT;
     }
-    public List<CT_DSCT> getAll() {
-        String sql = "SELECT * FROM CongThuc_DSCT";
-        return getData(sql);
+    public List<CT_DSCT> getAll(String id) {
+        String sql = "SELECT * FROM CongThuc_DSCT WHERE idDanhSachCongThuc = ?";
+        return getData(sql,id);
     }
     public int deleteID(String id) {
         return db.delete("CongThuc_DSCT","id = ?",new String[]{String.valueOf(id)});
     }
-    public CT_DSCT getID(String id) {
-        String sql = "SELECT * FROM CongThuc_DSCT WHERE idDanhSachCongThuc = ?";
-        List<CT_DSCT> lstCongThuc = getData(sql, id);
-        if (lstCongThuc != null && !lstCongThuc.isEmpty()) {
-            return lstCongThuc.get(0);
-        }
-        return null;
-    }
-
+//    public List<CT_DSCT> getID(String id) {
+//        String sql = "SELECT * FROM CongThuc_DSCT WHERE idDanhSachCongThuc = ?";
+//        List<CT_DSCT> lstCongThuc = getData(sql, id);
+//        if (lstCongThuc != null && !lstCongThuc.isEmpty()) {
+//            return lstCongThuc;
+//        }
+//        return null;
+//    }
 }

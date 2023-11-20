@@ -89,8 +89,8 @@ public class FragmentCongThucDaLuu extends Fragment {
         return view;
     }
     private void SetRecipeListAdapter(){
-        ArrayList<DanhSachCongThuc> lstDSCT = (ArrayList<DanhSachCongThuc>) dsctDao.getAll();
-        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getContext(),lstDSCT);
+        ArrayList<DanhSachCongThuc> lstDSCT = (ArrayList<DanhSachCongThuc>) dsctDao.getAllIdUser(String.valueOf(mainActivity.getUser().getId()));
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getContext(),lstDSCT,mainActivity);
         rcvSavedRecipe.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         rcvSavedRecipe.setLayoutManager(new GridLayoutManager(getContext(),2));
         rcvSavedRecipe.setAdapter(recipeListAdapter);

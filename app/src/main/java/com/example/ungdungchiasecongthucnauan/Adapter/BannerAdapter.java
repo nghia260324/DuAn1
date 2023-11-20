@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ungdungchiasecongthucnauan.ChiTietCongThuc;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
@@ -52,21 +53,28 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CongThuc congThuc = lstCongthuc.get(position);
         NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
-        Anh anh = new Anh();
-        if (congThuc.getIdAnh() != null) {
-            anh = anhDao.getID(congThuc.getIdAnh());
-        }
         if (congThuc != null) {
+            Anh anh = new Anh();
+            if (congThuc.getIdAnh() != null) {
+                anh = anhDao.getID(congThuc.getIdAnh());
+            }
             holder.tv_nameuser.setText(congThuc.getTen());
             holder.tv_namedish.setText(nguoiDung.getHoTen());
             holder.tv_date.setText(sdf.format(congThuc.getNgayTao()));
-            Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.img_bgr);
+            Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(holder.img_bgr);
             new Service().setAvatar(holder.img_avata,nguoiDung.getAvatar());
         }
         holder.btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new SaveRecipe().OpenDialogSaveRecipe(context,congThuc,mainActivity);
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChiTietCongThuc ctct = new ChiTietCongThuc(context,congThuc,mainActivity);
+                ctct.OpenDialogCreateRecipes();
             }
         });
     }

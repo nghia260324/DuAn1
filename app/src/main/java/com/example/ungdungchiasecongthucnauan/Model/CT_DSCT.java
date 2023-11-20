@@ -4,14 +4,11 @@ public class CT_DSCT {
     private int id;
     private String idCongThuc;
     private int iđSCT;
-
-
     public CT_DSCT(int id, String idCongThuc, int iđSCT) {
         this.id = id;
         this.idCongThuc = idCongThuc;
         this.iđSCT = iđSCT;
     }
-
     public int getId() {
         return id;
     }

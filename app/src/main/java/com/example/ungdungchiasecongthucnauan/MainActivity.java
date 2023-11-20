@@ -1,14 +1,24 @@
 package com.example.ungdungchiasecongthucnauan;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
@@ -59,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
     public void registerDataChangeListener(DataChangeListener listener) {
         this.dataChangeListener = listener;
     }
+    private BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            sendNotification();
+        }
+    };
     ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +141,14 @@ public class MainActivity extends AppCompatActivity {
         }
         GetRecipes();
         GetAllData();
+        IntentFilter filter = new IntentFilter("ALARM_TRIGGERED");
+        registerReceiver(alarmReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(alarmReceiver);
     }
 
     public ArrayList<CongThuc> GetRecipes() {
@@ -224,5 +248,21 @@ public class MainActivity extends AppCompatActivity {
             return lstCT;
         }
         return null;
+    }
+    private void sendNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ConfigNotification.CHANNEL_ID)
+                .setSmallIcon(R.drawable.logoapp)
+                .setContentTitle("Đã đến giờ hẹn. Hãy tiếp tục nấu bữa ăn của mình nào !!!")
+                .setContentText("")
+                .setColor(Color.RED)
+                .setAutoCancel(true)
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) {
+            notificationManagerCompat.notify((int) System.currentTimeMillis(),builder.build());
+        } else {
+            ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.POST_NOTIFICATIONS},7979);
+        }
     }
 }

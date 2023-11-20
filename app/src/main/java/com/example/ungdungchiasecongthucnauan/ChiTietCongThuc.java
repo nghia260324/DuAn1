@@ -1,10 +1,14 @@
 package com.example.ungdungchiasecongthucnauan;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,8 +95,18 @@ public class ChiTietCongThuc {
         dialog.getWindow().setAttributes(layoutParams);
 
         initUI(dialog);
+
         ImageView img_CommmentUser = dialog.findViewById(R.id.img_CommmentUser);
         new Service().setAvatar(img_CommmentUser,mainActivity.getUser().getAvatar());
+
+        ImageButton btnMore = dialog.findViewById(R.id.btn_more);
+        btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu(v);
+            }
+        });
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +119,7 @@ public class ChiTietCongThuc {
         if (congThuc.getIdAnh() != null){
             anh = anhDao.getID(congThuc.getIdAnh());
         }
-        Glide.with(context).load(anh.getUrl()).error(R.drawable.ic_picture).into(imgBanner);
+        Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(imgBanner);
 
         new Service().setAvatar(imgAvatar,nguoiDung.getAvatar());
         tvNameUser.setText(nguoiDung.getHoTen());
@@ -224,7 +240,7 @@ public class ChiTietCongThuc {
         });
     }
     private void loadComment(ArrayList<BinhLuan> lstBinhLuan){
-        if (!congThuc.getLstBinhLuan().isEmpty()) {
+        if (congThuc.getLstBinhLuan() != null && !congThuc.getLstBinhLuan().isEmpty()) {
             tvNoneComment.setVisibility(View.GONE);
             layoutComment.setVisibility(View.VISIBLE);
             tvComment.setText("Bình luận(" + congThuc.getLstBinhLuan().size() + ")");
@@ -243,6 +259,80 @@ public class ChiTietCongThuc {
             tvComment.setText("Bình luận(0)");
             layoutComment.setVisibility(View.GONE);
         }
+    }
+
+    private void PopupMenu(View view){
+        PopupMenu popupMenu = new PopupMenu(context, view);
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu_more, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.timer_option) {
+                    OpenDialogTimer();
+                    return true;
+                } else if (item.getItemId() == R.id.costEstimates_option) {
+
+                    return true;
+                } else if (item.getItemId() == R.id.calories_option) {
+
+                    return true;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+    private int selectedTimeInMinutes = 0;
+    private void OpenDialogTimer() {
+        final View dialogView = View.inflate(context,R.layout.dialog_timer,null);
+        final Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(layoutParams);
+
+        LinearLayout layout_timer = dialog.findViewById(R.id.layout_timer);
+        TextView tv_time = dialog.findViewById(R.id.tv_time);
+        Button btn_start = dialog.findViewById(R.id.btn_start);
+
+        final NumberPicker numberPicker = new NumberPicker(context);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(60);
+        numberPicker.setValue(selectedTimeInMinutes);
+        numberPicker.setWrapSelectorWheel(true);
+        layout_timer.addView(numberPicker);
+
+        btn_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedTimeInMinutes = numberPicker.getValue();
+                startTimer();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+    private void startTimer (){
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+        }
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, selectedTimeInMinutes * 60 * 1000, pendingIntent);
 
     }
 }

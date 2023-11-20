@@ -20,5 +20,5 @@
         app:itemIconTint="@color/white"
         app:labelVisibilityMode="unlabeled"
         app:itemBackground="@drawable/cus_bgr_item_selected_navigation"
-        app:menu="@menu/botton_navigation"/>
+        app:menu="@menu/bottom_navigation"/>
 </LinearLayout>

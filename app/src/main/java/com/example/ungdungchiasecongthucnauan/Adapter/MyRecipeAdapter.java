@@ -64,7 +64,7 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
             if (congThuc.getIdAnh() != null) {
                 anh = anhDao.getID(congThuc.getIdAnh());
             }
-            Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.imgMyRecipe);
+            Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(holder.imgMyRecipe);
             holder.tvNameRecipe.setText(congThuc.getTen());
         }
         holder.imgMyRecipe.setOnClickListener(new View.OnClickListener() {
