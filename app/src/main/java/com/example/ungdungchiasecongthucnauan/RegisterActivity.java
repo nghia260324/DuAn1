@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -36,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     NguoiDung nguoiDung;
     Spinner spinner;
 
+    String id;
     String email;
     String name;
     String password;
@@ -62,11 +64,9 @@ public class RegisterActivity extends AppCompatActivity {
                  email = edtEmail.getText().toString().trim();
                  name = edtName.getText().toString().trim();
                  password = edtPassword.getText().toString().trim();
-                 rePassword = edtRePassword.getText().toString().trim().trim();
+                 rePassword = edtRePassword.getText().toString().trim();
 
                 if (Validate(email,name,password,rePassword)){
-                    String id = UUID.randomUUID().toString();
-                    nguoiDung.setId(id);
                     databaseReference.child(id).setValue(nguoiDung);
                     if(nguoiDungDao.insert(nguoiDung) > 0) {
                         SaveUserToFireBase(email,password);
@@ -118,6 +118,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 check = false;
             } else {
+                id = UUID.randomUUID().toString();
+                nguoiDung.setId(id);
                 nguoiDung.setHoTen(name);
                 nguoiDung.setEmail(email);
                 nguoiDung.setMatKhau(password);
@@ -174,11 +176,13 @@ public class RegisterActivity extends AppCompatActivity {
                             Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
                             startActivity(intent);
                             finishAffinity();
+
                         } else {
                             Log.w("w", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+
     }
 }
