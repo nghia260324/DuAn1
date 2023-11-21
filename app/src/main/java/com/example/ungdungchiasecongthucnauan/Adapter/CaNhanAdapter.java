@@ -79,8 +79,6 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                        logOut();
                 }else if(item.equals("Tạo danh sách công thức mới")){
                       addListCT();
-                } else if (item.equals("Tạo danh sách món ăn theo ngày")) {
-                    
                 }
             }
         });

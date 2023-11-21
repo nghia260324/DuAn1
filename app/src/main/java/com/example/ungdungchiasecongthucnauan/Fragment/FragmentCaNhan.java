@@ -71,7 +71,6 @@ public class FragmentCaNhan extends Fragment {
         List<String> items = new ArrayList<>();
         items.add("Đổi mật khẩu");
         items.add("Tạo danh sách công thức mới");
-        items.add("Tạo danh sách món ăn theo ngày");
         items.add("Đăng xuất");
 
         CaNhanAdapter adapter = new CaNhanAdapter(getActivity(), items);
