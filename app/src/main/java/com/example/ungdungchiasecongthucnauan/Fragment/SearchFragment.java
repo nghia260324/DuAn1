@@ -101,6 +101,9 @@ public class SearchFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+
+    TextView tvNotFound;
     private static final String PATH_SEARCH_HISTORY = "search_history.txt";
     MainActivity mainActivity;
     EditText edtSearch,edtSearchDialog;
@@ -110,6 +113,13 @@ public class SearchFragment extends Fragment {
     TextView tvNone,tvNoneRecipe;
     LinearLayout layoutHistory;
     CongThucDao congThucDao;
+
+    ArrayList<CongThuc> lstCongThuc = new ArrayList<>();
+    @Override
+    public void onResume() {
+        super.onResume();
+        lstCongThuc = mainActivity.GetRecipes();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,6 +127,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         initUI(view);
+        lstCongThuc = mainActivity.GetRecipes();
         edtSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -127,8 +138,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        RCVLoaiCongThucAdapter rcvLoaiCongThucAdapter = new RCVLoaiCongThucAdapter(getContext(), mainActivity.lstLoaiCongThuc);
-
+        RCVLoaiCongThucAdapter rcvLoaiCongThucAdapter = new RCVLoaiCongThucAdapter(getContext(), mainActivity.lstLoaiCongThuc,mainActivity);
         rcvFormulaType.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         View itemLayout = LayoutInflater.from(getContext()).inflate(R.layout.item_formula_type,null);
         itemLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -226,6 +236,7 @@ public class SearchFragment extends Fragment {
         LinearLayout layoutShowSearch = dialog.findViewById(R.id.layout_showSearch);
         ImageView imgDown = dialog.findViewById(R.id.img_down);
         Button btnSave = dialog.findViewById(R.id.btn_save);
+        tvNotFound = dialog.findViewById(R.id.tv_notFound);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,7 +329,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String value = s.toString().toLowerCase().trim();
-                ArrayList<CongThuc> lstCongThuc = mainActivity.GetRecipes();
+//                ArrayList<CongThuc> lstCongThuc = mainActivity.GetRecipes();
                 for (int i = 0; i < lstCongThuc.size();i++){
                     CongThuc congThuc = lstCongThuc.get(i);
                     if (congThuc.getTen().toLowerCase().trim().contains(value)) {
@@ -417,21 +428,10 @@ public class SearchFragment extends Fragment {
     }
 
     private void expandView(View view) {
-//        view.setVisibility(View.VISIBLE);
-//        view.animate()
-//                .translationY(0)
-//                .setDuration(300)
-//                .start();
         TransitionManager.beginDelayedTransition((ViewGroup) view, new Slide(Gravity.TOP).setDuration(300));
         view.setVisibility(View.VISIBLE);
     }
     private void collapseView(View view) {
-//        int height = view.getHeight();
-//        view.animate()
-//                .translationY(-height)
-//                .setDuration(300)
-//                .withEndAction(() -> view.setVisibility(View.GONE))
-//                .start();
         TransitionManager.beginDelayedTransition((ViewGroup) view, new Slide(Gravity.BOTTOM).setDuration(300));
         view.setVisibility(View.GONE);
     }
@@ -442,12 +442,16 @@ public class SearchFragment extends Fragment {
         ArrayList<CongThuc> lstSearch = new ArrayList<>();
         for (CongThuc congThuc:lstCongThuc){
             for (String s: arrInputValue){
-                if (congThuc.getTen().toLowerCase().contains(s.toLowerCase())) {
+                if (congThuc.getTen().toLowerCase().contains(s.toLowerCase()) && congThuc.getTrangThai() == 1) {
                     lstSearch.add(congThuc);
                     break;
                 }
             }
         }
+        if (lstSearch.isEmpty()) {
+            tvNotFound.setVisibility(View.VISIBLE);
+        } else tvNotFound.setVisibility(View.GONE);
+
         for (String s:arrInputValue){
             for (CongThuc congThuc:lstSearch) {
                 int count = 0;

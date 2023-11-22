@@ -121,7 +121,7 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         popupMenu.show();
     }
     private void Share(CongThuc congThuc,int indexChange){
-        databaseReference.child(congThuc.getId()).setValue(congThuc).addOnSuccessListener(new OnSuccessListener<Void>() {
+        databaseReference.child(congThuc.getId()).child("trangThai").setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(context, "Chia sẻ thành công !", Toast.LENGTH_SHORT).show();
@@ -134,7 +134,7 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         });
     }
     private void CancelShare(CongThuc congThuc,int indexChange) {
-        databaseReference.child(congThuc.getId()).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+        databaseReference.child(congThuc.getId()).child("trangThai").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(context, "Chia sẻ thành công !", Toast.LENGTH_SHORT).show();

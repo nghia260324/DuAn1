@@ -42,6 +42,7 @@
                 android:layout_height="24dp"
                 android:background="@drawable/ic_more"/>
             <ImageButton
+                android:id="@+id/img_btn_save"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_toLeftOf="@+id/btn_more"
@@ -233,8 +234,33 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginHorizontal="12dp">
-
             </LinearLayout>
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/btn_showMore"
+                android:layout_marginTop="12dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:textAlignment="center"
+                    android:id="@+id/tv_smBtn"
+                    android:textColor="@color/black_333"
+                    android:fontFamily="@font/baloo_bhaijaan"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xem thêm"/>
+                <ImageView
+                    android:id="@+id/img_iconBtn"
+                    android:layout_marginTop="24dp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_keyboard_arrow_down"/>
+            </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/line_comment"
                 android:layout_gravity="center"

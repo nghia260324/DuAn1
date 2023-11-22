@@ -68,7 +68,6 @@
                 android:drawablePadding="6dp"
                 android:fontFamily="@font/baloo_bhaijaan"
                 android:hint="Nhập tên danh sách . . ."
-                android:inputType="textPassword"
                 android:paddingHorizontal="12dp"
                 android:textColorHint="@color/gray_d9d" />
             <Button

@@ -151,7 +151,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Ngao',2,93,15000)," +
                 "('Sò điệp tươi',2,111,16000)," +
 
-                "('Trứng chim cút',14,142,900)," +
+                "('Trứng chim cút',4,142,900)," +
                 "('Trứng gà',4,70,3000)," +
                 "('Trứng vịt',4,100,3000)," +
 

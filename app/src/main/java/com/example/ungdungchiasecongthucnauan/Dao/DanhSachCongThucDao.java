@@ -66,7 +66,7 @@ public class DanhSachCongThucDao {
     public List<CongThuc> getAllCongThucUser(String idUser) {
         List<CongThuc> lstCongThuc = new ArrayList<>();
         ArrayList<String> lstIDCongThuc = new ArrayList<>();
-        String sql = "SELECT idCongThuc FROM CongThuc_DSCT WHERE idDanhSachCongThuc IN (SELECT id FROM DanhSachCongThuc WHERE idNguoiDung = " + idUser +  ") GROUP BY idCongThuc";
+        String sql = "SELECT idCongThuc FROM CongThuc_DSCT WHERE idDanhSachCongThuc IN (SELECT id FROM DanhSachCongThuc WHERE idNguoiDung = '" + idUser +  "') GROUP BY idCongThuc";
 
         Cursor cursor = db.rawQuery(sql, null);
         while (cursor.moveToNext()) {

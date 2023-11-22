@@ -77,7 +77,6 @@ public class CongThucDao {
     }
     public long update(CongThuc obj) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id",obj.getId());
         contentValues.put("ten",obj.getTen());
         contentValues.put("idAnh",obj.getIdAnh());
         contentValues.put("idnguoiDung",obj.getIdNguoiDung());
@@ -91,6 +90,10 @@ public class CongThucDao {
     public List<CongThuc> getAll() {
         String sql = "SELECT * FROM CongThuc";
         return getData(sql);
+    }
+    public List<CongThuc> getAllType(String id) {
+        String sql = "SELECT * FROM CongThuc where idLoaiCongThuc = ?";
+        return getData(sql,id);
     }
     public List<CongThuc> getAllMyRecipes(String id) {
         String sql = "SELECT * FROM CongThuc Where idnguoiDung = ?";
@@ -148,5 +151,12 @@ public class CongThucDao {
             }
         }
         return lstCongThuc;
+    }
+    public boolean checkExists(String tableName, String idColumnName, String id) {
+        String sql = "SELECT * FROM " + tableName + " WHERE " + idColumnName + " = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{id});
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
     }
 }

@@ -31,7 +31,7 @@
             android:textSize="16sp"
             android:fontFamily="@font/baloo_bhaijaan"
             android:background="@drawable/cus_bgr_btn_add_material"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bắt đầu"
             android:id="@+id/btn_start"/>

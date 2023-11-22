@@ -228,11 +228,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e("DSCT",dsct.toString());
         }
     }
-    public void DataChangeListener() {
-        if (dataChangeListener != null) {
-            dataChangeListener.onDataChange(lstCongThuc);
-        }
-    }
 
     public ArrayList<KieuNguyenLieu> getAllKieuNguyenLieu(){
         ArrayList<KieuNguyenLieu> lstKNT = (ArrayList<KieuNguyenLieu>) kieuNguyenLieuDao.getAll();

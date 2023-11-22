@@ -30,7 +30,7 @@ public class SaveRecipe {
         DanhSachCongThucDao dsctDao = new DanhSachCongThucDao(context);
         CongThucDSCTDao congThucDSCTDao = new CongThucDSCTDao(context);
         if (dsct.getAll() != null && !dsct.getAll().isEmpty()) {
-            ArrayList<CongThuc> lstCT = (ArrayList<CongThuc>) dsctDao.getAllCongThucUser(String.valueOf(mainActivity.getUser().getId()));
+            ArrayList<CongThuc> lstCT = (ArrayList<CongThuc>) dsctDao.getAllCongThucUser(mainActivity.getUser().getId());
             for (CongThuc ct:lstCT) {
                 if (ct != null && ct.getId().equals(congThuc.getId())) {
                     check = true;
@@ -84,7 +84,7 @@ public class SaveRecipe {
             }
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage("Bạn chưa có danh sách công thức nào ! Hãy tạo 1 danh sách công thức trước.");
+            builder.setMessage("Bạn chưa có danh sách công thức nào !\nHãy tạo 1 danh sách công thức trước.");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
