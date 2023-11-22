@@ -152,7 +152,7 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         return lstCongThuc != null?lstCongThuc.size():0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgMyRecipe;
         TextView tvNameRecipe;
         ImageButton btnMore;
