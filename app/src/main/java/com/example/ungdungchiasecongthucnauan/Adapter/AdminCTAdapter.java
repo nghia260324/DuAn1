@@ -13,15 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.ungdungchiasecongthucnauan.ChiTietCongThuc;
 import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
+import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.example.ungdungchiasecongthucnauan.Service;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -31,12 +33,14 @@ public class AdminCTAdapter extends RecyclerView.Adapter<AdminCTAdapter.ViewHold
     AnhDao anhDao;
     NguoiDungDao nguoiDungDao;
     CongThucDao congThucDao;
-    public AdminCTAdapter(Context context,List<CongThuc> congThucList) {
+    MainActivity mainActivity;
+    public AdminCTAdapter(Context context,List<CongThuc> congThucList,MainActivity mainActivity) {
         this.context = context;
         this.congThucList = congThucList;
         this.anhDao = new AnhDao(context);
         this.nguoiDungDao = new NguoiDungDao(context);
         this.congThucDao = new CongThucDao(context);
+        this.mainActivity = mainActivity;
     }
 
     public void AdminCTAdapter( List<CongThuc> congThucList) {
@@ -58,7 +62,8 @@ public class AdminCTAdapter extends RecyclerView.Adapter<AdminCTAdapter.ViewHold
               anh = anhDao.getID(congThucList.get(position).getIdAnh());
           }
           NguoiDung nguoiDung = nguoiDungDao.getID(congThucList.get(position).getIdNguoiDung());
-          Picasso.get().load(anh.getUrl()).into(holder.img_bgr);
+//          Picasso.get().load(anh.getUrl()).error(R.drawable.ct).into(holder.img_bgr);
+          Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(holder.img_bgr);
           new Service().setAvatar(holder.img_avata,nguoiDung.getAvatar());
           holder.tv_nameuser.setText(nguoiDung.getHoTen());
           holder.tv_namedish.setText(congThuc.getTen());
@@ -70,7 +75,12 @@ public class AdminCTAdapter extends RecyclerView.Adapter<AdminCTAdapter.ViewHold
                   PopupMenu(v,congThuc);
               }
           });
-
+          holder.itemView.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  ChiTietCongThuc chiTietCongThuc = new ChiTietCongThuc(context,congThuc,mainActivity);
+              }
+          });
     }
     private void PopupMenu(View view,CongThuc congThuc){
         PopupMenu popupMenu = new PopupMenu(context, view);

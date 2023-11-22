@@ -133,11 +133,10 @@ public class CreateRecipesFragment extends Fragment {
     DanhSachNguyenLieuDao dsnlDao;
     AnhDao anhDao;
     NguyenLieuDao nguyenLieuDao;
-
     LoaiCongThuc loaiCongThuc;
-
     private DatabaseReference databaseReference;
     String time,foodRation,foodName,idRecipes;
+    TextView tv_quantity;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -153,6 +152,8 @@ public class CreateRecipesFragment extends Fragment {
                 OpenDialogCreateRecipes();
             }
         });
+        int quantity = congThucDao.getAllStatus().size();
+        tv_quantity.setText(" - Hơn " + quantity + " công thức nấu ăn đã được tạo và chia sẻ đến mọi người.");
         return view;
     }
     private void OpenDialogCreateRecipes() {
@@ -430,6 +431,8 @@ public class CreateRecipesFragment extends Fragment {
         buocLamDao = new BuocLamDao(getContext());
         dsnlDao = new DanhSachNguyenLieuDao(getContext());
         nguyenLieuDao = new NguyenLieuDao(getContext());
+
+        tv_quantity = view.findViewById(R.id.tv_quantity);
     }
     private void ResetData() {
         foodName = "";

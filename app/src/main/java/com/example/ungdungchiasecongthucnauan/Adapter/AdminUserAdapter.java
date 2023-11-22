@@ -2,12 +2,10 @@ package com.example.ungdungchiasecongthucnauan.Adapter;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -15,9 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
-import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
 
@@ -27,8 +23,6 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
     NguoiDungDao nguoiDungDao;
     Context context;
     List<NguoiDung> list;
-
-
     public AdminUserAdapter(Context context, List<NguoiDung> list) {
         this.context = context;
         this.list = list;

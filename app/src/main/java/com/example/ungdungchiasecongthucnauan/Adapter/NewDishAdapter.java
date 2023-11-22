@@ -25,11 +25,9 @@ import com.example.ungdungchiasecongthucnauan.SaveRecipe;
 import com.example.ungdungchiasecongthucnauan.Service;
 import com.google.firebase.database.DatabaseReference;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 
-public class NewdishAdapter extends RecyclerView.Adapter<NewdishAdapter.ViewHolder>{
+public class NewDishAdapter extends RecyclerView.Adapter<NewDishAdapter.ViewHolder>{
     private Context context;
     private ArrayList<CongThuc> lstCongthuc;
     DatabaseReference databaseReference;
@@ -38,25 +36,24 @@ public class NewdishAdapter extends RecyclerView.Adapter<NewdishAdapter.ViewHold
     MainActivity mainActivity;
     private NguoiDungDao nguoiDungDao;
 
-    public NewdishAdapter(Context context, ArrayList<CongThuc> lstCongthuc, DatabaseReference databaseReference, AnhDao anhDao, CongThucDao congThucDao, NguoiDungDao nguoiDungDao, MainActivity mainActivity) {
+    public NewDishAdapter(Context context, ArrayList<CongThuc> lstCongthuc,MainActivity mainActivity) {
         this.context = context;
         this.lstCongthuc = lstCongthuc;
-        this.databaseReference = databaseReference;
-        this.anhDao = anhDao;
+        this.anhDao = new AnhDao(context);
         this.mainActivity = mainActivity;
-        this.congThucDao = congThucDao;
-        this.nguoiDungDao = nguoiDungDao;
+        this.congThucDao = new CongThucDao(context);
+        this.nguoiDungDao = new NguoiDungDao(context);
     }
 
     @NonNull
     @Override
-    public NewdishAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NewDishAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newdish,null);
-        return new NewdishAdapter.ViewHolder(view);
+        return new NewDishAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewdishAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NewDishAdapter.ViewHolder holder, int position) {
         CongThuc congThuc = lstCongthuc.get(position);
 
         if (congThuc != null){
@@ -85,7 +82,6 @@ public class NewdishAdapter extends RecyclerView.Adapter<NewdishAdapter.ViewHold
                 ctct.OpenDialogCreateRecipes();
             }
         });
-
     }
 
     @Override
@@ -104,7 +100,6 @@ public class NewdishAdapter extends RecyclerView.Adapter<NewdishAdapter.ViewHold
             tv_namenewdish = itemView.findViewById(R.id.tv_namenewdish);
             tv_time = itemView.findViewById(R.id.tv_time);
             btn_save = itemView.findViewById(R.id.btn_save);
-
         }
     }
 }

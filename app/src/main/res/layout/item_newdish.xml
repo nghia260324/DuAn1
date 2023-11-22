@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="6dp">
     <RelativeLayout
+        android:padding="1dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shadow_bgr_while_rounde_corner_10"
@@ -16,28 +17,26 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_newDish"
                 android:layout_alignParentTop="true"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
                 android:background="@drawable/canh"
                 app:shapeAppearanceOverlay="@style/rounded_corner_10"/>
             <ImageButton
                 android:id="@+id/btn_save"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/ic_save"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="12dp"
-                android:background="@drawable/ic_save"
-                android:backgroundTint="@color/black_333"/>
+                android:layout_margin="12dp"/>
         </RelativeLayout>
         <LinearLayout
             android:background="@drawable/cus_bgr_while_rounde_corner_bottom_10"
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="6dp"
+            android:padding="12dp"
             android:layout_marginTop="130dp"
             android:orientation="vertical">
             <LinearLayout
@@ -63,29 +62,31 @@
                     android:textColor="@color/black_333"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <TextView
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:id="@+id/tv_namenewdish"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Canh Hai San"
                     android:textColor="@color/black_333"
-                    android:fontFamily="@font/baloo_bhai_2"/>
+                    android:fontFamily="@font/baloo_bhaijaan"/>
                 <TextView
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="210dp"
                     android:text="1 Tiếng trước"
                     android:textSize="10sp"
                     android:textColor="@color/black_333"
-                    android:fontFamily="@font/baloo_bhai_2"/>
+                    android:fontFamily="@font/baloo_bhaijaan"/>
             </LinearLayout>
         </LinearLayout>
 

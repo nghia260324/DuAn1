@@ -99,6 +99,10 @@ public class CongThucDao {
         String sql = "SELECT * FROM CongThuc where idLoaiCongThuc = ?";
         return getData(sql,id);
     }
+    public List<CongThuc> getAllStatus() {
+        String sql = "SELECT * FROM CongThuc where trangThai = 0";
+        return getData(sql);
+    }
     public List<CongThuc> getAllMyRecipes(String id) {
         String sql = "SELECT * FROM CongThuc Where idnguoiDung = ?";
         return getData(sql,id);

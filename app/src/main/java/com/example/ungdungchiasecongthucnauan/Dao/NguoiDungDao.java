@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.ungdungchiasecongthucnauan.Database.DbHelper;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ public class NguoiDungDao {
         return db.insert("NguoiDung",null,contentValues);
     }
     public long update(NguoiDung obj) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
+        databaseReference.child(obj.getId()).child("avatar").setValue(obj.getAvatar());
         ContentValues contentValues = new ContentValues();
         contentValues.put("avatar",obj.getAvatar());
         contentValues.put("matKhau", obj.getMatKhau());

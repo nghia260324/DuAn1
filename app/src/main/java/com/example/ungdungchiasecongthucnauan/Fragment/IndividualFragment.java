@@ -1,22 +1,37 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.ungdungchiasecongthucnauan.Adapter.ChangeAvatarAdapter;
 import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerAdapter;
+import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
+import com.example.ungdungchiasecongthucnauan.IReturnString;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.example.ungdungchiasecongthucnauan.Service;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,6 +84,8 @@ public class IndividualFragment extends Fragment {
     TextView tvHoten,tvEmail;
     ImageView imgUser;
     MainActivity mainActivity;
+    ArrayList<String> lstAvatar;
+    NguoiDungDao nguoiDungDao;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,8 +104,63 @@ public class IndividualFragment extends Fragment {
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        imgUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenDialogChangeAvatar();
+            }
+        });
+
         setDataUser();
         return view;
+    }
+    int selectedAvatar = 0;
+
+    private void OpenDialogChangeAvatar() {
+        selectedAvatar = mainActivity.getUser().getAvatar() - 1;
+        final View dialogView = View.inflate(getContext(),R.layout.dialog_change_avatar,null);
+        final Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(layoutParams);
+
+        Button btn_save = dialog.findViewById(R.id.btn_save);
+        RecyclerView rcvChangeAvatar = dialog.findViewById(R.id.rcv_changeAvatar);
+        ChangeAvatarAdapter changeAvatarAdapter = new ChangeAvatarAdapter(getContext(), lstAvatar, mainActivity, new IReturnString() {
+            @Override
+            public void ReturnString(String value) {
+                selectedAvatar = lstAvatar.indexOf(value);
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        rcvChangeAvatar.setLayoutManager(linearLayoutManager);
+        rcvChangeAvatar.setLayoutManager(new GridLayoutManager(getContext(),3));
+        rcvChangeAvatar.setAdapter(changeAvatarAdapter);
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NguoiDung nguoiDung = mainActivity.getUser();
+                if (selectedAvatar != nguoiDung.getAvatar() - 1) {
+                    nguoiDung.setAvatar(selectedAvatar + 1);
+                    nguoiDungDao.update(nguoiDung);
+                    Toast.makeText(getContext(), "Cập nhật thông tin thành công!", Toast.LENGTH_SHORT).show();
+                    setDataUser();
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void initUI(View view) {
@@ -99,14 +171,19 @@ public class IndividualFragment extends Fragment {
         tvEmail = view.findViewById(R.id.tvEmail);
         imgUser = view.findViewById(R.id.imgUser);
 
-        imgUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         mainActivity = (MainActivity) getActivity();
+        nguoiDungDao = new NguoiDungDao(getContext());
+        lstAvatar = new ArrayList<>();
+        lstAvatar.add("avatar1");
+        lstAvatar.add("avatar2");
+        lstAvatar.add("avatar3");
+        lstAvatar.add("avatar4");
+        lstAvatar.add("avatar5");
+        lstAvatar.add("avatar6");
+        lstAvatar.add("avatar7");
+        lstAvatar.add("avatar8");
+        lstAvatar.add("avatar9");
+        lstAvatar.add("avatar10");
     }
 
     private void setDataUser(){

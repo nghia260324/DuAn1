@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.BannerAdapter;
+import com.example.ungdungchiasecongthucnauan.Adapter.NewDishAdapter;
 import com.example.ungdungchiasecongthucnauan.DataChangeListener;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
@@ -66,7 +68,7 @@ public class HomeFragment extends Fragment implements DataChangeListener {
     MainActivity mainActivity;
     Toolbar toolbar;
     BannerAdapter bannerAdapter;
-    private RecyclerView rcv_banner;
+    private RecyclerView rcv_banner,rcvNew;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,11 +81,17 @@ public class HomeFragment extends Fragment implements DataChangeListener {
         rcv_banner.setLayoutManager(linearLayoutManager);
         rcv_banner.setAdapter(bannerAdapter);
 
+        NewDishAdapter newDishAdapter = new NewDishAdapter(getContext(),mainActivity.lstCongThuc,mainActivity);
+        rcvNew.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        rcvNew.setLayoutManager(new GridLayoutManager(getContext(),2));
+        rcvNew.setAdapter(newDishAdapter);
+
         return view;
     }
 
     private void initUI(View view) {
         rcv_banner = view.findViewById(R.id.rcv_banner);
+        rcvNew = view.findViewById(R.id.rcv_new);
 
         mainActivity = (MainActivity) getActivity();
     }
