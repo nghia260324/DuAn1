@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp"
+    android:background="@color/transparent"
+    android:orientation="horizontal"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/round_edittext"
+        >
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingLeft="25dp"
+                android:text="Ho ten"
+                android:fontFamily="@font/baloo_bhaijaan"
+                android:id="@+id/tv_hoten"
+                />
+
+            <TextView
+                android:paddingTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="25dp"
+                android:text="Trang thai"
+                android:fontFamily="@font/baloo_bhaijaan"
+                android:id="@+id/tv_trangthai"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ic_option"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_more"
+            android:backgroundTint="@color/black"
+            />
+    </LinearLayout>
+
+</LinearLayout>
