@@ -47,6 +47,17 @@
         android:id="@+id/rcv_searchSuggestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_notFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/baloo_bhaijaan"
+        android:textSize="16sp"
+        android:text="Không tìm thấy kết quả nào phù hợp !"
+        android:textAlignment="center"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/black_333"/>
     <LinearLayout
         android:padding="12dp"
         android:layout_marginTop="12dp"

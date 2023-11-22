@@ -24,6 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:textColor="@color/white"
-        android:text="OK"
+        android:text="Ok"
+        android:fontFamily="@font/baloo_bhaijaan"
+        android:textAllCaps="false"
         android:background="@color/orange_FDA"/>
 </LinearLayout>

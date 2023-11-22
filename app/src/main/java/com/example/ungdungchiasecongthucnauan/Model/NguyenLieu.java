@@ -57,4 +57,15 @@ public class NguyenLieu {
     public void setGia(int gia) {
         this.gia = gia;
     }
+
+    @Override
+    public String toString() {
+        return "NguyenLieu{" +
+                "id=" + id +
+                ", ten='" + ten + '\'' +
+                ", kieu=" + kieu +
+                ", calo=" + calo +
+                ", gia=" + gia +
+                '}';
+    }
 }

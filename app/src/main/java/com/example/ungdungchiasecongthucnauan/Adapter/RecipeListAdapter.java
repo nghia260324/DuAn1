@@ -160,12 +160,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                         new Service().setAvatar(imgAvatar,nguoiDung.getAvatar());
                         Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(imgRecipe);
                     }
-
                 } else {
                     imgRecipe.setVisibility(View.GONE);
                     imgAvatar.setVisibility(View.GONE);
                     tvUser.setVisibility(View.GONE);
-                    tvName.setText("Công thức này đã bị người dùng ẩnh hoặc xóa !");
+                    tvName.setText("Công thức này đã bị người dùng ẩn hoặc xóa !");
                 }
                 btnMore.setOnClickListener(new View.OnClickListener() {
                     @Override

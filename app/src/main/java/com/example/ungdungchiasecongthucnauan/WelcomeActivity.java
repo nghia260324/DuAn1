@@ -82,14 +82,23 @@ public class WelcomeActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Anh> lstNDFirebase = new ArrayList<>();
+                ArrayList<Anh> lstAnhFirebase = new ArrayList<>();
+                ArrayList<Anh> lstAnhCSDL = (ArrayList<Anh>) anhDao.getAll();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Anh anh = snapshot.getValue(Anh.class);
-                    lstNDFirebase.add(anh);
+                    lstAnhFirebase.add(anh);
                 }
-                if (lstNDFirebase != null && !lstNDFirebase.isEmpty()) {
-                    for (Anh anh:lstNDFirebase) {
+                if (lstAnhFirebase != null && !lstAnhFirebase.isEmpty() && lstAnhCSDL.isEmpty()) {
+                    for (Anh anh:lstAnhFirebase) {
                         anhDao.insert(anh);
+                    }
+                } else if (lstAnhFirebase != null && !lstAnhFirebase.isEmpty() && lstAnhCSDL != null && !lstAnhCSDL.isEmpty()) {
+                    for (Anh anh:lstAnhFirebase) {
+                        if (congThucDao.checkExists("Anh","id",anh.getId())) {
+                            anhDao.update(anh);
+                        } else {
+                            anhDao.insert(anh);
+                        }
                     }
                 }
                 CheckDataUser();
@@ -105,29 +114,85 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<CongThuc> lstCTFirebase = new ArrayList<>();
+                ArrayList<CongThuc> lstCSDL = (ArrayList<CongThuc>) congThucDao.getAll();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     CongThuc congThuc = snapshot.getValue(CongThuc.class);
                     lstCTFirebase.add(congThuc);
                 }
-                if (lstCTFirebase != null && !lstCTFirebase.isEmpty()) {
+                if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL.isEmpty()) {
                     for (CongThuc congThuc:lstCTFirebase) {
                         congThucDao.insert(congThuc);
                         ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
                         ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
                         ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
                         for (BuocLam buocLam:lstBuocLam) {
-                            buocLamDao.insertID(buocLam);
+                            buocLamDao.insert(buocLam);
                         }
                         for (DanhSachNguyenLieu dsnl:lstDSNL){
                             dsnlDao.insert(dsnl);
                         }
                         if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
                             for (BinhLuan binhLuan:lstBinhLuan) {
-                                binhLuanDao.insertID(binhLuan);
+                                binhLuanDao.insert(binhLuan);
                             }
                         }
-
                     }
+                } else if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL != null && !lstCSDL.isEmpty()) {
+                    for (CongThuc congThuc:lstCTFirebase) {
+
+                        if (congThucDao.checkExists("CongThuc","id",congThuc.getId())) {
+                            congThucDao.update(congThuc);
+                            ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
+                            ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
+                            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
+
+                            for (BuocLam buocLam:lstBuocLam) {
+                                if (congThucDao.checkExists("BuocLam","id",String.valueOf(buocLam.getId()))) {
+                                    buocLamDao.update(buocLam);
+
+                                } else {
+                                    buocLamDao.insert(buocLam);
+                                }
+                            }
+                            for (DanhSachNguyenLieu dsnl:lstDSNL){
+                                if (congThucDao.checkExists("DanhSachNguyenLieu","id",String.valueOf(dsnl.getId()))) {
+                                    dsnlDao.update(dsnl);
+                                } else {
+                                    dsnlDao.insert(dsnl);
+                                }
+                            }
+                            if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
+                                for (BinhLuan binhLuan:lstBinhLuan) {
+                                    if (congThucDao.checkExists("BinhLuan","id",String.valueOf(binhLuan.getId()))) {
+                                        binhLuanDao.update(binhLuan);
+
+                                    } else {
+                                        binhLuanDao.insert(binhLuan);
+                                    }
+                                }
+                            }
+                        } else {
+                            congThucDao.insert(congThuc);
+                            ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
+                            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
+                            ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
+                            for (BuocLam buocLam:lstBuocLam) {
+                                buocLamDao.insert(buocLam);
+                            }
+                            for (DanhSachNguyenLieu dsnl:lstDSNL){
+                                dsnlDao.insert(dsnl);
+                            }
+                            if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
+                                for (BinhLuan binhLuan:lstBinhLuan) {
+                                    binhLuanDao.insert(binhLuan);
+                                }
+                            }
+                        }
+                    }
+                    checkUserLogin();
+                    overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
+                    progressDialog.dismiss();
+                    finish();
                 }
                 checkUserLogin();
                 overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
@@ -145,13 +210,22 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<NguoiDung> lstNDFirebase = new ArrayList<>();
+                ArrayList<NguoiDung> lstNDCSDL = (ArrayList<NguoiDung>) nguoiDungDao.getAll();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     NguoiDung nguoiDung = snapshot.getValue(NguoiDung.class);
                     lstNDFirebase.add(nguoiDung);
                 }
-                if (lstNDFirebase != null && !lstNDFirebase.isEmpty()) {
+                if (lstNDFirebase != null && !lstNDFirebase.isEmpty() && lstNDCSDL.isEmpty()) {
                     for (NguoiDung nd:lstNDFirebase) {
                         nguoiDungDao.insert(nd);
+                    }
+                } else if (lstNDFirebase != null && !lstNDFirebase.isEmpty() && lstNDCSDL != null && !lstNDCSDL.isEmpty()) {
+                    for (NguoiDung nd:lstNDFirebase) {
+                        if (congThucDao.checkExists("NguoiDung","id",nd.getId())) {
+                            nguoiDungDao.update(nd);
+                        } else {
+                            nguoiDungDao.insert(nd);
+                        }
                     }
                 }
                 CheckDataRecipe();
@@ -176,7 +250,6 @@ public class WelcomeActivity extends AppCompatActivity {
         String input = "<font color=" + color + ">" + text + "</font>";
         return input;
     }
-
     private void checkUserLogin(){
         FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
         if (user ==null){
@@ -186,7 +259,7 @@ public class WelcomeActivity extends AppCompatActivity {
             Intent intent=new Intent(this,MainActivity.class);
             startActivity(intent);
         }
-        finish();
+        finishAffinity();
     }
 
 }

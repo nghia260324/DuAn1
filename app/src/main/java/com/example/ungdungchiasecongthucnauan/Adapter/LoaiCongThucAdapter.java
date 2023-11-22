@@ -23,8 +23,6 @@ public class LoaiCongThucAdapter extends ArrayAdapter<LoaiCongThuc> {
         this.context = context;
         this.lstNL = new ArrayList<>(lstNL);
     }
-
-
     @Override
     public View getView(int position,View convertView,ViewGroup parent) {
         if (convertView == null) {

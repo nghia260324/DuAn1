@@ -522,8 +522,9 @@ public class FragmentCongThucCuaToi extends Fragment{
                             progressDialog.dismiss();
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                            CongThuc ctSave = congThucDao.getID(congThuc.getId());
                             databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-                            databaseReference.child(congThuc.getId()).setValue(congThuc);
+                            databaseReference.child(ctSave.getId()).setValue(ctSave);
                             Reload();
                         }
                     });
@@ -556,8 +557,9 @@ public class FragmentCongThucCuaToi extends Fragment{
             progressDialog.dismiss();
             dialog.dismiss();
             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
+            CongThuc ctSave = congThucDao.getID(congThuc.getId());
             databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-            databaseReference.child(congThuc.getId()).setValue(congThuc);
+            databaseReference.child(ctSave.getId()).setValue(ctSave);
             Reload();
         }
     }
@@ -742,5 +744,4 @@ public class FragmentCongThucCuaToi extends Fragment{
         lstAnh = new ArrayList<>();
         lstUri = new ArrayList<>();
     }
-
 }

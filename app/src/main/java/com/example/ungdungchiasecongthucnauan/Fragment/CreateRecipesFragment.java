@@ -492,6 +492,7 @@ public class CreateRecipesFragment extends Fragment {
                             progressDialog.dismiss();
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
+                            congThuc = congThucDao.getID(congThuc.getId());
                             databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
                             databaseReference.child(congThuc.getId()).setValue(congThuc);
                         }
@@ -582,6 +583,9 @@ public class CreateRecipesFragment extends Fragment {
         congThuc.setNgayTao(new Date());
         congThuc.setIdLoai(loaiCongThuc.getId());
         congThuc.setTrangThai(0);
+        congThuc.setLstBuocLam(lstBuocLam);
+        congThuc.setLstNguyenLieu(lstDanhSachNguyenLieu);
+        congThuc.setLstBinhLuan(null);
         congThucDao.insert(congThuc);
     }
 }

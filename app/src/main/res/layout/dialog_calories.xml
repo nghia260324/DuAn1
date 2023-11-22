@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/layout_dialogCalories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tính calo"
+                android:textSize="16sp"
+                android:fontFamily="@font/baloo_bhaijaan"
+                android:textColor="@color/black_333"/>
+            <LinearLayout
+                android:id="@+id/layout_calories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+            <Button
+                android:layout_gravity="right"
+                android:id="@+id/btn_addMaterial"
+                android:layout_marginTop="12dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cus_bgr_btn_add_material"
+                android:text="Nguyên liệu"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:fontFamily="@font/baloo_bhaijaan"
+                android:drawableStart="@drawable/ic_create"
+                android:drawablePadding="6dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cus_bgr_btn_add_material"
+                android:text="Tính Calo"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/baloo_bhaijaan"
+                android:id="@+id/btn_calculatorCalories"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng số calo cho món ăn này là: "
+                android:fontFamily="@font/baloo_bhai_2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black_333"
+                android:layout_marginTop="24dp"
+                android:id="@+id/tv_sum"/>
+            <TextView
+                android:visibility="gone"
+                android:textColor="@color/orange_FDA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lưu ý:"
+                android:fontFamily="@font/baloo_bhai_2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:id="@+id/tv_note"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
