@@ -24,6 +24,8 @@ import androidx.annotation.NonNull;
 import com.example.ungdungchiasecongthucnauan.Dao.DanhSachCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.LoginActivity;
+import com.example.ungdungchiasecongthucnauan.ManagerCTActivity;
+import com.example.ungdungchiasecongthucnauan.ManagerUserActivity;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachCongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
@@ -72,14 +74,20 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Phan quyen and them cac nut
                 if (item.equals("Đổi mật khẩu")) {
-                       changePassword();
-                } else if (item.equals("Đăng xuất")) {
-                       logOut();
+                    changePassword();
+                }else if (item.equals("Đăng xuất")) {
+                    logOut();
                 }else if(item.equals("Tạo danh sách công thức mới")){
-                      addListCT();
+                    addListCT();
+                }else if (item.equals("Quản lý người dùng")){
+                    Intent intent=new Intent(getContext(), ManagerUserActivity.class);
+                    getContext().startActivity(intent);
+                }else if (item.equals("Quản lý công thức")) {
+                    Intent intent=new Intent(getContext(), ManagerCTActivity.class);
+                    getContext().startActivity(intent);
                 }
+
             }
         });
 
