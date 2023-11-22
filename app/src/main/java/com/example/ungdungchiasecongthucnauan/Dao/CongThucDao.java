@@ -10,6 +10,8 @@ import com.example.ungdungchiasecongthucnauan.Model.BinhLuan;
 import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,6 +75,8 @@ public class CongThucDao {
         return db.insert("CongThuc",null,contentValues);
     }
     public int delete(String id) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+        databaseReference.child(id).setValue(null);
         return db.delete("CongThuc","id = ?",new String[]{String.valueOf(id)});
     }
     public long update(CongThuc obj) {

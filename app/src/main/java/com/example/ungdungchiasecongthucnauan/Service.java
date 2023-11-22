@@ -1,11 +1,15 @@
 package com.example.ungdungchiasecongthucnauan;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
+import com.example.ungdungchiasecongthucnauan.Model.Anh;
 import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 
 import java.io.FileInputStream;
@@ -13,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Service {
     public void writeFile(Context context, String path, Object lstSearchHistory){
@@ -96,5 +102,30 @@ public class Service {
             case 10: imageView.setImageResource(R.drawable.avatar10);break;
             default:break;
         }
+    }
+    public void DialogEnlarge(Context context, Anh anh) {
+        Dialog dialog = new Dialog(context,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setContentView(R.layout.dialog_enlarge);
+        ImageView img_enlarge = dialog.findViewById(R.id.img_enlarge);
+
+        Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(img_enlarge);
+
+        img_enlarge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+    public void setDay(Date day,TextView textView) {
+        Date currentDate = new Date();
+        Date formulaDate = day;
+        long diffInMillies = Math.abs(currentDate.getTime() - formulaDate.getTime());
+        long daysBetween = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        if (daysBetween == 0) {
+            textView.setText("Hôm nay");
+        } else textView.setText(daysBetween+" ngày trước");
     }
 }

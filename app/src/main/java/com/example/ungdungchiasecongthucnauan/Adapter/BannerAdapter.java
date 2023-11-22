@@ -23,7 +23,6 @@ import com.example.ungdungchiasecongthucnauan.R;
 import com.example.ungdungchiasecongthucnauan.SaveRecipe;
 import com.example.ungdungchiasecongthucnauan.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder> {
@@ -31,7 +30,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
     private ArrayList<CongThuc> lstCongthuc;
     private NguoiDungDao nguoiDungDao;
     private AnhDao anhDao;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     MainActivity mainActivity;
 
     public BannerAdapter(Context context, ArrayList<CongThuc> lstCongthuc, MainActivity mainActivity) {
@@ -60,7 +58,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
             }
             holder.tv_nameuser.setText(congThuc.getTen());
             holder.tv_namedish.setText(nguoiDung.getHoTen());
-            holder.tv_date.setText(sdf.format(congThuc.getNgayTao()));
+            new Service().setDay(congThuc.getNgayTao(),holder.tv_date);
             Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(holder.img_bgr);
             new Service().setAvatar(holder.img_avata,nguoiDung.getAvatar());
         }
@@ -78,7 +76,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
             }
         });
     }
-
     @Override
     public int getItemCount() {
         return lstCongthuc != null? lstCongthuc.size():0;

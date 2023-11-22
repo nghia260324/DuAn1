@@ -29,7 +29,7 @@ public class SaveRecipe {
         DanhSachCongThucDao dsct = new DanhSachCongThucDao(context);
         DanhSachCongThucDao dsctDao = new DanhSachCongThucDao(context);
         CongThucDSCTDao congThucDSCTDao = new CongThucDSCTDao(context);
-        if (dsct.getAll() != null && !dsct.getAll().isEmpty()) {
+        if (dsct.getAllIdUser(mainActivity.getUser().getId()) != null && !dsct.getAll().isEmpty()) {
             ArrayList<CongThuc> lstCT = (ArrayList<CongThuc>) dsctDao.getAllCongThucUser(mainActivity.getUser().getId());
             for (CongThuc ct:lstCT) {
                 if (ct != null && ct.getId().equals(congThuc.getId())) {

@@ -1,7 +1,9 @@
 package com.example.ungdungchiasecongthucnauan.Adapter;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,6 +47,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     private NguoiDungDao nguoiDungDao;
     private CongThucDSCTDao congThucDSCTDao;
     private DanhSachCongThucDao dsctDao;
+    private CongThucDSCTDao ctdsctDao;
     MainActivity mainActivity;
 
     public RecipeListAdapter(Context context, ArrayList<DanhSachCongThuc> lstDSCT, MainActivity mainActivity) {
@@ -55,6 +58,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         this.nguoiDungDao = new NguoiDungDao(context);
         this.congThucDSCTDao = new CongThucDSCTDao(context);
         this.dsctDao = new DanhSachCongThucDao(context);
+        this.ctdsctDao = new CongThucDSCTDao(context);
         this.mainActivity = mainActivity;
     }
 
@@ -96,6 +100,33 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                 OpenDialog(dsct);
             }
         });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Bạn có chắc chắn muốn xóa danh sách công thức này không?")
+                        .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ctdsctDao.deleteAllId(String.valueOf(dsct.getId()));
+                                dsctDao.delete(String.valueOf(dsct.getId()));
+                                reload();
+                            }
+                        })
+                        .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                return true;
+            }
+        });
+    }
+    private void reload(){
+        lstDSCT.clear();
+        lstDSCT =(ArrayList<DanhSachCongThuc>) dsctDao.getAllIdUser(String.valueOf(mainActivity.getUser().getId()));
+        notifyDataSetChanged();
     }
     TextView tv_listName;
     LinearLayout layout_item,layout_user;

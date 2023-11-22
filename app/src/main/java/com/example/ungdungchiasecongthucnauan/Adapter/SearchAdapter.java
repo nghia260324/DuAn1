@@ -60,7 +60,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             String listMaterial = "";
             holder.tvName.setText(congThuc.getTen());
             holder.tvUser.setText(nguoiDung.getHoTen());
-            holder.tvTime.setText(sdf.format(congThuc.getNgayTao()));
+            new Service().setDay(congThuc.getNgayTao(),holder.tvTime);
             new Service().setAvatar(holder.imgAvatar,nguoiDung.getAvatar());
             Glide.with(context).load(anh.getUrl()).error(R.drawable.logoapp).into(holder.imgRecipe);
             for (DanhSachNguyenLieu dsnl: congThuc.getLstNguyenLieu()) {

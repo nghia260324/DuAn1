@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Html;
-import android.transition.Slide;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -109,6 +107,9 @@ public class ChiTietCongThuc {
         dialog.getWindow().setAttributes(layoutParams);
 
         initUI(dialog);
+
+
+
         LinearLayout btn_save = dialog.findViewById(R.id.btn_save);
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +148,13 @@ public class ChiTietCongThuc {
             anh = anhDao.getID(congThuc.getIdAnh());
         }
         Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(imgBanner);
+        Anh finalAnh = anh;
+        imgBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Service().DialogEnlarge(context, finalAnh);
+            }
+        });
 
         new Service().setAvatar(imgAvatar,nguoiDung.getAvatar());
         tvNameUser.setText(nguoiDung.getHoTen());
@@ -239,6 +247,13 @@ public class ChiTietCongThuc {
 
                 if (anhBuocLam != null) {
                     Glide.with(context).load(anhBuocLam.getUrl()).error(R.drawable.ic_picture).into(imgPictureMaking);
+                    Anh finalAnhBuocLam = anhBuocLam;
+                    imgPictureMaking.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new Service().DialogEnlarge(context, finalAnhBuocLam);
+                        }
+                    });
                 } else {
                     imgPictureMaking.setVisibility(View.GONE);
                 }
@@ -292,16 +307,6 @@ public class ChiTietCongThuc {
                 @Override
                 public void onClick(View v) {
                     collapseView(layoutComment);
-//                    if (isExpanded) {
-//                        collapseView(layoutComment);
-//                        tv_smBtn.setText("Xem thêm");
-//                        img_iconBtn.setImageResource(R.drawable.baseline_keyboard_arrow_down);
-//                    } else {
-//                        expandView(layoutComment);
-//                        tv_smBtn.setText("Ẩn");
-//                        img_iconBtn.setImageResource(R.drawable.baseline_keyboard_arrow_up);
-//                    }
-//                    isExpanded = !isExpanded;
                 }
             });
             btn_showMore.callOnClick();
@@ -313,16 +318,10 @@ public class ChiTietCongThuc {
             layoutComment.setVisibility(View.GONE);
         }
     }
-    private void expandView(View view) {
-        TransitionManager.beginDelayedTransition((ViewGroup) view, new Slide(Gravity.BOTTOM).setDuration(300));
-        view.setVisibility(View.VISIBLE);
-    }
-//    private void collapseView(View view) {
-//        TransitionManager.beginDelayedTransition((ViewGroup) view, new Slide(Gravity.TOP).setDuration(300));
-//        view.setVisibility(View.GONE);
-//    }
     private void collapseView(LinearLayout linearLayout) {
         if (linearLayout.getHeight() > 0) {
+            tv_smBtn.setText("Xem thêm");
+            img_iconBtn.setImageResource(R.drawable.baseline_keyboard_arrow_down);
             Animation slideDown = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_out_down);
             linearLayout.startAnimation(slideDown);
             linearLayout.getLayoutParams().height = 0;
@@ -331,6 +330,8 @@ public class ChiTietCongThuc {
                 linearLayout.getChildAt(i).setVisibility(View.GONE);
             }
         } else {
+            tv_smBtn.setText("Ẩn");
+            img_iconBtn.setImageResource(R.drawable.baseline_keyboard_arrow_up);
             Animation slideUp = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.slide_in_down_comment);
             linearLayout.startAnimation(slideUp);
             linearLayout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;

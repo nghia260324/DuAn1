@@ -25,8 +25,8 @@ public class CongThucDSCTDao {
         contentValues.put("idDanhSachCongThuc",idDSCT);
         return db.insert("CongThuc_DSCT",null,contentValues);
     }
-    public int delete(String id) {
-        return db.delete("CongThuc_DSCT","id = ?",new String[]{String.valueOf(id)});
+    public int deleteAllId(String id) {
+        return db.delete("CongThuc_DSCT","idDanhSachCongThuc = ?",new String[]{String.valueOf(id)});
     }
     private List<CT_DSCT> getData(String sql, String ... selectionArgs) {
         List<CT_DSCT> lstDSCT = new ArrayList<>();
