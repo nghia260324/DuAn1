@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +22,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.ungdungchiasecongthucnauan.Dao.DanhSachCongThucDao;
+import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.LoginActivity;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachCongThuc;
+import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
 import com.example.ungdungchiasecongthucnauan.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -38,6 +46,10 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
     EditText edt_mkcu, edt_mkmoi,edt_nhaplaimk,edt_name;
     Button btn_save;
     DanhSachCongThucDao dsclDao = new DanhSachCongThucDao(getContext());
+    NguoiDungDao nguoiDungDao =new NguoiDungDao(getContext());
+    FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+    String email=user.getEmail();
+
 
     public CaNhanAdapter(Context context, List<String> items) {
         super(context, 0, items);
@@ -67,8 +79,6 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                        logOut();
                 }else if(item.equals("Tạo danh sách công thức mới")){
                       addListCT();
-                } else if (item.equals("Tạo danh sách món ăn theo ngày")) {
-                    
                 }
             }
         });
@@ -119,8 +129,6 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                   String renewpass=edt_nhaplaimk.getText().toString().trim();
 
                   if (validate(oldpassword,newpassword,renewpass)){
-                      FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
-                      String email=user.getEmail();
 
                       FirebaseAuth.getInstance().signInWithEmailAndPassword(email, oldpassword)
                               .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -129,7 +137,6 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                                       if (task.isSuccessful()) {
                                           updatePass(newpassword);
                                           dialog.dismiss();
-
                                       } else {
                                           dialog.dismiss();
                                           Toast.makeText(getContext(),"Mật khẩu hiện tại chưa chính xác",Toast.LENGTH_LONG).show();
@@ -209,8 +216,10 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
             public void onClick(View view) {
                 String name = edt_name.getText().toString().trim();
                 if (!name.isEmpty()) {
+                    NguoiDung nd=nguoiDungDao.getNguoiDungFromEmail(email);
                     DanhSachCongThuc dsct = new DanhSachCongThuc();
                     dsct.setTen(name);
+                    dsct.setIdNguoiDung(nd.getId());
                     dsclDao.insert(dsct);
                     Toast.makeText(getContext(), "Tạo thành công !", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
