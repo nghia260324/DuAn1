@@ -49,19 +49,23 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NguoiDung nd=list.get(position);
 
-        holder.tv_hoten.setText("Họ tên: "+nd.getHoTen());
-        if(nd.getTrangThai()==0){
-            holder.tv_trangthai.setText("Trạng thái: Đang hoạt động");
-        }else {
-            holder.tv_trangthai.setText("Trạng thái: Đang khóa");
-        }
-
-        holder.img_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu(view,nd);
+            holder.tv_hoten.setText("Họ tên: "+nd.getHoTen());
+            if(nd.getTrangThai()==0){
+                holder.tv_trangthai.setText("Trạng thái: Đang hoạt động");
+            }else {
+                holder.tv_trangthai.setText("Trạng thái: Đang khóa");
             }
-        });
+
+            holder.img_option.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopupMenu(view,nd);
+                }
+            });
+
+
+
+
 
 
 
@@ -86,34 +90,42 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
 
     private void PopupMenu(View view,NguoiDung nd){
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.popup_menu_admin, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu_delete, popupMenu.getMenu());
+        MenuItem shareItem= popupMenu.getMenu().findItem(R.id.delete_option);
+        if (nd.getTrangThai()==0){
+            shareItem.setTitle("Khóa");
+        }else {
+            shareItem.setTitle("Mở khóa");
+        }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.Lock_option) {
-                    nd.setTrangThai(1);
+                if (item.getItemId() == R.id.delete_option) {
+                    if (nd.getTrangThai()==0){
+                        nd.setTrangThai(1);
+                        nguoiDungDao.update(nd);
+                        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
+                        databaseReference.child(nd.getId()).child("trangThai").setValue(1);
 
-                    nguoiDungDao.update(nd);
-                    DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
-                    databaseReference.child(nd.getId()).child("trangThai").setValue(1);
+                        list.clear();
+                        list=nguoiDungDao.getAll();
+                        notifyDataSetChanged();
+                    }else {
 
-                    list.clear();
-                    list=nguoiDungDao.getAll();
-                    notifyDataSetChanged();
+                        nd.setTrangThai(0);
+                        nguoiDungDao.update(nd);
+                        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
+                        databaseReference.child(nd.getId()).child("trangThai").setValue(0);
+
+                        list.clear();
+                        list=nguoiDungDao.getAll();
+                        notifyDataSetChanged();
+                    }
+
                     return true;
-                }
-                if (item.getItemId() == R.id.Unlock_option) {
-                    nd.setTrangThai(0);
-                    nguoiDungDao.update(nd);
-                    DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
-                    databaseReference.child(nd.getId()).child("trangThai").setValue(0);
 
-                    list.clear();
-                    list=nguoiDungDao.getAll();
-                    notifyDataSetChanged();
-
-                    return true;
                 }
+
 
 
                 return false;

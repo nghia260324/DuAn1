@@ -133,5 +133,8 @@ public class NguoiDungDao {
         return resultList;
     }
 
-
+    public List<NguoiDung> getAllND() {
+        String sql = "SELECT * FROM NguoiDung WHERE phanQuyen = 1 or phanQuyen =2";
+        return getData(sql);
+    }
 }

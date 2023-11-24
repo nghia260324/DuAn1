@@ -38,7 +38,7 @@ public class ManagerUserActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        list = nguoiDungDao.getAll();
+        list = nguoiDungDao.getAllND();
 
         adminUserAdapter = new AdminUserAdapter(this,list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -54,7 +54,7 @@ public class ManagerUserActivity extends AppCompatActivity {
                     if (event.getRawX() >= (et_searchUser.getRight() - et_searchUser.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         String keyword = et_searchUser.getText().toString().trim();
                         if (TextUtils.isEmpty(keyword)) {
-                            list = nguoiDungDao.getAll();
+                            list = nguoiDungDao.getAllND();
                         } else {
                             list = nguoiDungDao.search(keyword);
                         }
