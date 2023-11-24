@@ -296,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                         for (Anh a:lstAnhFirebase) {
                             if (a.getId().equals(anh.getId())) {
                                 check = false;
+                                break;
                             }
                         }
                         if (check) {
@@ -393,6 +394,7 @@ public class MainActivity extends AppCompatActivity {
                         for (CongThuc ct:lstCTFirebase) {
                             if (ct.getId().equals(congThuc.getId())) {
                                 check = false;
+                                break;
                             }
                         }
                         if (check) {
@@ -404,7 +406,6 @@ public class MainActivity extends AppCompatActivity {
 
                             for (BuocLam buocLam:lstBuocLam) {
                                 buocLamDao.delete(String.valueOf(buocLam.getId()));
-
                             }
                             for (DanhSachNguyenLieu dsnl:lstDSNL){
                                 dsnlDao.delete(String.valueOf(dsnl.getId()));
@@ -451,6 +452,7 @@ public class MainActivity extends AppCompatActivity {
                         for (NguoiDung n:lstNDFirebase) {
                             if (n.getId().equals(nd.getId())) {
                                 check = false;
+                                break;
                             }
                         }
                         if (check) {
