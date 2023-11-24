@@ -5,4 +5,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="is_empty">Không được để trống trường này !</string>
     <string name="text_note">Lưu ý: Số calo được tính toán chỉ mang tính chất tham khảo và có thể thay đổi tùy thuộc vào các yếu tố như phương pháp nấu ăn, thương hiệu sản phẩm, và cách thức chuẩn bị món ăn.</string>
+    <string name="text_note_price">Giá tiền tính được chỉ mang tính chất tham khảo và có thể không chính xác hoàn toàn do giá của các nguyên liệu có thể thay đổi tùy thuộc vào vị trí và thời điểm mua hàng.</string>
 </resources>

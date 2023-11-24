@@ -77,11 +77,11 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu(v,congThuc,holder.getAdapterPosition());
+                PopupMenu(v,congThuc);
             }
         });
     }
-    private void PopupMenu(View view,CongThuc congThuc,int indexChange){
+    private void PopupMenu(View view,CongThuc congThuc){
         PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
         MenuItem shareMenuItem = popupMenu.getMenu().findItem(R.id.share_option);
@@ -100,15 +100,16 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
                     switch (congThuc.getTrangThai()) {
                         case 0:
                             congThuc.setTrangThai(1);
-                            Share(congThuc,indexChange);
+                            Share(congThuc);
                             break;
                         case 1:
                             congThuc.setTrangThai(0);
-                            CancelShare(congThuc,indexChange);
+                            CancelShare(congThuc);
                             break;
                         default: break;
                     }
                     congThucDao.update(congThuc);
+                    Reload();
                     return true;
                 } else if (item.getItemId() == R.id.delete_option) {
                     openEdit.IOpenDialogDelete(congThuc);
@@ -120,7 +121,12 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
         });
         popupMenu.show();
     }
-    private void Share(CongThuc congThuc,int indexChange){
+    private void Reload(){
+        lstCongThuc.clear();
+        lstCongThuc = (ArrayList<CongThuc>) congThucDao.getAllMyRecipes(String.valueOf(mainActivity.getUser().getId()));
+        notifyDataSetChanged();
+    }
+    private void Share(CongThuc congThuc){
         databaseReference.child(congThuc.getId()).child("trangThai").setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -133,11 +139,11 @@ public class MyRecipeAdapter extends RecyclerView.Adapter<MyRecipeAdapter.ViewHo
             }
         });
     }
-    private void CancelShare(CongThuc congThuc,int indexChange) {
+    private void CancelShare(CongThuc congThuc) {
         databaseReference.child(congThuc.getId()).child("trangThai").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(context, "Chia sẻ thành công !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Hủy chia sẻ thành công !", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

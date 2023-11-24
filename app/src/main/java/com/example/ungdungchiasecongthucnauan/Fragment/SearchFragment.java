@@ -101,8 +101,6 @@ public class SearchFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
-
     TextView tvNotFound;
     private static final String PATH_SEARCH_HISTORY = "search_history.txt";
     MainActivity mainActivity;
@@ -118,7 +116,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        lstCongThuc = mainActivity.GetRecipes();
+        lstCongThuc = (ArrayList<CongThuc>) congThucDao.getAllStatus();
+        SetRCVRecipeViewed();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,7 +126,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         initUI(view);
-        lstCongThuc = mainActivity.GetRecipes();
+        lstCongThuc = mainActivity.lstCongThuc;
         edtSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -397,7 +396,7 @@ public class SearchFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                     String value = edtSearchDialog.getText().toString().trim();
-                    ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,mainActivity.GetRecipes());
+                    ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,lstCongThuc);
                     SearchAdapter searchAdapter = new SearchAdapter(getContext(), lstCongThucSearch,null);
                     rcvSearchSuggestion.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
                     rcvSearchSuggestion.setLayoutManager(new GridLayoutManager(getContext(),1));

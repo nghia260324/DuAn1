@@ -62,11 +62,10 @@ public class NewDishAdapter extends RecyclerView.Adapter<NewDishAdapter.ViewHold
             if (congThuc.getIdAnh() != null) {
                 anh = anhDao.getID(congThuc.getIdAnh());
             }
-            Glide.with(context).load(anh.getUrl()).error(R.drawable.canh).into(holder.img_newDish);
+            Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(holder.img_newDish);
             holder.tv_namenewdish.setText(congThuc.getTen());
             holder.tv_namend.setText(nguoiDung.getHoTen());
             new Service().setDay(congThuc.getNgayTao(),holder.tv_time);
-            Glide.with(context).load(anh.getUrl()).error(R.drawable.canh).into(holder.img_newDish);
             new Service().setAvatar(holder.img_avtnd,nguoiDung.getAvatar());
         }
         holder.btn_save.setOnClickListener(new View.OnClickListener() {

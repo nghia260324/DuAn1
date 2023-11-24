@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_priceC"
+        android:textSize="16sp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="12dp"
+        android:textAlignment="center"
+        android:text="Test"
+        android:fontFamily="@font/baloo_bhai_2"
+        android:textColorHint="@color/black_333"/>
+</LinearLayout>

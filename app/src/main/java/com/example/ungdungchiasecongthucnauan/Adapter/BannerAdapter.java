@@ -56,10 +56,10 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
             if (congThuc.getIdAnh() != null) {
                 anh = anhDao.getID(congThuc.getIdAnh());
             }
-            holder.tv_nameuser.setText(congThuc.getTen());
-            holder.tv_namedish.setText(nguoiDung.getHoTen());
-            new Service().setDay(congThuc.getNgayTao(),holder.tv_date);
             Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(holder.img_bgr);
+            holder.tv_nameuser.setText(nguoiDung.getHoTen());
+            holder.tv_namedish.setText(congThuc.getTen());
+            new Service().setDay(congThuc.getNgayTao(),holder.tv_date);
             new Service().setAvatar(holder.img_avata,nguoiDung.getAvatar());
         }
         holder.btn_save.setOnClickListener(new View.OnClickListener() {

@@ -1,13 +1,10 @@
 package com.example.ungdungchiasecongthucnauan.Fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.BannerAdapter;
 import com.example.ungdungchiasecongthucnauan.Adapter.NewDishAdapter;
-import com.example.ungdungchiasecongthucnauan.DataChangeListener;
+import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.MainActivity;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.R;
@@ -27,7 +24,7 @@ import java.util.ArrayList;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment implements DataChangeListener {
+public class HomeFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,27 +63,28 @@ public class HomeFragment extends Fragment implements DataChangeListener {
 
     }
     MainActivity mainActivity;
-    Toolbar toolbar;
     BannerAdapter bannerAdapter;
-    private RecyclerView rcv_banner,rcvNew;
+    NewDishAdapter newDishAdapter;
+    RecyclerView rcv_banner,rcvNew;
+
+    CongThucDao congThucDao;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         initUI(view);
-        bannerAdapter = new BannerAdapter(getContext(),mainActivity.lstCongThuc,mainActivity);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rcv_banner.setLayoutManager(linearLayoutManager);
-        rcv_banner.setAdapter(bannerAdapter);
+        SetAdapterBanner();
+        SetAdapterNew();
 
-        NewDishAdapter newDishAdapter = new NewDishAdapter(getContext(),mainActivity.lstCongThuc,mainActivity);
+        return view;
+    }
+
+    private void SetAdapterNew() {
+        newDishAdapter = new NewDishAdapter(getContext(),(ArrayList<CongThuc>) congThucDao.get10CongThucNew(),mainActivity);
         rcvNew.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         rcvNew.setLayoutManager(new GridLayoutManager(getContext(),2));
         rcvNew.setAdapter(newDishAdapter);
-
-        return view;
     }
 
     private void initUI(View view) {
@@ -94,18 +92,20 @@ public class HomeFragment extends Fragment implements DataChangeListener {
         rcvNew = view.findViewById(R.id.rcv_new);
 
         mainActivity = (MainActivity) getActivity();
+        congThucDao = new CongThucDao(getContext());
+    }
+
+    private void SetAdapterBanner(){
+        bannerAdapter= new BannerAdapter(getContext(),(ArrayList<CongThuc>) congThucDao.getTopCtBL(),mainActivity);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rcv_banner.setLayoutManager(linearLayoutManager);
+        rcv_banner.setAdapter(bannerAdapter);
     }
 
     @Override
-    public void onDataChange(ArrayList<CongThuc> dataList) {
-        bannerAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof MainActivity) {
-            ((MainActivity) context).registerDataChangeListener(this);
-        }
+    public void onResume() {
+        super.onResume();
+        SetAdapterBanner();
+        SetAdapterNew();
     }
 }

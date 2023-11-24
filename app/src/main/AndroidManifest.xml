@@ -21,6 +21,9 @@
         android:theme="@style/Theme.UngDungChiaSeCongThucNauAn"
         tools:targetApi="31">
         <activity
+            android:name=".CostEstimatesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManagerCTActivity"
             android:exported="false" />
         <activity

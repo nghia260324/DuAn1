@@ -32,7 +32,6 @@
                 android:fontFamily="@font/baloo_bhaijaan"
                 android:id="@+id/tv_trangthai"/>
         </LinearLayout>
-
         <ImageView
             android:id="@+id/ic_option"
             android:layout_width="20dp"

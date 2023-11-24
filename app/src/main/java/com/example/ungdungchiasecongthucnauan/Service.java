@@ -23,9 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class Service {
     public void writeFile(Context context, String path, Object lstSearchHistory){
         try {
-            Log.e("Check a","");
             FileOutputStream fos = context.openFileOutput(path,Context.MODE_PRIVATE);
-            Log.e("Check b","");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(lstSearchHistory);
             oos.close();

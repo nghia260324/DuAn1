@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -89,93 +88,97 @@ public class ChiTietCongThuc {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public void OpenDialogCreateRecipes() {
-        final View dialogView = View.inflate(context,R.layout.dialog_recipe_details,null);
-        final Dialog dialog = new Dialog(context);
+        if (congThuc.getTrangThai() == 1) {
+            final View dialogView = View.inflate(context,R.layout.dialog_recipe_details,null);
+            final Dialog dialog = new Dialog(context);
 
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(dialogView);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(dialogView);
 
-        Window window = dialog.getWindow();
-        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
+            Window window = dialog.getWindow();
+            window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
 
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-        layoutParams.gravity = Gravity.CENTER;
-        dialog.getWindow().setAttributes(layoutParams);
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.copyFrom(dialog.getWindow().getAttributes());
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+            layoutParams.gravity = Gravity.CENTER;
+            dialog.getWindow().setAttributes(layoutParams);
 
-        initUI(dialog);
+            initUI(dialog);
 
 
 
-        LinearLayout btn_save = dialog.findViewById(R.id.btn_save);
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SaveRecipe().OpenDialogSaveRecipe(context,congThuc,mainActivity);
+            LinearLayout btn_save = dialog.findViewById(R.id.btn_save);
+            btn_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SaveRecipe().OpenDialogSaveRecipe(context,congThuc,mainActivity);
+                }
+            });
+            ImageButton img_btn_save = dialog.findViewById(R.id.img_btn_save);
+            img_btn_save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SaveRecipe().OpenDialogSaveRecipe(context,congThuc,mainActivity);
+                }
+            });
+            ImageView img_CommmentUser = dialog.findViewById(R.id.img_CommmentUser);
+            new Service().setAvatar(img_CommmentUser,mainActivity.getUser().getAvatar());
+
+            ImageButton btnMore = dialog.findViewById(R.id.btn_more);
+            btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu(v);
+                }
+            });
+
+            btnBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            Anh anh = new Anh();
+            NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
+            if (congThuc.getIdAnh() != null){
+                anh = anhDao.getID(congThuc.getIdAnh());
             }
-        });
-        ImageButton img_btn_save = dialog.findViewById(R.id.img_btn_save);
-        img_btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SaveRecipe().OpenDialogSaveRecipe(context,congThuc,mainActivity);
-            }
-        });
-        ImageView img_CommmentUser = dialog.findViewById(R.id.img_CommmentUser);
-        new Service().setAvatar(img_CommmentUser,mainActivity.getUser().getAvatar());
+            Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(imgBanner);
+            Anh finalAnh = anh;
+            imgBanner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new Service().DialogEnlarge(context, finalAnh);
+                }
+            });
 
-        ImageButton btnMore = dialog.findViewById(R.id.btn_more);
-        btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu(v);
-            }
-        });
+            new Service().setAvatar(imgAvatar,nguoiDung.getAvatar());
+            tvNameUser.setText(nguoiDung.getHoTen());
+            tvFormulaName.setText(congThuc.getTen());
+            tvTime.setText(sdf.format(congThuc.getNgayTao()));
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            int ration = congThuc.getKhauPhan();
+            int time = congThuc.getThoiGianNau();
+            if (ration > 0) {
+                tvRation.setText("Khẩu phần: " + congThuc.getKhauPhan() + " người.");
+            } else {tvRation.setVisibility(View.GONE);}
+            if (time > 0){
+                tvCookingTime.setText("Thời gian nấu: " + congThuc.getThoiGianNau() + " phút.");
+            } else {tvCookingTime.setVisibility(View.GONE);}
+            if (ration < 0 && time < 0){
+                tvRation.setVisibility(View.GONE);
+                tvCookingTime.setVisibility(View.GONE);
+                layoutLine.setVisibility(View.GONE);
             }
-        });
-
-        Anh anh = new Anh();
-        NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(congThuc.getIdNguoiDung()));
-        if (congThuc.getIdAnh() != null){
-            anh = anhDao.getID(congThuc.getIdAnh());
+            ChiTiet();
+            dialog.show();
+        } else {
+            Toast.makeText(context, "Công thức này đã bị người dùng ẩn hoặc xóa!", Toast.LENGTH_SHORT).show();
         }
-        Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(imgBanner);
-        Anh finalAnh = anh;
-        imgBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Service().DialogEnlarge(context, finalAnh);
-            }
-        });
-
-        new Service().setAvatar(imgAvatar,nguoiDung.getAvatar());
-        tvNameUser.setText(nguoiDung.getHoTen());
-        tvFormulaName.setText(congThuc.getTen());
-        tvTime.setText(sdf.format(congThuc.getNgayTao()));
-
-        int ration = congThuc.getKhauPhan();
-        int time = congThuc.getThoiGianNau();
-        if (ration > 0) {
-            tvRation.setText("Khẩu phần: " + congThuc.getKhauPhan() + " người.");
-        } else {tvRation.setVisibility(View.GONE);}
-        if (time > 0){
-            tvCookingTime.setText("Thời gian nấu: " + congThuc.getThoiGianNau() + " phút.");
-        } else {tvCookingTime.setVisibility(View.GONE);}
-        if (ration < 0 && time < 0){
-            tvRation.setVisibility(View.GONE);
-            tvCookingTime.setVisibility(View.GONE);
-            layoutLine.setVisibility(View.GONE);
-        }
-        ChiTiet();
-        dialog.show();
     }
 
 
@@ -351,7 +354,9 @@ public class ChiTietCongThuc {
                     OpenDialogTimer();
                     return true;
                 } else if (item.getItemId() == R.id.costEstimates_option) {
-
+                    Intent intent = new Intent(context,CostEstimatesActivity.class);
+                    intent.putExtra("CONG_THUC",congThuc);
+                    context.startActivity(intent);
                     return true;
                 } else if (item.getItemId() == R.id.calories_option) {
                     OpenDialogCalories();
@@ -391,6 +396,13 @@ public class ChiTietCongThuc {
         Button btn_addMaterial = dialog.findViewById(R.id.btn_addMaterial);
         Button btn_calculatorCalories = dialog.findViewById(R.id.btn_calculatorCalories);
         TextView tv_sum = dialog.findViewById(R.id.tv_sum);
+        ImageButton btn_back = dialog.findViewById(R.id.btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         btn_addMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -423,6 +435,8 @@ public class ChiTietCongThuc {
                 int quantity = layoutCalories.getChildCount();
                 if (quantity > 0) {
                     ArrayList<Integer> lstCalo = new ArrayList<>();
+                    ArrayList<String> lstHide = new ArrayList<>();
+
                     for (int i = 0; i < layoutCalories.getChildCount(); i++) {
                         View view = layoutCalories.getChildAt(i);
                         EditText edtMass = view.findViewById(R.id.edt_quantity);
@@ -440,30 +454,32 @@ public class ChiTietCongThuc {
                             lstCalo.clear();
                             return;
                         }
-                        lstCalo.add(i,(Integer.parseInt(mass) * Integer.parseInt(calo))/100);
-                    }
-                    ArrayList<String> lstHide = new ArrayList<>();
-                    int sum = 0;
-                    for (int i = 0; i < lstNL.size(); i++) {
                         int knl = lstNL.get(i).getKieu();
                         switch (knl){
                             case 1:
                             case 2:
                             case 3:
-                            case 4:
+                            case 5:
                             case 6:
                             case 7:
                             case 8:
                             case 9:
                             case 10:
-                            case 12:
-                                sum += lstCalo.get(i);
+                                lstCalo.add((Integer.parseInt(mass) * Integer.parseInt(calo))/100);
                                 break;
-                            case 5:
+                            case 4:
+                                lstCalo.add(Integer.parseInt(mass) * Integer.parseInt(calo));
+                                break;
+                            case 11:
+                            case 12:
                                 lstHide.add(lstNL.get(i).getTen());
                                 break;
                             default:break;
                         }
+                    }
+                    int sum = 0;
+                    for (int i = 0; i < lstCalo.size(); i++) {
+                        sum += lstCalo.get(i);
                     }
                     String textRecipe = getColoredSpanned("Tổng số calo cho món ăn này là: ", "#333333");
                     String textAdvantage = getColoredSpanned(String.valueOf(sum),"#FDA17A");
@@ -504,7 +520,6 @@ public class ChiTietCongThuc {
         for (int i = 0; i < layoutCalories.getChildCount(); i++) {
             viewMain = layoutCalories.getChildAt(i);
             int index = layoutCalories.indexOfChild(viewMain);
-            Log.e("INDEX CHECK",index + "");
             initUICalories();
             viewMain.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -517,10 +532,14 @@ public class ChiTietCongThuc {
             });
             NLAdapter knlAdapter = new NLAdapter(context, R.layout.item_selected_spinner_knl, mainActivity.getAllNguyenLieu());
             actvNL.setAdapter(knlAdapter);
+            int finalI = i;
             actvNL.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    viewMain = layoutCalories.getChildAt(finalI);
+                    initUICalories();
                     NguyenLieu nguyenLieu1 = nguyenLieuDao.getTen(actvNL.getText().toString().trim());
+                    lstNL.remove(index);
                     lstNL.add(index,nguyenLieu1);
                     edt_calo.setText(nguyenLieu1.getCalo() + "");
                     setUnit(tvLeftCalo,nguyenLieu1);

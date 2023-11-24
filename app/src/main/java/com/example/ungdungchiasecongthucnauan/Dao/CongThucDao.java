@@ -96,11 +96,11 @@ public class CongThucDao {
         return getData(sql);
     }
     public List<CongThuc> getAllType(String id) {
-        String sql = "SELECT * FROM CongThuc where idLoaiCongThuc = ?";
+        String sql = "SELECT * FROM CongThuc where trangThai = 1 and idLoaiCongThuc = ?";
         return getData(sql,id);
     }
     public List<CongThuc> getAllStatus() {
-        String sql = "SELECT * FROM CongThuc where trangThai = 0";
+        String sql = "SELECT * FROM CongThuc where trangThai = 1";
         return getData(sql);
     }
     public List<CongThuc> getAllMyRecipes(String id) {
@@ -166,5 +166,28 @@ public class CongThucDao {
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         return exists;
+    }
+
+    public List<CongThuc> get10CongThucNew() {
+        String sql = "SELECT * FROM CongThuc Where trangThai = 1 ORDER BY ngay DESC LIMIT 10";
+        return getData(sql);
+    }
+
+    public List<CongThuc> getTopCtBL() {
+        List<CongThuc> top5 = new ArrayList<>();
+        String sql = "SELECT idCongThuc, COUNT(*) AS SoLuongBinhLuan " +
+                "FROM BinhLuan " +
+                "GROUP BY idCongThuc " +
+                "ORDER BY SoLuongBinhLuan DESC " +
+                "LIMIT 5";
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            CongThuc congThuc = getID(cursor.getString(0));
+            if (congThuc.getTrangThai() == 1) {
+                top5.add(congThuc);
+            }
+        }
+        cursor.close();
+        return top5;
     }
 }

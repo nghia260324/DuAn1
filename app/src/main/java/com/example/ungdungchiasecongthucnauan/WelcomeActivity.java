@@ -261,5 +261,4 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         finishAffinity();
     }
-
 }

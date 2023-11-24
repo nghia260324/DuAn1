@@ -22,14 +22,22 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ungdungchiasecongthucnauan.Adapter.ViewPagerBottomNavigationAdapter;
+import com.example.ungdungchiasecongthucnauan.Dao.AnhDao;
+import com.example.ungdungchiasecongthucnauan.Dao.BinhLuanDao;
+import com.example.ungdungchiasecongthucnauan.Dao.BuocLamDao;
 import com.example.ungdungchiasecongthucnauan.Dao.CongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.DanhSachCongThucDao;
+import com.example.ungdungchiasecongthucnauan.Dao.DanhSachNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.KieuNguyenLieuDao;
 import com.example.ungdungchiasecongthucnauan.Dao.LoaiCongThucDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguoiDungDao;
 import com.example.ungdungchiasecongthucnauan.Dao.NguyenLieuDao;
+import com.example.ungdungchiasecongthucnauan.Model.Anh;
+import com.example.ungdungchiasecongthucnauan.Model.BinhLuan;
+import com.example.ungdungchiasecongthucnauan.Model.BuocLam;
 import com.example.ungdungchiasecongthucnauan.Model.CongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.DanhSachCongThuc;
+import com.example.ungdungchiasecongthucnauan.Model.DanhSachNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.KieuNguyenLieu;
 import com.example.ungdungchiasecongthucnauan.Model.LoaiCongThuc;
 import com.example.ungdungchiasecongthucnauan.Model.NguoiDung;
@@ -59,15 +67,15 @@ public class MainActivity extends AppCompatActivity {
     NguyenLieuDao nguyenLieuDao;
     LoaiCongThucDao loaiCongThucDao;
     CongThucDao congThucDao;
+    AnhDao anhDao;
+    BinhLuanDao binhLuanDao;
+    BuocLamDao buocLamDao;
+    DanhSachNguyenLieuDao dsnlDao;
     public ArrayList<CongThuc> lstCongThuc;
     public ArrayList<CongThuc> myRecipes;
     public ArrayList<LoaiCongThuc> lstLoaiCongThuc;
     ViewPager2 viewPager2;
     DatabaseReference databaseReference;
-    private DataChangeListener dataChangeListener;
-    public void registerDataChangeListener(DataChangeListener listener) {
-        this.dataChangeListener = listener;
-    }
     private BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -75,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    boolean checkUser = false;
-    boolean checkCT = false;
     ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,19 +145,10 @@ public class MainActivity extends AppCompatActivity {
             itemCreateRecipes.setVisible(true);
         }
         GetRecipes();
-        GetAllData();
+//        GetAllData();
+        CheckDataImage();
         IntentFilter filter = new IntentFilter("ALARM_TRIGGERED");
         registerReceiver(alarmReceiver, filter);
-        checkCT = false;
-        checkUser = false;
-
-//        UpdateData();
-    }
-
-    private void UpdateData() {
-        Thread thread = new Thread(() -> {
-
-        });
     }
 
     @Override
@@ -161,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public ArrayList<CongThuc> GetRecipes() {
-//        lstCongThuc = (ArrayList<CongThuc>) congThucDao.getAll();
         myRecipes = (ArrayList<CongThuc>) congThucDao.getAllMyRecipes(getUser().getId());
         for (CongThuc congThuc: lstCongThuc){
             Log.e("Công thức","" + congThuc.toString());
@@ -169,37 +165,34 @@ public class MainActivity extends AppCompatActivity {
         return myRecipes;
     }
 
-    private void GetAllData() {
-        Thread thread = new Thread(() -> {
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    lstCongThuc.clear();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        CongThuc congThuc = snapshot.getValue(CongThuc.class);
-                        if (congThuc.getTrangThai() == 1) {
-                            lstCongThuc.add(congThuc);
-                        }
-                    }
-                    if (dataChangeListener != null) {
-                        dataChangeListener.onDataChange(lstCongThuc);
-                    }
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });
-        });
-        thread.start();
-    }
+//    private void GetAllData() {
+//        Thread thread = new Thread(() -> {
+//            databaseReference.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    lstCongThuc.clear();
+//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        CongThuc congThuc = snapshot.getValue(CongThuc.class);
+//                        if (congThuc.getTrangThai() == 1) {
+//                            lstCongThuc.add(congThuc);
+//                        }
+//                    }
+//                    if (dataChangeListener != null) {
+//                        dataChangeListener.onDataChange((ArrayList<CongThuc>) congThucDao.getTopCtBL());
+//                    }
+//                    if (progressDialog != null) {
+//                        progressDialog.dismiss();
+//                    }
+//                }
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                }
+//            });
+//        });
+//        thread.start();
+//    }
 
     public NguoiDung getUser() {
-//        Intent intent = getIntent();
-//        String id = intent.getStringExtra("userID");
-//        NguoiDung nguoiDung = nguoiDungDao.getID(id);
         FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
         String email = user.getEmail();
         NguoiDung nguoiDung = nguoiDungDao.getNguoiDungFromEmail(email);
@@ -212,6 +205,10 @@ public class MainActivity extends AppCompatActivity {
         nguyenLieuDao = new NguyenLieuDao(this);
         loaiCongThucDao = new LoaiCongThucDao(this);
         congThucDao = new CongThucDao(this);
+        anhDao = new AnhDao(this);
+        binhLuanDao = new BinhLuanDao(this);
+        dsnlDao = new DanhSachNguyenLieuDao(this);
+        buocLamDao = new BuocLamDao(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         viewPager2 = findViewById(R.id.viewPager2);
@@ -270,4 +267,155 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void CheckDataImage() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("ALL_IMAGE");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Anh> lstAnhFirebase = new ArrayList<>();
+                ArrayList<Anh> lstAnhCSDL = (ArrayList<Anh>) anhDao.getAll();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Anh anh = snapshot.getValue(Anh.class);
+                    lstAnhFirebase.add(anh);
+                }
+                if (lstAnhFirebase != null && !lstAnhFirebase.isEmpty() && lstAnhCSDL.isEmpty()) {
+                    for (Anh anh:lstAnhFirebase) {
+                        anhDao.insert(anh);
+                    }
+                } else if (lstAnhFirebase != null && !lstAnhFirebase.isEmpty() && lstAnhCSDL != null && !lstAnhCSDL.isEmpty()) {
+                    for (Anh anh:lstAnhFirebase) {
+                        if (congThucDao.checkExists("Anh","id",anh.getId())) {
+                            anhDao.update(anh);
+                        } else {
+                            anhDao.insert(anh);
+                        }
+                    }
+                }
+                CheckDataUser();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+    private void CheckDataRecipe() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<CongThuc> lstCTFirebase = new ArrayList<>();
+                ArrayList<CongThuc> lstCSDL = (ArrayList<CongThuc>) congThucDao.getAll();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    CongThuc congThuc = snapshot.getValue(CongThuc.class);
+                    lstCTFirebase.add(congThuc);
+                }
+                if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL.isEmpty()) {
+                    for (CongThuc congThuc:lstCTFirebase) {
+                        congThucDao.insert(congThuc);
+                        ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
+                        ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
+                        ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
+                        for (BuocLam buocLam:lstBuocLam) {
+                            buocLamDao.insert(buocLam);
+                        }
+                        for (DanhSachNguyenLieu dsnl:lstDSNL){
+                            dsnlDao.insert(dsnl);
+                        }
+                        if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
+                            for (BinhLuan binhLuan:lstBinhLuan) {
+                                binhLuanDao.insert(binhLuan);
+                            }
+                        }
+                    }
+                } else if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL != null && !lstCSDL.isEmpty()) {
+                    for (CongThuc congThuc:lstCTFirebase) {
+
+                        if (congThucDao.checkExists("CongThuc","id",congThuc.getId())) {
+                            congThucDao.update(congThuc);
+                            ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
+                            ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
+                            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
+
+                            for (BuocLam buocLam:lstBuocLam) {
+                                if (congThucDao.checkExists("BuocLam","id",String.valueOf(buocLam.getId()))) {
+                                    buocLamDao.update(buocLam);
+
+                                } else {
+                                    buocLamDao.insert(buocLam);
+                                }
+                            }
+                            for (DanhSachNguyenLieu dsnl:lstDSNL){
+                                if (congThucDao.checkExists("DanhSachNguyenLieu","id",String.valueOf(dsnl.getId()))) {
+                                    dsnlDao.update(dsnl);
+                                } else {
+                                    dsnlDao.insert(dsnl);
+                                }
+                            }
+                            if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
+                                for (BinhLuan binhLuan:lstBinhLuan) {
+                                    if (congThucDao.checkExists("BinhLuan","id",String.valueOf(binhLuan.getId()))) {
+                                        binhLuanDao.update(binhLuan);
+
+                                    } else {
+                                        binhLuanDao.insert(binhLuan);
+                                    }
+                                }
+                            }
+                        } else {
+                            congThucDao.insert(congThuc);
+                            ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
+                            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
+                            ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
+                            for (BuocLam buocLam:lstBuocLam) {
+                                buocLamDao.insert(buocLam);
+                            }
+                            for (DanhSachNguyenLieu dsnl:lstDSNL){
+                                dsnlDao.insert(dsnl);
+                            }
+                            if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
+                                for (BinhLuan binhLuan:lstBinhLuan) {
+                                    binhLuanDao.insert(binhLuan);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+    private void CheckDataUser() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<NguoiDung> lstNDFirebase = new ArrayList<>();
+                ArrayList<NguoiDung> lstNDCSDL = (ArrayList<NguoiDung>) nguoiDungDao.getAll();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    NguoiDung nguoiDung = snapshot.getValue(NguoiDung.class);
+                    lstNDFirebase.add(nguoiDung);
+                }
+                if (lstNDFirebase != null && !lstNDFirebase.isEmpty() && lstNDCSDL.isEmpty()) {
+                    for (NguoiDung nd:lstNDFirebase) {
+                        nguoiDungDao.insert(nd);
+                    }
+                } else if (lstNDFirebase != null && !lstNDFirebase.isEmpty() && lstNDCSDL != null && !lstNDCSDL.isEmpty()) {
+                    for (NguoiDung nd:lstNDFirebase) {
+                        if (congThucDao.checkExists("NguoiDung","id",nd.getId())) {
+                            nguoiDungDao.update(nd);
+                        } else {
+                            nguoiDungDao.insert(nd);
+                        }
+                    }
+                }
+                CheckDataRecipe();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 }

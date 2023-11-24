@@ -11,23 +11,71 @@
             android:id="@+id/layout_dialogCalories"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tính calo"
-                android:textSize="16sp"
-                android:fontFamily="@font/baloo_bhaijaan"
-                android:textColor="@color/black_333"/>
             <LinearLayout
+                android:paddingHorizontal="12dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/shadow_bgr_black"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/ic_back"
+                    android:id="@+id/btn_back"/>
+                <TextView
+                    android:layout_marginLeft="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tính calo"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/baloo_bhaijaan"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginBottom="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_marginLeft="12dp"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyên liệu"
+                    android:fontFamily="@font/baloo_bhai_2"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black_333"
+                    android:layout_marginTop="24dp"/>
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Khối lượng"
+                    android:fontFamily="@font/baloo_bhai_2"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black_333"
+                    android:layout_marginTop="24dp"/>
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="Calo"
+                    android:fontFamily="@font/baloo_bhai_2"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black_333"
+                    android:layout_marginTop="24dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginHorizontal="8dp"
                 android:id="@+id/layout_calories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
             </LinearLayout>
             <Button
+                android:layout_marginRight="12dp"
                 android:layout_gravity="right"
                 android:id="@+id/btn_addMaterial"
                 android:layout_marginTop="12dp"
@@ -44,6 +92,7 @@
                 android:drawableStart="@drawable/ic_create"
                 android:drawablePadding="6dp"/>
             <Button
+                android:layout_marginHorizontal="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/cus_bgr_btn_add_material"
@@ -55,6 +104,7 @@
                 android:fontFamily="@font/baloo_bhaijaan"
                 android:id="@+id/btn_calculatorCalories"/>
             <TextView
+                android:layout_marginLeft="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tổng số calo cho món ăn này là: "
@@ -65,6 +115,7 @@
                 android:layout_marginTop="24dp"
                 android:id="@+id/tv_sum"/>
             <TextView
+                android:layout_marginLeft="12dp"
                 android:visibility="gone"
                 android:textColor="@color/orange_FDA"
                 android:layout_width="wrap_content"
