@@ -76,8 +76,6 @@ public class FragmentCongThucDaLuu extends Fragment {
         SetRecipeListAdapter();
     }
 
-    boolean checkRCV = true;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

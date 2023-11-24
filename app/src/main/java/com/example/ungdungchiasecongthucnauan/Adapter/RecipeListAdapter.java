@@ -179,7 +179,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                 LinearLayout btnMore = view.findViewById(R.id.btn_more);
                 layout_user = view.findViewById(R.id.layout_user);
 
-                if (ct != null) {
+                if (ct != null && ct.getTrangThai() == 1) {
                     NguoiDung nguoiDung = nguoiDungDao.getID(String.valueOf(ct.getIdNguoiDung()));
                     Anh anh = new Anh();
                     if (ct != null) {
