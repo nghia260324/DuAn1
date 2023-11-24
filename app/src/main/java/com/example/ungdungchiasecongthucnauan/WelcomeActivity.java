@@ -144,9 +144,8 @@ public class WelcomeActivity extends AppCompatActivity {
     }
     private void CheckDataRecipe() {
         Log.e("CHECK RECIPE A","");
-
         databaseReferenceUser.removeEventListener(valueEventListenerUser);
-
+        databaseReferenceRecipe = FirebaseDatabase.getInstance().getReference("CONG_THUC");
         valueEventListenerRecipe = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
