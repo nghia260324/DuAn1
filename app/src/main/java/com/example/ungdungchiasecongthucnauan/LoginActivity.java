@@ -141,14 +141,19 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             progressDialog.dismiss();
-                            Log.d("TAG", "signInWithEmail:success");
-                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                            overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
-                            finishAffinity();
+                            NguoiDung nd;
+                            nd=nguoiDungDao.getNguoiDungFromEmail(email);
+                            if(nd.getTrangThai()==0){
+                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
+                                finishAffinity();
+                            }else {
+                                Toast.makeText(LoginActivity.this, "Tài khoản của bạn đã bị khóa",
+                                        Toast.LENGTH_SHORT).show();
+                            }
 
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TaG", "signInWithEmail:failure", task.getException());
+
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();

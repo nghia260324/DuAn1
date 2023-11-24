@@ -43,8 +43,9 @@ public class AdminCTAdapter extends RecyclerView.Adapter<AdminCTAdapter.ViewHold
         this.mainActivity = mainActivity;
     }
 
-    public void AdminCTAdapter( List<CongThuc> congThucList) {
-        this.congThucList = congThucList;
+    public void setList(List<CongThuc> congThuclist) {
+        this.congThucList = congThuclist;
+        notifyDataSetChanged();
     }
 
     @NonNull
