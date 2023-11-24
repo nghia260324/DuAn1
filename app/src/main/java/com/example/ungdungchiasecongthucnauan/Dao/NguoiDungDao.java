@@ -40,6 +40,7 @@ public class NguoiDungDao {
         ContentValues contentValues = new ContentValues();
         contentValues.put("avatar",obj.getAvatar());
         contentValues.put("matKhau", obj.getMatKhau());
+        contentValues.put("trangThai",obj.getTrangThai());
 
         return db.update("NguoiDung",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
     }
@@ -114,4 +115,23 @@ public class NguoiDungDao {
         }
         return null;
     }
+
+    public List<NguoiDung> search(String keyword) {
+        List<NguoiDung> resultList = new ArrayList<>();
+        Cursor cursor=db.rawQuery("SELECT * FROM NguoiDung WHERE hoTen= ?",new String[]{keyword});
+        while (cursor.moveToNext()) {
+            resultList.add(new NguoiDung(
+                    cursor.getString(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    Integer.parseInt(cursor.getString(4)),
+                    Integer.parseInt(cursor.getString(5)),
+                    Integer.parseInt(cursor.getString(6))
+            ));
+        }
+        return resultList;
+    }
+
+
 }

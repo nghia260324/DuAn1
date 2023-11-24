@@ -1,7 +1,11 @@
 package com.example.ungdungchiasecongthucnauan;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,6 +26,7 @@ public class ManagerCTActivity extends AppCompatActivity {
     MainActivity mainActivity;
     CongThucDao congThucDao;
     Toolbar toolbar;
+    EditText ed_searchCT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +44,39 @@ public class ManagerCTActivity extends AppCompatActivity {
 
         adminCTAdapter = new AdminCTAdapter(this,list,mainActivity);
         recyclerView.setAdapter(adminCTAdapter);
+
+        ed_searchCT.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (ed_searchCT.getRight() - ed_searchCT.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        String keyword = ed_searchCT.getText().toString().trim();
+                        if (TextUtils.isEmpty(keyword)) {
+                            list = congThucDao.getAll();
+                        } else {
+                            list = congThucDao.getData("SELECT * FROM CongThuc WHERE ten= ?",new String[]{keyword});
+                        }
+                        adminCTAdapter.setList(list);
+                        recyclerView.setAdapter(adminCTAdapter);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+
+
+
     }
 
     private void initUI() {
         toolbar = findViewById(R.id.toolbar);
-
         congThucDao = new CongThucDao(this);
         list = new ArrayList<>();
+        ed_searchCT=findViewById(R.id.edt_searchCT);
+
     }
 
 
