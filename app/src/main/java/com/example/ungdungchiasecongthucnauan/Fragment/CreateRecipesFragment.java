@@ -58,6 +58,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -496,8 +497,8 @@ public class CreateRecipesFragment extends Fragment {
                             dialog.dismiss();
                             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
                             congThuc = congThucDao.getID(congThuc.getId());
-                            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-                            databaseReference.child(congThuc.getId()).setValue(congThuc);
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+                            reference.child(congThuc.getId()).setValue(congThuc);
                         }
                     });
                 }
@@ -520,8 +521,8 @@ public class CreateRecipesFragment extends Fragment {
             progressDialog.dismiss();
             dialog.dismiss();
             Toast.makeText(getContext(), "Lưu thành công !", Toast.LENGTH_SHORT).show();
-            databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-            databaseReference.child(congThuc.getId()).setValue(congThuc);
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
+            reference.child(congThuc.getId()).setValue(congThuc);
         }
     }
     private void SaveDataToFirebase(Anh anh, Uri uri,int pos,int size,Dialog dialog){
@@ -589,6 +590,10 @@ public class CreateRecipesFragment extends Fragment {
         congThuc.setLstBuocLam(lstBuocLam);
         congThuc.setLstNguyenLieu(lstDanhSachNguyenLieu);
         congThuc.setLstBinhLuan(null);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Log.e("CONG THUC CHECL",congThuc.getNgayTao() + "");
+        Log.e("CONG THUC CHECL",sdf.format(congThuc.getNgayTao()) + "");
         congThucDao.insert(congThuc);
     }
 }
