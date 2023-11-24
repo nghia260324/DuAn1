@@ -291,6 +291,17 @@ public class MainActivity extends AppCompatActivity {
                             anhDao.insert(anh);
                         }
                     }
+                    for (Anh anh:lstAnhCSDL) {
+                        boolean check = true;
+                        for (Anh a:lstAnhFirebase) {
+                            if (a.getId().equals(anh.getId())) {
+                                check = false;
+                            }
+                        }
+                        if (check) {
+                            anhDao.delete(anh.getId());
+                        }
+                    }
                 }
                 CheckDataUser();
             }
@@ -377,6 +388,35 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
+                    for (CongThuc congThuc:lstCSDL) {
+                        boolean check = true;
+                        for (CongThuc ct:lstCTFirebase) {
+                            if (ct.getId().equals(congThuc.getId())) {
+                                check = false;
+                            }
+                        }
+                        if (check) {
+                            congThucDao.delete(congThuc.getId());
+
+                            ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
+                            ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
+                            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
+
+                            for (BuocLam buocLam:lstBuocLam) {
+                                buocLamDao.delete(String.valueOf(buocLam.getId()));
+
+                            }
+                            for (DanhSachNguyenLieu dsnl:lstDSNL){
+                                dsnlDao.delete(String.valueOf(dsnl.getId()));
+                            }
+                            if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
+                                for (BinhLuan binhLuan:lstBinhLuan) {
+                                    binhLuanDao.delete(String.valueOf(binhLuan.getId()));
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
             @Override
@@ -405,6 +445,17 @@ public class MainActivity extends AppCompatActivity {
                             nguoiDungDao.update(nd);
                         } else {
                             nguoiDungDao.insert(nd);
+                        }
+                    }
+                    for (NguoiDung nd:lstNDCSDL) {
+                        boolean check = true;
+                        for (NguoiDung n:lstNDFirebase) {
+                            if (n.getId().equals(nd.getId())) {
+                                check = false;
+                            }
+                        }
+                        if (check) {
+                            nguoiDungDao.delete(nd.getId());
                         }
                     }
                 }

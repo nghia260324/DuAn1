@@ -30,8 +30,6 @@ public class NguoiDungDao {
         contentValues.put("phanQuyen",obj.getPhanQuyen());
         contentValues.put("avatar",obj.getAvatar());
 
-
-
         return db.insert("NguoiDung",null,contentValues);
     }
     public long update(NguoiDung obj) {
@@ -43,6 +41,9 @@ public class NguoiDungDao {
         contentValues.put("trangThai",obj.getTrangThai());
 
         return db.update("NguoiDung",contentValues,"id = ?",new String[]{String.valueOf(obj.getId())});
+    }
+    public int delete(String id) {
+        return db.delete("NguoiDung","id = ?",new String[]{String.valueOf(id)});
     }
     private List<NguoiDung> getData(String sql, String ... selectionArgs) {
         List<NguoiDung> lstNguoiDung = new ArrayList<>();
@@ -61,7 +62,7 @@ public class NguoiDungDao {
         return lstNguoiDung;
     }
     public List<NguoiDung> getAll() {
-        String sql = "SELECT * FROM NguoiDung";
+        String sql = "SELECT * FROM NguoiDung ";
         return getData(sql);
     }
     public NguoiDung getID (String id) {
