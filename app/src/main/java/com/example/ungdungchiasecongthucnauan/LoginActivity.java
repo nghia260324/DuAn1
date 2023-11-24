@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -139,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             progressDialog.dismiss();
                             NguoiDung nd;
                             nd=nguoiDungDao.getNguoiDungFromEmail(email);
@@ -148,13 +146,11 @@ public class LoginActivity extends AppCompatActivity {
                                 overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
                                 finishAffinity();
                             }else {
-                                Toast.makeText(LoginActivity.this, "Tài khoản của bạn đã bị khóa",
+                                Toast.makeText(LoginActivity.this, "Tài khoản của bạn đã bị khóa!",
                                         Toast.LENGTH_SHORT).show();
                             }
-
                         } else {
-
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác!",
                                     Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
 

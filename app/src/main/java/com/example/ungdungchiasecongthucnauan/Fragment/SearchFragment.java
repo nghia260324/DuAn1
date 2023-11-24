@@ -240,9 +240,6 @@ public class SearchFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < lstIDMaterial.size(); i++){
-                    Log.e("lstIDMaterial", "" + lstIDMaterial.get(i));
-                }
                 layoutShowSearch.callOnClick();
                 tvAllMaterial.setVisibility(View.VISIBLE);
                 StringBuilder stringBuilder = new StringBuilder();
@@ -350,7 +347,6 @@ public class SearchFragment extends Fragment {
                             service.writeFile(getContext(),PATH_SEARCH_HISTORY,lstSearchHistory);
                             ShowSearchHistory();
                         }
-
                         edtSearchDialog.setText(value);
                         ArrayList<CongThuc> lstCongThucSearch = searchCongThuc(value,lstCongThuc);
                         SearchAdapter searchAdapter = new SearchAdapter(getContext(), lstCongThucSearch, new IReturnDone() {

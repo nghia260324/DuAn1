@@ -330,7 +330,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL != null && !lstCSDL.isEmpty()) {
                     for (CongThuc congThuc:lstCTFirebase) {
-
                         if (congThucDao.checkExists("CongThuc","id",congThuc.getId())) {
                             congThucDao.update(congThuc);
                             ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
@@ -340,7 +339,6 @@ public class MainActivity extends AppCompatActivity {
                             for (BuocLam buocLam:lstBuocLam) {
                                 if (congThucDao.checkExists("BuocLam","id",String.valueOf(buocLam.getId()))) {
                                     buocLamDao.update(buocLam);
-
                                 } else {
                                     buocLamDao.insert(buocLam);
                                 }
@@ -356,7 +354,6 @@ public class MainActivity extends AppCompatActivity {
                                 for (BinhLuan binhLuan:lstBinhLuan) {
                                     if (congThucDao.checkExists("BinhLuan","id",String.valueOf(binhLuan.getId()))) {
                                         binhLuanDao.update(binhLuan);
-
                                     } else {
                                         binhLuanDao.insert(binhLuan);
                                     }

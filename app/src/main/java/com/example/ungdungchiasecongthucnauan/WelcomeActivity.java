@@ -126,14 +126,14 @@ public class WelcomeActivity extends AppCompatActivity {
                         ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
                         ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
                         for (BuocLam buocLam:lstBuocLam) {
-                            buocLamDao.insert(buocLam);
+                            buocLamDao.insertID(buocLam);
                         }
                         for (DanhSachNguyenLieu dsnl:lstDSNL){
-                            dsnlDao.insert(dsnl);
+                            dsnlDao.insertID(dsnl);
                         }
                         if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
                             for (BinhLuan binhLuan:lstBinhLuan) {
-                                binhLuanDao.insert(binhLuan);
+                                binhLuanDao.insertID(binhLuan);
                             }
                         }
                     }
@@ -151,23 +151,22 @@ public class WelcomeActivity extends AppCompatActivity {
                                     buocLamDao.update(buocLam);
 
                                 } else {
-                                    buocLamDao.insert(buocLam);
+                                    buocLamDao.insertID(buocLam);
                                 }
                             }
                             for (DanhSachNguyenLieu dsnl:lstDSNL){
                                 if (congThucDao.checkExists("DanhSachNguyenLieu","id",String.valueOf(dsnl.getId()))) {
                                     dsnlDao.update(dsnl);
                                 } else {
-                                    dsnlDao.insert(dsnl);
+                                    dsnlDao.insertID(dsnl);
                                 }
                             }
                             if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
                                 for (BinhLuan binhLuan:lstBinhLuan) {
                                     if (congThucDao.checkExists("BinhLuan","id",String.valueOf(binhLuan.getId()))) {
                                         binhLuanDao.update(binhLuan);
-
                                     } else {
-                                        binhLuanDao.insert(binhLuan);
+                                        binhLuanDao.insertID(binhLuan);
                                     }
                                 }
                             }
@@ -177,14 +176,14 @@ public class WelcomeActivity extends AppCompatActivity {
                             ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
                             ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
                             for (BuocLam buocLam:lstBuocLam) {
-                                buocLamDao.insert(buocLam);
+                                buocLamDao.insertID(buocLam);
                             }
                             for (DanhSachNguyenLieu dsnl:lstDSNL){
-                                dsnlDao.insert(dsnl);
+                                dsnlDao.insertID(dsnl);
                             }
                             if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
                                 for (BinhLuan binhLuan:lstBinhLuan) {
-                                    binhLuanDao.insert(binhLuan);
+                                    binhLuanDao.insertID(binhLuan);
                                 }
                             }
                         }
