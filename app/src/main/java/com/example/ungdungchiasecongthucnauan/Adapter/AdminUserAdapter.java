@@ -2,7 +2,6 @@ package com.example.ungdungchiasecongthucnauan.Adapter;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -106,28 +105,17 @@ public class AdminUserAdapter extends RecyclerView.Adapter<AdminUserAdapter.View
                         nguoiDungDao.update(nd);
                         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
                         databaseReference.child(nd.getId()).child("trangThai").setValue(1);
-
-                        list.clear();
-                        list=nguoiDungDao.getAll();
-                        notifyDataSetChanged();
                     }else {
-
                         nd.setTrangThai(0);
                         nguoiDungDao.update(nd);
                         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
                         databaseReference.child(nd.getId()).child("trangThai").setValue(0);
-
-                        list.clear();
-                        list=nguoiDungDao.getAll();
-                        notifyDataSetChanged();
                     }
-
+                    list.clear();
+                    list=nguoiDungDao.getAllND();
+                    notifyDataSetChanged();
                     return true;
-
                 }
-
-
-
                 return false;
             }
         });

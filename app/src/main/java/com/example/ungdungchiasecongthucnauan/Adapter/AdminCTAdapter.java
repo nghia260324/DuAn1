@@ -47,7 +47,6 @@ public class AdminCTAdapter extends RecyclerView.Adapter<AdminCTAdapter.ViewHold
         this.congThucList = congThuclist;
         notifyDataSetChanged();
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -86,7 +85,6 @@ public class WelcomeActivity extends AppCompatActivity {
         });
     }
     private void CheckDataImage() {
-        Log.e("CHECK IMAGE","");
         databaseReferenceImage = FirebaseDatabase.getInstance().getReference("ALL_IMAGE");
         valueEventListenerImage = new ValueEventListener() {
             @Override
@@ -102,48 +100,16 @@ public class WelcomeActivity extends AppCompatActivity {
                         anhDao.insert(anh);
                     }
                 }
-                Log.e("CHECK IMAGE","");
                 CheckDataUser();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         };
         databaseReferenceImage.addValueEventListener(valueEventListenerImage);
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                ArrayList<Anh> lstAnhFirebase = new ArrayList<>();
-//                ArrayList<Anh> lstAnhCSDL = (ArrayList<Anh>) anhDao.getAll();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Anh anh = snapshot.getValue(Anh.class);
-//                    lstAnhFirebase.add(anh);
-//                }
-//                if (lstAnhFirebase != null && !lstAnhFirebase.isEmpty() && lstAnhCSDL.isEmpty()) {
-//                    for (Anh anh:lstAnhFirebase) {
-//                        anhDao.insert(anh);
-//                    }
-//                }
-////                else if (lstAnhFirebase != null && !lstAnhFirebase.isEmpty() && lstAnhCSDL != null && !lstAnhCSDL.isEmpty()) {
-////                    for (Anh anh:lstAnhFirebase) {
-////                        if (congThucDao.checkExists("Anh","id",anh.getId())) {
-////                            anhDao.update(anh);
-////                        } else {
-////                            anhDao.insert(anh);
-////                        }
-////                    }
-////                }
-//                CheckDataUser();
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
     }
     private void CheckDataRecipe() {
-        Log.e("CHECK RECIPE A","");
         databaseReferenceUser.removeEventListener(valueEventListenerUser);
         databaseReferenceRecipe = FirebaseDatabase.getInstance().getReference("CONG_THUC");
         valueEventListenerRecipe = new ValueEventListener() {
@@ -154,11 +120,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 for (DataSnapshot ss : snapshot.getChildren()) {
                     CongThuc congThuc = ss.getValue(CongThuc.class);
                     lstCTFirebase.add(congThuc);
-                    Log.e("CHECK RECIPE B","");
                 }
                 if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL.isEmpty()) {
                     for (CongThuc congThuc:lstCTFirebase) {
-                        Log.e("CHECK RECIPE C","");
 
                         congThucDao.insert(congThuc);
                         ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
@@ -177,8 +141,6 @@ public class WelcomeActivity extends AppCompatActivity {
                         }
                     }
                 }
-                Log.e("CHECK RECIPE D","");
-
                 checkUserLogin();
             }
 
@@ -189,109 +151,10 @@ public class WelcomeActivity extends AppCompatActivity {
         };
 
         databaseReferenceRecipe.addValueEventListener(valueEventListenerRecipe);
-
-//        databaseReference = FirebaseDatabase.getInstance().getReference("CONG_THUC");
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                ArrayList<CongThuc> lstCTFirebase = new ArrayList<>();
-//                ArrayList<CongThuc> lstCSDL = (ArrayList<CongThuc>) congThucDao.getAll();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    CongThuc congThuc = snapshot.getValue(CongThuc.class);
-//                    lstCTFirebase.add(congThuc);
-//                }
-//                if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL.isEmpty()) {
-//                    for (CongThuc congThuc:lstCTFirebase) {
-//                        congThucDao.insert(congThuc);
-//                        ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
-//                        ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
-//                        ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
-//                        for (BuocLam buocLam:lstBuocLam) {
-//                            buocLamDao.insertID(buocLam);
-//                        }
-//                        for (DanhSachNguyenLieu dsnl:lstDSNL){
-//                            dsnlDao.insertID(dsnl);
-//                        }
-//                        if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
-//                            for (BinhLuan binhLuan:lstBinhLuan) {
-//                                binhLuanDao.insertID(binhLuan);
-//                            }
-//                        }
-//                    }
-//                }
-//
-////                else if (lstCTFirebase != null && !lstCTFirebase.isEmpty() && lstCSDL != null && !lstCSDL.isEmpty()) {
-////                    for (CongThuc congThuc:lstCTFirebase) {
-////
-////                        if (congThucDao.checkExists("CongThuc","id",congThuc.getId())) {
-////                            congThucDao.update(congThuc);
-////                            ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
-////                            ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
-////                            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
-////
-////                            for (BuocLam buocLam:lstBuocLam) {
-////                                if (congThucDao.checkExists("BuocLam","id",String.valueOf(buocLam.getId()))) {
-////                                    buocLamDao.update(buocLam);
-////
-////                                } else {
-////                                    buocLamDao.insertID(buocLam);
-////                                }
-////                            }
-////                            for (DanhSachNguyenLieu dsnl:lstDSNL){
-////                                if (congThucDao.checkExists("DanhSachNguyenLieu","id",String.valueOf(dsnl.getId()))) {
-////                                    dsnlDao.update(dsnl);
-////                                } else {
-////                                    dsnlDao.insertID(dsnl);
-////                                }
-////                            }
-////                            if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
-////                                for (BinhLuan binhLuan:lstBinhLuan) {
-////                                    if (congThucDao.checkExists("BinhLuan","id",String.valueOf(binhLuan.getId()))) {
-////                                        binhLuanDao.update(binhLuan);
-////                                    } else {
-////                                        binhLuanDao.insertID(binhLuan);
-////                                    }
-////                                }
-////                            }
-////                        } else {
-////                            congThucDao.insert(congThuc);
-////                            ArrayList<BuocLam> lstBuocLam = congThuc.getLstBuocLam();
-////                            ArrayList<BinhLuan> lstBinhLuan = congThuc.getLstBinhLuan();
-////                            ArrayList<DanhSachNguyenLieu> lstDSNL = congThuc.getLstNguyenLieu();
-////                            for (BuocLam buocLam:lstBuocLam) {
-////                                buocLamDao.insertID(buocLam);
-////                            }
-////                            for (DanhSachNguyenLieu dsnl:lstDSNL){
-////                                dsnlDao.insertID(dsnl);
-////                            }
-////                            if (lstBinhLuan != null && !lstBinhLuan.isEmpty()) {
-////                                for (BinhLuan binhLuan:lstBinhLuan) {
-////                                    binhLuanDao.insertID(binhLuan);
-////                                }
-////                            }
-////                        }
-////                    }
-////                    checkUserLogin();
-////                    overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
-////                    progressDialog.dismiss();
-////                    finish();
-////                }
-//                checkUserLogin();
-//                overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
-//                progressDialog.dismiss();
-//                finish();
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
     }
     private void CheckDataUser() {
-        Log.e("CHECK USER","");
         databaseReferenceImage.removeEventListener(valueEventListenerImage);
-
         databaseReferenceUser = FirebaseDatabase.getInstance().getReference("NGUOI_DUNG");
-
         valueEventListenerUser = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -315,35 +178,6 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         };
         databaseReferenceUser.addValueEventListener(valueEventListenerUser);
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                ArrayList<NguoiDung> lstNDFirebase = new ArrayList<>();
-//                ArrayList<NguoiDung> lstNDCSDL = (ArrayList<NguoiDung>) nguoiDungDao.getAll();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    NguoiDung nguoiDung = snapshot.getValue(NguoiDung.class);
-//                    lstNDFirebase.add(nguoiDung);
-//                }
-//                if (lstNDFirebase != null && !lstNDFirebase.isEmpty() && lstNDCSDL.isEmpty()) {
-//                    for (NguoiDung nd:lstNDFirebase) {
-//                        nguoiDungDao.insert(nd);
-//                    }
-//                }
-////                else if (lstNDFirebase != null && !lstNDFirebase.isEmpty() && lstNDCSDL != null && !lstNDCSDL.isEmpty()) {
-////                    for (NguoiDung nd:lstNDFirebase) {
-////                        if (congThucDao.checkExists("NguoiDung","id",nd.getId())) {
-////                            nguoiDungDao.update(nd);
-////                        } else {
-////                            nguoiDungDao.insert(nd);
-////                        }
-////                    }
-////                }
-//                CheckDataRecipe();
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
     }
     private void initUI() {
         tvTitle2 = findViewById(R.id.tv_title2);
@@ -361,8 +195,10 @@ public class WelcomeActivity extends AppCompatActivity {
         return input;
     }
     private void checkUserLogin(){
-        databaseReferenceRecipe.removeEventListener(valueEventListenerRecipe);
-        progressDialog.dismiss();
+        if (databaseReferenceRecipe != null && valueEventListenerRecipe != null && progressDialog != null) {
+            databaseReferenceRecipe.removeEventListener(valueEventListenerRecipe);
+            progressDialog.dismiss();
+        }
         FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
         if (user ==null){
             Intent intent=new Intent(this,LoginActivity.class);

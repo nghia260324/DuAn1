@@ -101,7 +101,6 @@ public class HomeFragment extends Fragment {
         rcv_banner.setLayoutManager(linearLayoutManager);
         rcv_banner.setAdapter(bannerAdapter);
     }
-
     @Override
     public void onResume() {
         super.onResume();
