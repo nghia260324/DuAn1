@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -619,7 +620,9 @@ public class ChiTietCongThuc {
         } else {
             pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         }
+        long triggerAtTimeMillis = System.currentTimeMillis()+ selectedTimeInMinutes * 34 * 1000;
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, selectedTimeInMinutes * 60 * 1000, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtTimeMillis, pendingIntent);
     }
 }
