@@ -62,7 +62,6 @@ public class AdminCTAdapter extends RecyclerView.Adapter<AdminCTAdapter.ViewHold
               anh = anhDao.getID(congThucList.get(position).getIdAnh());
           }
           NguoiDung nguoiDung = nguoiDungDao.getID(congThucList.get(position).getIdNguoiDung());
-//          Picasso.get().load(anh.getUrl()).error(R.drawable.ct).into(holder.img_bgr);
           Glide.with(context).load(anh.getUrl()).error(R.drawable.ct).into(holder.img_bgr);
           new Service().setAvatar(holder.img_avata,nguoiDung.getAvatar());
           holder.tv_nameuser.setText(nguoiDung.getHoTen());

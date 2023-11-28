@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -159,9 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
     public ArrayList<CongThuc> GetRecipes() {
         myRecipes = (ArrayList<CongThuc>) congThucDao.getAllMyRecipes(getUser().getId());
-        for (CongThuc congThuc: lstCongThuc){
-            Log.e("Công thức","" + congThuc.toString());
-        }
         return myRecipes;
     }
 
@@ -221,11 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
         DanhSachCongThucDao dsctDao = new DanhSachCongThucDao(this);
         ArrayList<DanhSachCongThuc> lstDSCT = (ArrayList<DanhSachCongThuc>) dsctDao.getAll();
-        for (DanhSachCongThuc dsct:lstDSCT) {
-            Log.e("DSCT",dsct.toString());
-        }
     }
-
     public ArrayList<KieuNguyenLieu> getAllKieuNguyenLieu(){
         ArrayList<KieuNguyenLieu> lstKNT = (ArrayList<KieuNguyenLieu>) kieuNguyenLieuDao.getAll();
         return lstKNT;
@@ -253,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ConfigNotification.CHANNEL_ID)
                 .setSmallIcon(R.drawable.logoapp)
-                .setContentTitle("Đã đến giờ hẹn. Hãy tiếp tục nấu bữa ăn của mình nào !!!")
+                .setContentTitle("Hẹn giờ kết thúc. Đã đến lúc chuyển sang bước tiếp theo trong quá trình nấu ăn!")
                 .setContentText("")
                 .setColor(Color.RED)
                 .setAutoCancel(true)

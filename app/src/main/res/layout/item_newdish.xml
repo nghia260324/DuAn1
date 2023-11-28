@@ -69,6 +69,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <TextView
+                    android:layout_marginRight="24dp"
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:id="@+id/tv_namenewdish"

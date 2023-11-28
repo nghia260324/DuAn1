@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
     static final String dbName = "CONG_THUC_NAU_AN";
-    static final int dbVersion = 10;
+    static final int dbVersion = 5;
     public DbHelper(Context context) {
         super(context, dbName, null, dbVersion);
     }
@@ -120,6 +120,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Gia vị')," +//11//
                 "('Khác')";//12
 
+
         String add_NguyenLieu = "INSERT INTO NguyenLieu(ten,idKieuNguyenLieu,calo,gia) VALUES" +
                 "('Thịt bò',1,250,20000)," +
                 "('Thịt bò xay',1,250,32000)," +
@@ -200,10 +201,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 "('Váng sữa',8,375,0)," +
                 "('Phô mai lát con bò cười',12,402,120000)," +//500gram
-                "('Bơ thực vật',12,716,40000)," +//500gram
-                "('Đậu phụ',12,68,15000)";//500gram
-//        String add_nguoiDung = "INSERT INTO NguoiDung(hoTen,email,matKhau,trangThai,phanQuyen,avatar) VALUES" +
-//                "('Admin','admin@gmail.com','admin',0,0,5)";
+                "('Bơ thực vật',12,716,40000)," +
+
+                "('Mật ong',12,300,100000)," +//100ml
+                "('Nước nóng',12,0,0)," +//100ml
+                "('Đường',12,387,3000)," +//100gram
+                "('Đường phèn',12,383,5000)," +//100gram
+                "('Bột rau câu',12,62,80000)," +//100gram
+                "('Khoai tím',12,62,4000)," +//100gram
+                "('Đậu phụ',12,70,12000)," +//100gram
+                "('Nước cốt dừa',12,70,3000)," +//100ml
+                "('Trà',12,24,50000)," +//100gram
+                "('Trà hoa nhài',12,0,33000)," +//100gram
+                "('Tắc - Quất',12,71,5000)";//100gram
         String add_LoaiCongThuc = "INSERT INTO LoaiCongThuc(ten) VALUES" +
                 "('Đồ uống')," +
                 "('Nướng')," +
@@ -220,7 +230,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.execSQL(add_kieuNguyenLieu);
         db.execSQL(add_NguyenLieu);
-//        db.execSQL(add_nguoiDung);
         db.execSQL(add_LoaiCongThuc);
     }
 

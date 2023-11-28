@@ -119,7 +119,8 @@ public class NguoiDungDao {
 
     public List<NguoiDung> search(String keyword) {
         List<NguoiDung> resultList = new ArrayList<>();
-        Cursor cursor=db.rawQuery("SELECT * FROM NguoiDung WHERE hoTen= ?",new String[]{keyword});
+        String sql = "SELECT * FROM NguoiDung WHERE phanQuyen <> 0 AND hoTen Like '%" + keyword +"%'";
+        Cursor cursor=db.rawQuery(sql,null);
         while (cursor.moveToNext()) {
             resultList.add(new NguoiDung(
                     cursor.getString(0),

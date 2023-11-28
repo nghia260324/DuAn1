@@ -89,7 +89,7 @@ public class ChiTietCongThuc {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public void OpenDialogCreateRecipes() {
-        if (congThuc.getTrangThai() == 1) {
+        if (congThuc.getTrangThai() == 1 || congThuc.getIdNguoiDung().equals(mainActivity.getUser().getId())) {
             final View dialogView = View.inflate(context,R.layout.dialog_recipe_details,null);
             final Dialog dialog = new Dialog(context);
 
@@ -108,8 +108,6 @@ public class ChiTietCongThuc {
             dialog.getWindow().setAttributes(layoutParams);
 
             initUI(dialog);
-
-
 
             LinearLayout btn_save = dialog.findViewById(R.id.btn_save);
             btn_save.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +216,13 @@ public class ChiTietCongThuc {
             View view = LayoutInflater.from(context).inflate(R.layout.item_search_history,null);
             TextView tvName = view.findViewById(R.id.tv_history);
             TextView tvMass = view.findViewById(R.id.tv_mass);
-            new Service().SetMass(nguyenLieuDao,tvName,tvMass,dsnl.getIdNguyenLieu(),dsnl.getKhoiLuong());
+            if (dsnl.getKhoiLuong() > 0) {
+                new Service().SetMass(nguyenLieuDao,tvName,tvMass,dsnl.getIdNguyenLieu(),dsnl.getKhoiLuong());
+            } else {
+                NguyenLieu nguyenLieu = nguyenLieuDao.getID(String.valueOf(dsnl.getIdNguyenLieu()));
+                tvName.setText(nguyenLieu.getTen());
+                tvMass.setText("");
+            }
             layoutMaterial.addView(view);
         }
 
@@ -427,8 +431,8 @@ public class ChiTietCongThuc {
             edt_quantity.setText(dsnl.getKhoiLuong() + "");
             new Service().SetMass(nguyenLieuDao,null,tv_leftQuantity,nguyenLieu.getId(),-1);
             layoutCalories.addView(viewMain);
-            InitAndSetAdapter(lstNL);
         }
+        InitAndSetAdapter(lstNL);
 
         btn_calculatorCalories.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -456,6 +460,7 @@ public class ChiTietCongThuc {
                             return;
                         }
                         int knl = lstNL.get(i).getKieu();
+                        String name = lstNL.get(i).getTen();
                         switch (knl){
                             case 1:
                             case 2:
@@ -473,7 +478,25 @@ public class ChiTietCongThuc {
                                 break;
                             case 11:
                             case 12:
-                                lstHide.add(lstNL.get(i).getTen());
+                                switch (name) {
+                                    case "Đường":
+                                    case "Bột rau câu":
+                                    case "Đậu phụ":
+                                    case "Tắc - Quất":
+                                    case "Nước cốt dừa":
+                                    case "Khoai tím":
+                                    case "Trà":
+                                    case "Mật ong":
+                                    case "Đường phèn":
+                                        lstCalo.add(Integer.parseInt(mass) * Integer.parseInt(calo)/100);
+                                        break;
+                                    case "Nước nóng":
+                                    case "Trà hoa nhài":
+                                        lstHide.add(lstNL.get(i).getTen());
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 break;
                             default:break;
                         }
@@ -520,28 +543,28 @@ public class ChiTietCongThuc {
     private void InitAndSetAdapter(ArrayList<NguyenLieu> lstNL){
         for (int i = 0; i < layoutCalories.getChildCount(); i++) {
             viewMain = layoutCalories.getChildAt(i);
-            int index = layoutCalories.indexOfChild(viewMain);
             initUICalories();
-            viewMain.setOnLongClickListener(new View.OnLongClickListener() {
+            int finalI = i;
+
+            layoutCalories.getChildAt(i).setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    lstNL.remove(index);
-                    layoutCalories.removeView(viewMain);
+                    lstNL.remove(finalI);
+                    layoutCalories.removeView(layoutCalories.getChildAt(finalI));
                     InitAndSetAdapter(lstNL);
                     return true;
                 }
             });
             NLAdapter knlAdapter = new NLAdapter(context, R.layout.item_selected_spinner_knl, mainActivity.getAllNguyenLieu());
             actvNL.setAdapter(knlAdapter);
-            int finalI = i;
             actvNL.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     viewMain = layoutCalories.getChildAt(finalI);
                     initUICalories();
                     NguyenLieu nguyenLieu1 = nguyenLieuDao.getTen(actvNL.getText().toString().trim());
-                    lstNL.remove(index);
-                    lstNL.add(index,nguyenLieu1);
+                    lstNL.remove(finalI);
+                    lstNL.add(finalI,nguyenLieu1);
                     edt_calo.setText(nguyenLieu1.getCalo() + "");
                     setUnit(tvLeftCalo,nguyenLieu1);
                     new Service().SetMass(nguyenLieuDao,null,tv_leftQuantity,nguyenLieu1.getId(),-1);
@@ -551,6 +574,7 @@ public class ChiTietCongThuc {
     }
     private void setUnit(TextView tv, NguyenLieu nguyenLieu){
         int typeMaterial = nguyenLieu.getKieu();
+        String name = nguyenLieu.getTen();
         switch (typeMaterial){
             case 1:
             case 2:
@@ -561,7 +585,26 @@ public class ChiTietCongThuc {
             case 9:
             case 10:
             case 12:
-                tv.setText("calo\n/100gram");
+                switch (name) {
+                    case "Đường":
+                    case "Bột rau câu":
+                    case "Đậu phụ":
+                    case "Tắc - Quất":
+                    case "Khoai tím":
+                    case "Trà":
+                    case "Đường phèn":
+                        tv.setText("calo/100gram");
+                        break;
+                    case "Nước cốt dừa":
+                    case "Mật ong":
+                        tv.setText("calo/100ml");
+                        break;
+                    case "Trà hoa nhài":
+                    case "Nước nóng":
+                        tv.setText("");
+                    default:
+                        break;
+                }
                 break;
             case 4:
                 tv.setText("calo\n/1quả");

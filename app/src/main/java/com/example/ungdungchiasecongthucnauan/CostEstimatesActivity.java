@@ -30,6 +30,7 @@ import com.example.ungdungchiasecongthucnauan.Model.NguyenLieu;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class CostEstimatesActivity extends AppCompatActivity {
@@ -42,6 +43,7 @@ public class CostEstimatesActivity extends AppCompatActivity {
     NguyenLieuDao nguyenLieuDao;
     ArrayList<NguyenLieu> lstNL;
     ArrayList<Integer> lstPrice;
+    HashMap<Integer,String> lstPriceCheck = new HashMap<>();
     AutoCompleteTextView actvNL;
     EditText edt_quantity,edt_price;
     TextView tv_leftQuantity,tv_leftPrice;
@@ -87,6 +89,13 @@ public class CostEstimatesActivity extends AppCompatActivity {
                         return;
                     } else {
                         lstPriceU.add(Integer.parseInt(price));
+                    }
+                }
+                for (int i = 0; i < lstNL.size(); i++) {
+                    NguyenLieu nguyenLieu = lstNL.get(i);
+                    if (nguyenLieu.getTen().equals(lstPriceCheck.get(nguyenLieu.getId()))) {
+                        lstNL.remove(nguyenLieu);
+                        lstPrice.remove(i);
                     }
                 }
                 layoutColumnCompare.setVisibility(View.VISIBLE);
@@ -173,12 +182,14 @@ public class CostEstimatesActivity extends AppCompatActivity {
                 layoutCompare.setVisibility(View.VISIBLE);
                 layoutCompareMain.setVisibility(View.VISIBLE);
                 for (int i = 0; i < lstNL.size(); i++) {
-                    View view = LayoutInflater.from(CostEstimatesActivity.this).inflate(R.layout.item_compare,null);
-                    TextView tvMaterial = view.findViewById(R.id.tv_material);
-                    TextView tvPrice = view.findViewById(R.id.tv_price);
-                    tvMaterial.setText(lstNL.get(i).getTen());
-                    tvPrice.setText(String.valueOf(lstPrice.get(i)));
-                    layoutCompare.addView(view);
+                    if (lstPrice.get(i) != -1) {
+                        View view = LayoutInflater.from(CostEstimatesActivity.this).inflate(R.layout.item_compare,null);
+                        TextView tvMaterial = view.findViewById(R.id.tv_material);
+                        TextView tvPrice = view.findViewById(R.id.tv_price);
+                        tvMaterial.setText(lstNL.get(i).getTen());
+                        tvPrice.setText(String.valueOf(lstPrice.get(i)));
+                        layoutCompare.addView(view);
+                    }
                 }
 //                AddEventViewLayoutCompare();
                 btnCompare.setVisibility(View.GONE);
@@ -236,13 +247,15 @@ public class CostEstimatesActivity extends AppCompatActivity {
                         }
 
                         int knl = lstNL.get(i).getKieu();
+                        double p;
                         switch (knl){
                             case 1:
                             case 2:
                             case 3:
                             case 5:
                             case 9:
-                                lstPrice.add(Integer.parseInt(quantity)/100 * Integer.parseInt(price));
+                                p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 100;
+                                lstPrice.add((int) Math.round(p));
                                 break;
                             case 4:
                                 lstPrice.add(Integer.parseInt(quantity) * Integer.parseInt(price));
@@ -251,11 +264,36 @@ public class CostEstimatesActivity extends AppCompatActivity {
                             case 7:
                             case 8:
                             case 10:
-                                lstPrice.add(Integer.parseInt(quantity)/500 * Integer.parseInt(price));
+                                p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 500;
+                                lstPrice.add((int) Math.round(p));
                                 break;
                             case 11:
-                            case 12:
                                 lstHide.add(lstNL.get(i).getTen());
+                                break;
+                            case 12:
+                                String name = lstNL.get(i).getTen();
+                                switch (name) {
+                                    case "Đường":
+                                    case "Bột rau câu":
+                                    case "Đậu phụ":
+                                    case "Tắc - Quất":
+                                    case "Nước cốt dừa":
+                                    case "Khoai tím":
+                                    case "Trà":
+                                    case "Mật ong":
+                                    case "Đường phèn":
+                                    case "Trà hoa nhài":
+                                        p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 100;
+                                        lstPrice.add((int) Math.round(p));
+                                        break;
+                                    case "Nước nóng":
+                                        lstPriceCheck.put(lstNL.get(i).getId(),lstNL.get(i).getTen());
+                                        lstPrice.add(-1);
+                                        lstHide.add(lstNL.get(i).getTen());
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 break;
                             default:break;
                         }
@@ -330,6 +368,7 @@ public class CostEstimatesActivity extends AppCompatActivity {
 
     private void setUnit(TextView tv, NguyenLieu nguyenLieu){
         int typeMaterial = nguyenLieu.getKieu();
+        String name = nguyenLieu.getTen();
         switch (typeMaterial){
             case 1:
             case 2:
@@ -349,10 +388,31 @@ public class CostEstimatesActivity extends AppCompatActivity {
             case 10:
                 tv.setText("VND/500gram");
                 break;
-//            case 11:
-//            case 12:
-//                break;
-            default:break;
+            case 11:
+            case 12:
+                switch (name) {
+                    case "Đường":
+                    case "Bột rau câu":
+                    case "Đậu phụ":
+                    case "Tắc - Quất":
+                    case "Khoai tím":
+                    case "Trà":
+                    case "Đường phèn":
+                    case "Trà hoa nhài":
+                        tv.setText("VND/100gram");
+                        break;
+                    case "Nước cốt dừa":
+                    case "Mật ong":
+                        tv.setText("VND/100ml");
+                        break;
+                    case "Nước nóng":
+                        tv.setText("");
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
         }
     }
     private void initView(View view) {

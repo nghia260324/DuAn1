@@ -146,10 +146,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         };
-
         databaseReferenceRecipe.addValueEventListener(valueEventListenerRecipe);
     }
     private void CheckDataUser() {
@@ -207,7 +205,6 @@ public class WelcomeActivity extends AppCompatActivity {
             Intent intent=new Intent(this,MainActivity.class);
             startActivity(intent);
         }
-
         overridePendingTransition(R.anim.slide_in_down,R.anim.slide_out_down);
         finishAffinity();
     }

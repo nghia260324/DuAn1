@@ -2,7 +2,6 @@ package com.example.ungdungchiasecongthucnauan;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +48,7 @@ public class Service {
     public void SetMass(NguyenLieuDao nguyenLieuDao, TextView tvName, TextView tvMass, int type, int mass) {
         NguyenLieu nguyenLieu = nguyenLieuDao.getID(String.valueOf(type));
         int typeMaterial = nguyenLieu.getKieu();
+        String name = nguyenLieu.getTen();
         switch (typeMaterial){
             case 1:
             case 2:
@@ -58,7 +58,6 @@ public class Service {
             case 8:
             case 9:
             case 10:
-            case 12:
                 if (tvName != null) {
                     tvName.setText(nguyenLieu.getTen());
                     tvMass.setText(" ( " + mass + "gram )");
@@ -82,8 +81,36 @@ public class Service {
                     tvMass.setText("(ml)");
                 }
                 break;
-//            case 11: break;
+            case 12:
+                switch (name) {
+                    case "Đường":
+                    case "Bột rau câu":
+                    case "Đậu phụ":
+                    case "Tắc - Quất":
+                    case "Khoai tím":
+                    case "Trà":
+                    case "Trà hoa nhài":
+                    case "Đường phèn":
+                        SetText(tvName,tvMass,nguyenLieu,mass,"gram");
+                        break;
+                    case "Nước cốt dừa":
+                    case "Mật ong":
+                    case "Nước nóng":
+                        SetText(tvName,tvMass,nguyenLieu,mass,"ml");
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:break;
+        }
+    }
+    public void SetText(TextView tvN,TextView tvM,NguyenLieu nguyenLieu,int mass,String s){
+        if (tvN != null) {
+            tvN.setText(nguyenLieu.getTen());
+            tvM.setText(" ( " + mass + "" + s +  " )");
+        } else {
+            tvM.setText("(" + s + ")");
         }
     }
     public void setAvatar(ImageView imageView, int index){
