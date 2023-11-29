@@ -107,8 +107,12 @@ public class Service {
                 }
                 break;
             case 11:
-                tvName.setText(nguyenLieu.getTen());
-                tvMass.setText("");
+                switch (name) {
+                    case "Nước mắm":
+                        SetText(tvName,tvMass,nguyenLieu,mass,"ml");
+                        break;
+                }
+                break;
             default:break;
         }
     }

@@ -393,7 +393,6 @@ public class CostEstimatesActivity extends AppCompatActivity {
             case 10:
                 tv.setText("VND/500gram");
                 break;
-            case 11:
             case 12:
                 switch (name) {
                     case "Đường":
@@ -421,8 +420,16 @@ public class CostEstimatesActivity extends AppCompatActivity {
                         break;
                 }
                 break;
+            case 11:
+                switch (name) {
+                    case "Nước mắm":
+                        tv.setText("");
+                        break;
+                }
+                break;
             default:
                 break;
+
         }
     }
     private void initView(View view) {

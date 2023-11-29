@@ -79,7 +79,9 @@ public class SaveRecipe {
                         View view = layout_dsct.getChildAt(i);
                         CheckBox checkBox = view.findViewById(R.id.cbo_select);
                         if (checkBox.isChecked()) {
-                            congThucDSCTDao.insert(congThuc.getId(),lstDSCT.get(i).getId());
+                            if (!congThucDao.checkExists("CongThuc_DSCT","idCongThuc = '" + congThuc.getId() + "' AND idDanhSachCongThuc",String.valueOf(lstDSCT.get(i).getId()))) {
+                                congThucDSCTDao.insert(congThuc.getId(),lstDSCT.get(i).getId());
+                            }
                         } else {
                             if (congThucDao.checkExists("CongThuc_DSCT","idCongThuc = '" + congThuc.getId() + "' AND idDanhSachCongThuc",String.valueOf(lstDSCT.get(i).getId()))) {
                                 congThucDSCTDao.deleteID(String.valueOf(lstDSCT.get(i).getId()));
