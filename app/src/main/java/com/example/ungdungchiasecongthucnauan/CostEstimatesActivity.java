@@ -283,7 +283,12 @@ public class CostEstimatesActivity extends AppCompatActivity {
                                     case "Mật ong":
                                     case "Đường phèn":
                                     case "Trà hoa nhài":
+                                    case "Bún tươi":
                                         p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 100;
+                                        lstPrice.add((int) Math.round(p));
+                                        break;
+                                    case "Mía tươi":
+                                        p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 500;
                                         lstPrice.add((int) Math.round(p));
                                         break;
                                     case "Nước nóng":
@@ -399,6 +404,7 @@ public class CostEstimatesActivity extends AppCompatActivity {
                     case "Trà":
                     case "Đường phèn":
                     case "Trà hoa nhài":
+                    case "Bún tươi":
                         tv.setText("VND/100gram");
                         break;
                     case "Nước cốt dừa":
@@ -407,6 +413,10 @@ public class CostEstimatesActivity extends AppCompatActivity {
                         break;
                     case "Nước nóng":
                         tv.setText("");
+                        break;
+                    case "Mi tươi":
+                        tv.setText("VND/500gram");
+                        break;
                     default:
                         break;
                 }

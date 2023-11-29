@@ -91,6 +91,10 @@ public class Service {
                     case "Trà":
                     case "Trà hoa nhài":
                     case "Đường phèn":
+                    case "Bún tươi":
+                    case "Mía tươi":
+                    case "Phô mai lát con bò cười":
+                    case "Bơ thực vật":
                         SetText(tvName,tvMass,nguyenLieu,mass,"gram");
                         break;
                     case "Nước cốt dừa":
@@ -102,6 +106,9 @@ public class Service {
                         break;
                 }
                 break;
+            case 11:
+                tvName.setText(nguyenLieu.getTen());
+                tvMass.setText("");
             default:break;
         }
     }

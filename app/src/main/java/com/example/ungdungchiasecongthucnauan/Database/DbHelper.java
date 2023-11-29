@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
     static final String dbName = "CONG_THUC_NAU_AN";
-    static final int dbVersion = 5;
+    static final int dbVersion = 10;
     public DbHelper(Context context) {
         super(context, dbName, null, dbVersion);
     }
@@ -132,6 +132,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Thịt lợn - heo xay',1,216,16000)," +
                 "('Bồ câu',1,213,50000)," +
                 "('Ức gà',1,165,10000)," +
+                "('Thịt gà ta nguyên con',1,165,0)," +
                 "('Cánh gà',1,203,10000)," +
                 "('Đùi gà',1,177,12000)," +
                 "('Mề gà tươi',1,94,10000)," +
@@ -199,6 +200,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Gạo nếp',10,71,20000)," +
                 "('Yến mạch',10,67,100000)," +//500gram
 
+                "('Nước mắm',11,40,0)," +
+
                 "('Váng sữa',8,375,0)," +
                 "('Phô mai lát con bò cười',12,402,120000)," +//500gram
                 "('Bơ thực vật',12,716,40000)," +
@@ -213,7 +216,11 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Nước cốt dừa',12,70,3000)," +//100ml
                 "('Trà',12,24,50000)," +//100gram
                 "('Trà hoa nhài',12,0,33000)," +//100gram
+                "('Bún tươi',12,110,2000)," +//100gram
+                "('Mía tươi',12,65,19000)," +//500gram
+                "('Bột nghệ',12,65,19000)," +//500gram
                 "('Tắc - Quất',12,71,5000)";//100gram
+
         String add_LoaiCongThuc = "INSERT INTO LoaiCongThuc(ten) VALUES" +
                 "('Đồ uống')," +
                 "('Nướng')," +

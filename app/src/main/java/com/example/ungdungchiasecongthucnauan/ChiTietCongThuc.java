@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -488,7 +487,11 @@ public class ChiTietCongThuc {
                                     case "Trà":
                                     case "Mật ong":
                                     case "Đường phèn":
+                                    case "Bún tươi":
                                         lstCalo.add(Integer.parseInt(mass) * Integer.parseInt(calo)/100);
+                                        break;
+                                    case "Mía tươi":
+                                        lstCalo.add(Integer.parseInt(mass) * Integer.parseInt(calo)/500);
                                         break;
                                     case "Nước nóng":
                                     case "Trà hoa nhài":
@@ -593,7 +596,13 @@ public class ChiTietCongThuc {
                     case "Khoai tím":
                     case "Trà":
                     case "Đường phèn":
+                    case "Bún tươi":
+                    case "Bơ thực vật":
+                    case "Mía tươi":
                         tv.setText("calo/100gram");
+                        break;
+                    case "Phô mai lát con bò cười":
+                        tv.setText("calo/500gram");
                         break;
                     case "Nước cốt dừa":
                     case "Mật ong":
@@ -611,6 +620,9 @@ public class ChiTietCongThuc {
                 break;
             case 5:
                 tv.setText("calo\n/100ml");
+                break;
+            case 11:
+                tv.setText("");
                 break;
             default:break;
         }
