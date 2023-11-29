@@ -67,7 +67,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "idCongThuc TEXT NOT NULL," +
                         "idNguyenLieu INTEGER NOT NULL," +
-                        "khoiLuong INTEGER)";
+                        "khoiLuong INTEGER NOT NULL)";
         String createTableBinhLuan =
                 "Create table BinhLuan (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +

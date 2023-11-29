@@ -233,6 +233,7 @@ public class CreateRecipesFragment extends Fragment {
 
                 for (int i = 0; i < layoutMaterial.getChildCount(); i++){
                     int index = i;
+                    DanhSachNguyenLieu getdsnl = lstDanhSachNguyenLieu.get(i);
                     View viewMaterial = layoutMaterial.getChildAt(index);
 
                     Button btnRemoveMaterial = viewMaterial.findViewById(R.id.btn_removeMaterial);
@@ -240,7 +241,7 @@ public class CreateRecipesFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             layoutMaterial.removeView(viewMaterial);
-                            lstDanhSachNguyenLieu.remove(index);
+                            lstDanhSachNguyenLieu.remove(getdsnl);
                         }
                     });
 
