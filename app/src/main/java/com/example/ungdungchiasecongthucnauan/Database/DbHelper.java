@@ -204,7 +204,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 "('Váng sữa',8,375,0)," +
                 "('Phô mai lát con bò cười',12,402,120000)," +//500gram
-                "('Bơ thực vật',12,716,40000)," +
+                "('Bơ thực vật',12,716,10000)," +//100gram
 
                 "('Mật ong',12,300,100000)," +//100ml
                 "('Nước nóng',12,0,0)," +//100ml
@@ -215,7 +215,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('Đậu phụ',12,70,12000)," +//100gram
                 "('Nước cốt dừa',12,70,3000)," +//100ml
                 "('Trà',12,24,50000)," +//100gram
-                "('Trà hoa nhài',12,0,33000)," +//100gram
+                "('Trà hoa nhài',12,0,60000)," +//100gram
                 "('Bún tươi',12,110,2000)," +//100gram
                 "('Mía tươi',12,65,19000)," +//500gram
                 "('Bột nghệ',12,65,19000)," +//500gram

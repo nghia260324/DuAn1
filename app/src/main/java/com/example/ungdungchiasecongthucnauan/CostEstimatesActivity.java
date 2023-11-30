@@ -268,6 +268,7 @@ public class CostEstimatesActivity extends AppCompatActivity {
                                 lstPrice.add((int) Math.round(p));
                                 break;
                             case 11:
+                                lstPriceCheck.put(lstNL.get(i).getId(),lstNL.get(i).getTen());
                                 lstHide.add(lstNL.get(i).getTen());
                                 break;
                             case 12:
@@ -283,11 +284,13 @@ public class CostEstimatesActivity extends AppCompatActivity {
                                     case "Mật ong":
                                     case "Đường phèn":
                                     case "Trà hoa nhài":
+                                    case "Bơ thực vật":
                                     case "Bún tươi":
                                         p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 100;
                                         lstPrice.add((int) Math.round(p));
                                         break;
                                     case "Mía tươi":
+                                    case "Phô mai lát con bò cười":
                                         p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 500;
                                         lstPrice.add((int) Math.round(p));
                                         break;
@@ -403,6 +406,7 @@ public class CostEstimatesActivity extends AppCompatActivity {
                     case "Trà":
                     case "Đường phèn":
                     case "Trà hoa nhài":
+                    case "Bơ thực vật":
                     case "Bún tươi":
                         tv.setText("VND/100gram");
                         break;
@@ -413,7 +417,8 @@ public class CostEstimatesActivity extends AppCompatActivity {
                     case "Nước nóng":
                         tv.setText("");
                         break;
-                    case "Mi tươi":
+                    case "Mía tươi":
+                    case "Phô mai lát con bò cười":
                         tv.setText("VND/500gram");
                         break;
                     default:
