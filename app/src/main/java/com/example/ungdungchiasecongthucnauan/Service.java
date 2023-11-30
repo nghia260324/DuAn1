@@ -95,6 +95,7 @@ public class Service {
                     case "Mía tươi":
                     case "Phô mai lát con bò cười":
                     case "Bơ thực vật":
+                    case "Bột nghệ":
                         SetText(tvName,tvMass,nguyenLieu,mass,"gram");
                         break;
                     case "Nước cốt dừa":

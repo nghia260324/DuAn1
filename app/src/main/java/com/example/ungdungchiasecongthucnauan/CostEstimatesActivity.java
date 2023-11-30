@@ -291,6 +291,7 @@ public class CostEstimatesActivity extends AppCompatActivity {
                                         break;
                                     case "Mía tươi":
                                     case "Phô mai lát con bò cười":
+                                    case "Bột nghệ":
                                         p = (double) (Integer.parseInt(quantity) * Integer.parseInt(price)) / 500;
                                         lstPrice.add((int) Math.round(p));
                                         break;
@@ -418,6 +419,7 @@ public class CostEstimatesActivity extends AppCompatActivity {
                         tv.setText("");
                         break;
                     case "Mía tươi":
+                    case "Bột nghệ":
                     case "Phô mai lát con bò cười":
                         tv.setText("VND/500gram");
                         break;
