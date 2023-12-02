@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -151,23 +152,39 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
     }
 
     private boolean validate(String oldpassword,String newpassword, String repassword){
-        boolean check;
+        boolean check=true;
 
-        if (oldpassword.isEmpty()&&newpassword.isEmpty()&&repassword.isEmpty()){
+        if (oldpassword.isEmpty() || newpassword.isEmpty() || repassword.isEmpty()){
+            if(oldpassword.isEmpty()){
+                edt_mkcu.setError("Không để trống trường này !");
+                edt_mkcu.requestFocus();
+            }
+            if(newpassword.isEmpty()){
+                edt_mkmoi.setError("Không để trống trường này !");
+                edt_mkmoi.requestFocus();
+            }
+            if(oldpassword.isEmpty()){
+                edt_nhaplaimk.setError("Không để trống trường này !");
+                edt_nhaplaimk.requestFocus();
+            }
+            check = false;
+        }else{
+
             if (!newpassword.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")){
                 edt_mkmoi.setError("Mật khẩu phải có 5 ký tự trở lên, Ít nhất 1 chữ in hoa và 1 chữ thường !");
                 edt_mkmoi.requestFocus();
+                check=false;
             }
+
             if (!newpassword.equals(repassword)) {
                 edt_nhaplaimk.setError("Nhập lại mật khẩu chưa chính xác !");
                 edt_nhaplaimk.requestFocus();
+                check=false;
             }
-            edt_mkcu.setError("Không để trống trường này !");
-            edt_mkcu.requestFocus();
-            check = false;
-        }else{
-           check=true;
+
         }
+
+
         return check;
     }
 
