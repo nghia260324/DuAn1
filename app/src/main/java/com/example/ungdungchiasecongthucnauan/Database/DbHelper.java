@@ -35,8 +35,8 @@ public class DbHelper extends SQLiteOpenHelper {
                         "idCongThuc TEXT NOT NULL," +
                         "noiDung TEXT NOT NULL," +
                         "idAnh TEXT," +
-                        "thuTu INTEGER NOT NULL)";
-//        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id)" +
+                        "thuTu INTEGER NOT NULL," +
+                        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id))";
         String createTableLoaiCongThuc =
                 "Create table LoaiCongThuc (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
@@ -51,53 +51,55 @@ public class DbHelper extends SQLiteOpenHelper {
                         "thoiGianNau INTEGER," +
                         "ngay DATE NOT NULL," +
                         "idLoaiCongThuc INTEGER NOT NULL," +
-                        "trangThai INTEGER NOT NULL)";
-//        "FOREIGN KEY(idnguoiDung) REFERENCES NguoiDung(id)," +
-//        "FOREIGN KEY(idLoaiCongThuc) REFERENCES LoaiCongThuc(id)" +
+                        "trangThai INTEGER NOT NULL," +
+                        "FOREIGN KEY(idnguoiDung) REFERENCES NguoiDung(id)," +
+                        "FOREIGN KEY(idLoaiCongThuc) REFERENCES LoaiCongThuc(id))";
         String createTableNguyenLieu =
                 "Create table NguyenLieu (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "ten TEXT NOT NULL," +
                         "idKieuNguyenLieu INTEGER NOT NULL," +
                         "calo INTEGER NOT NULL," +
-                        "gia INTEGER NOT NULL)";
-//        "FOREIGN KEY(idKieuNguyenLieu) REFERENCES KieuNguyenLieu(id)" +
+                        "gia INTEGER NOT NULL," +
+                        "FOREIGN KEY(idKieuNguyenLieu) REFERENCES KieuNguyenLieu(id))";
         String createTableDanhSachNguyenLieu =
                 "Create table DanhSachNguyenLieu (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "idCongThuc TEXT NOT NULL," +
                         "idNguyenLieu INTEGER NOT NULL," +
-                        "khoiLuong INTEGER NOT NULL)";
+                        "khoiLuong INTEGER NOT NULL," +
+                        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id))";
         String createTableBinhLuan =
                 "Create table BinhLuan (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "idCongThuc TEXT NOT NULL," +
                         "idNguoiDung TEXT NOT NULL," +
-                        "noiDung TEXT NOT NULL)";
-        //        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id)" +
-        //        "FOREIGN KEY(idNguoiDung) REFERENCES NguoiDung(id)" +
+                        "noiDung TEXT NOT NULL," +
+                        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id)," +
+                        "FOREIGN KEY(idNguoiDung) REFERENCES NguoiDung(id))";
         String createTableDanhSachCongThuc =
                 "Create table DanhSachCongThuc (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "ten TEXT NOT NULL," +
-                        "idNguoiDung TEXT NOT NULL)";
-        //        "FOREIGN KEY(idNguoiDung) REFERENCES NguoiDung(id)" +
+                        "idNguoiDung TEXT NOT NULL," +
+                        "FOREIGN KEY(idNguoiDung) REFERENCES NguoiDung(id))";
         String createTableCongThuc_DSCT =
                 "Create table CongThuc_DSCT (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         "idCongThuc TEXT NOT NULL," +
-                        "idDanhSachCongThuc INTEGER NOT NULL)";
-        //        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id)" +
-        //        "FOREIGN KEY(idDanhSachCongThuc) REFERENCES DanhSachCongThuc(id)" +
+                        "idDanhSachCongThuc INTEGER NOT NULL," +
+                        "FOREIGN KEY(idCongThuc) REFERENCES CongThuc(id)," +
+                        "FOREIGN KEY(idDanhSachCongThuc) REFERENCES DanhSachCongThuc(id))";
 
 
         db.execSQL(createTableKieuNguyenLieu);
+        db.execSQL(createTableNguyenLieu);
+        db.execSQL(createTableLoaiCongThuc);
+
         db.execSQL(createTableNguoiDung);
         db.execSQL(createTableAnh);
-        db.execSQL(createTableBuocLam);
-        db.execSQL(createTableLoaiCongThuc);
         db.execSQL(createTableCongThuc);
-        db.execSQL(createTableNguyenLieu);
+        db.execSQL(createTableBuocLam);
         db.execSQL(createTableDanhSachNguyenLieu);
         db.execSQL(createTableBinhLuan);
         db.execSQL(createTableDanhSachCongThuc);

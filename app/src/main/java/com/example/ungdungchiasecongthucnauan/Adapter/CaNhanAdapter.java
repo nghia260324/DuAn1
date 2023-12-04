@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -196,7 +195,7 @@ public class CaNhanAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getContext(),"User password updated.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Đổi mật khẩu thành công.",Toast.LENGTH_SHORT).show();
                         }else {
 
                         }

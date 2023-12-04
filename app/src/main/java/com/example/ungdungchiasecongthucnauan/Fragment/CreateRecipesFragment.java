@@ -58,7 +58,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -591,10 +590,7 @@ public class CreateRecipesFragment extends Fragment {
         congThuc.setLstBuocLam(lstBuocLam);
         congThuc.setLstNguyenLieu(lstDanhSachNguyenLieu);
         congThuc.setLstBinhLuan(null);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        Log.e("CONG THUC CHECL",congThuc.getNgayTao() + "");
-        Log.e("CONG THUC CHECL",sdf.format(congThuc.getNgayTao()) + "");
         congThucDao.insert(congThuc);
     }
 }
