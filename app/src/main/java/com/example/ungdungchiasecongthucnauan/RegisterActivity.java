@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
                     databaseReference.child(id).setValue(nguoiDung);
                     if(nguoiDungDao.insert(nguoiDung) > 0) {
                         SaveUserToFireBase(email,password);
-                        Toast.makeText(RegisterActivity.this, "Đăng ký tài khoản thành công !", Toast.LENGTH_SHORT).show();
+
 //                        btnGoLogin.callOnClick();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Tạo tài khoản thất bại !", Toast.LENGTH_SHORT).show();
@@ -173,13 +173,14 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            Toast.makeText(RegisterActivity.this, "Đăng ký tài khoản thành công !", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
                             startActivity(intent);
                             finishAffinity();
 
                         } else {
                             Log.w("w", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Email đã có sẵn vui lòng nhập 1 email khác", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
