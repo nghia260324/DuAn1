@@ -67,10 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
                  rePassword = edtRePassword.getText().toString().trim();
 
                 if (Validate(email,name,password,rePassword)){
-                    databaseReference.child(id).setValue(nguoiDung);
                     if(nguoiDungDao.insert(nguoiDung) > 0) {
                         SaveUserToFireBase(email,password);
-
+                        databaseReference.child(id).setValue(nguoiDung);
 //                        btnGoLogin.callOnClick();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Tạo tài khoản thất bại !", Toast.LENGTH_SHORT).show();
