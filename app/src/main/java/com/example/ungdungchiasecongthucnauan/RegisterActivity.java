@@ -43,6 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
     String password;
     String rePassword;
     DatabaseReference databaseReference;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (Validate(email,name,password,rePassword)){
                     if(nguoiDungDao.insert(nguoiDung) > 0) {
                         SaveUserToFireBase(email,password);
-                        databaseReference.child(id).setValue(nguoiDung);
+
 //                        btnGoLogin.callOnClick();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Tạo tài khoản thất bại !", Toast.LENGTH_SHORT).show();
@@ -166,12 +168,13 @@ public class RegisterActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spn_decentralization);
     }
     private void SaveUserToFireBase(String email, String password){
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            databaseReference.child(id).setValue(nguoiDung);
                             Toast.makeText(RegisterActivity.this, "Đăng ký tài khoản thành công !", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
                             startActivity(intent);
